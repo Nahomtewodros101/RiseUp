@@ -76,7 +76,7 @@ export default function CloudSolutionsPage() {
               </h2>
               <div className="space-y-4 text-gray-500 dark:text-gray-400">
                 <p>
-                  In today'&apos; digital landscape, cloud technology is essential
+                  In today&apos; digital landscape, cloud technology is essential
                   for businesses looking to scale efficiently, reduce costs, and
                   stay competitive.
                 </p>

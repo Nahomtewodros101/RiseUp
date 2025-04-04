@@ -38,6 +38,7 @@ export default function ProjectsPage() {
         setProjects(normalizedData);
         setFilteredProjects(normalizedData); // Initially show all projects
         setIsLoading(false);
+        console.log("Fetched projects:", projects);
       } catch (error) {
         console.error("Error fetching projects:", error);
         setIsLoading(false);
@@ -46,8 +47,6 @@ export default function ProjectsPage() {
 
     fetchProjects();
   }, []);
-
-
 
   if (!isContentReady || isLoading) {
     return (

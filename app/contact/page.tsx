@@ -18,7 +18,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { errors } from "jose";
 
 const MapComponent = dynamic(() => import("@/components/MapComponent"), {
   ssr: false,

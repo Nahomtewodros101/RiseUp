@@ -157,7 +157,7 @@ export default function TermsOfServicePage() {
                 Upload or transmit (or attempt to upload or to transmit)
                 viruses, Trojan horses, or other material, including excessive
                 use of capital letters and spamming (continuous posting of
-                repetitive text), that interferes with any party's uninterrupted
+                repetitive text), that interferes with any party&apos;s uninterrupted
                 use and enjoyment of the Site or modifies, impairs, disrupts,
                 alters, or interferes with the use, features, functions,
                 operation, or maintenance of the Site.

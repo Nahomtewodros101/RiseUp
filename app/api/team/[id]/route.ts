@@ -22,13 +22,22 @@ const teamMemberSchema = z.object({
 const partialTeamMemberSchema = teamMemberSchema.partial();
 
 // GET a single team member by ID
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+
+export async function GET(req: NextRequest) {
+  const id = req.nextUrl.pathname.split("/").pop();
+
+  if (!id) {
+    return NextResponse.json(
+      { error: "Team member ID is required" },
+      { status: 400 }
+    );
+  }
+
   try {
     const teamMember = await prisma.teamMember.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!teamMember) {

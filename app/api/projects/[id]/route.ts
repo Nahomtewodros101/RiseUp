@@ -2,12 +2,18 @@ import { type NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 
 // GET a single project by ID
-export async function GET(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
-  const { id } = context.params;
+export async function GET(req: NextRequest) {
   try {
+    const url = new URL(req.url);
+    const id = url.pathname.split("/").pop(); // grabs the [id] from the path
+
+    if (!id || typeof id !== "string") {
+      return NextResponse.json(
+        { error: "Invalid project ID" },
+        { status: 400 }
+      );
+    }
+
     const project = await prisma.project.findUnique({
       where: { id },
     });
@@ -27,17 +33,23 @@ export async function GET(
 }
 
 // DELETE a project by ID
-export async function DELETE(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
-  const { id } = context.params;
+export async function DELETE(req: NextRequest) {
   try {
-    const project = await prisma.project.delete({
+    const url = new URL(req.url);
+    const id = url.pathname.split("/").pop();
+
+    if (!id || typeof id !== "string") {
+      return NextResponse.json(
+        { error: "Invalid project ID" },
+        { status: 400 }
+      );
+    }
+
+    const deletedProject = await prisma.project.delete({
       where: { id },
     });
 
-    return NextResponse.json(project, { status: 200 });
+    return NextResponse.json(deletedProject, { status: 200 });
   } catch (error) {
     console.error("Failed to delete project:", error);
     return NextResponse.json(

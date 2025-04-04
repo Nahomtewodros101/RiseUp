@@ -1,0 +1,61 @@
+import { type NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import prisma from "@/lib/db";
+
+// Project schema for validation
+const projectSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  thumbnail: z.string().min(1, "Thumbnail is required"),
+  techStack: z.array(z.string()),
+  link: z.string().optional(),
+  images: z.array(z.string()),
+  projectType: z.enum(["website", "app", "ui-design"]),
+  testimonial: z.string().optional(),
+  featured: z.boolean().default(false),
+});
+
+// GET a single project by ID
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const project = await prisma.project.findUnique({
+      where: { id: params.id },
+    });
+
+    if (!project) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(project);
+  } catch (error) {
+    console.error("Failed to fetch project:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch project" },
+      { status: 500 }
+    );
+  }
+}
+//Delete a project by ID
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const project = await prisma.project.delete({
+      where: { id: params.id },
+    });
+
+    return NextResponse.json(project, { status: 200 });
+  } catch (error) {
+    console.error("Failed to delete project:", error);
+    return NextResponse.json(
+      { error: "Failed to delete project" },
+      { status: 500 }
+    );
+  }
+}
+
+// Other route handlers remain the same

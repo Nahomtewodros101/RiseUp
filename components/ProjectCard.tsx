@@ -2,13 +2,11 @@
 
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Project } from "@/types/";
 
 export default function ProjectCard({
-  id,
   title,
   description,
   thumbnail,
@@ -56,7 +54,7 @@ export default function ProjectCard({
 
         {testimonial && (
           <div className="mt-4 text-gray-700 dark:text-gray-300 italic">
-            <blockquote>"{testimonial}"</blockquote>
+            <blockquote>&quot;{testimonial}&quot;</blockquote>
           </div>
         )}
 

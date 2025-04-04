@@ -12,6 +12,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ user });
   } catch (error) {
     console.error("Auth error:", error);
+    console.error("Request URL:", req.url);
+    console.error("Request Method:", req.method);
     return NextResponse.json(
       { error: "An unexpected error occurred" },
       { status: 500 }

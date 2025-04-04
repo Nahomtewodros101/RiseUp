@@ -37,6 +37,16 @@ export default function AdminContacts() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-3 md:grid-cols-2">
+      {isLoading && (
+        <div className="flex items-center justify-center w-full h-full">
+          <p className="text-gray-500">Loading...</p>
+        </div>
+      )}
+      {!isLoading && contacts.length === 0 && (
+        <div className="flex items-center justify-center w-full h-full">
+          <p className="text-gray-500">No messages found</p>
+        </div>
+      )}
       {contacts.map((contact) => (
         <Card
           key={contact.id}

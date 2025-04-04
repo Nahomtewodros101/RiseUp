@@ -33,6 +33,8 @@ export async function GET(req: Request) {
     return NextResponse.json(contacts);
   } catch (error) {
     console.error("Failed to load contacts:", error);
+    console.error("Request URL:", req.url);
+    console.error("Request Method:", req.method);
     return NextResponse.json(
       { error: "An unexpected error occurred" },
       { status: 500 }

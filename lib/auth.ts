@@ -3,8 +3,6 @@ import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 import { z } from "zod";
 import {
   getAuthCookie,
-  setAuthCookie,
-  deleteAuthCookie,
 } from "@/app/utils/authCookies";
 
 // User types
@@ -77,6 +75,7 @@ export async function verifyJwtToken(
 
     return userPayload.data;
   } catch (error) {
+    console.error("Token verification failed:", error);
     return null;
   }
 }

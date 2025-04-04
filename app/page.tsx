@@ -188,8 +188,9 @@ export default function Home() {
                 Why Choose Us?
               </h2>
               <p className="max-w-[600px] mx-auto mt-6 text-gray-200">
-                We're more than just a service; we're a movement, shaping the
-                future together. Here’s why you should ride the wave with us.
+                We are more than just a service; we are a movement, shaping the
+                future together. Here&apos;s why you should ride the wave with
+                us.
               </p>
             </motion.div>
 
@@ -329,7 +330,7 @@ export default function Home() {
                   Ready to Start Your Project?
                 </h2>
                 <p className="max-w-[600px] text-blue-100 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Let's discuss how we can help bring your ideas to life
+                  Let us discuss how we can help bring your ideas to life
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">

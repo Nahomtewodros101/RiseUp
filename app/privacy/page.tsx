@@ -58,7 +58,7 @@ export default function PrivacyPolicyPage() {
           >
             <h2>Introduction</h2>
             <p>
-              Qemem Devs ("we", "our", or "us") is committed to protecting your
+              Qemem Devs (&qout;we&qout;, &qout;our&qout;, or &qout;us&qout;) is committed to protecting your
               privacy. This Privacy Policy explains how we collect, use,
               disclose, and safeguard your information when you visit our
               website or use our services.

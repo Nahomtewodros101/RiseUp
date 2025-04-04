@@ -74,7 +74,7 @@ export default function MobileAppsPage() {
               </h2>
               <div className="space-y-4 text-gray-500 dark:text-gray-400">
                 <p>
-                  In today's mobile-first world, having a powerful and intuitive
+                  In today&apos;s mobile-first world, having a powerful and intuitive
                   mobile app is essential for businesses looking to engage with
                   their customers and stay competitive.
                 </p>

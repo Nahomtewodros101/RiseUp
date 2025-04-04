@@ -22,15 +22,14 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const [isContentReady, setIsContentReady] = useState(false);
 
   useEffect(() => {
-    // Set content as ready after the loading screen has had time to show
     const timer = setTimeout(() => {
       setIsContentReady(true);
-    }, 2100); // Slightly longer than the loading screen duration
+      console.log(params.slug);
+    }, 2100);
 
     return () => clearTimeout(timer);
   }, []);
 
-  // Sample blog post data (in a real app, this would be fetched from an API)
   const post = {
     id: "1",
     title: "The Future of Web Development: Trends to Watch in 2023",

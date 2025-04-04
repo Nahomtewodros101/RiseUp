@@ -2,18 +2,6 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/db";
 
-// Project schema for validation
-const projectSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  thumbnail: z.string().min(1, "Thumbnail is required"),
-  techStack: z.array(z.string()),
-  link: z.string().optional(),
-  images: z.array(z.string()),
-  projectType: z.enum(["website", "app", "ui-design"]),
-  testimonial: z.string().optional(),
-  featured: z.boolean().default(false),
-});
 
 // GET a single project by ID
 export async function GET(

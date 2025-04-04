@@ -110,7 +110,7 @@ export default function WelcomeBanner() {
               <Wave className="h-8 w-8 text-white" />
             </motion.div>
 
-            <div>
+            <div className="flex justify-center items-center flex-col">
               <h2 className="text-xl font-bold flex items-center gap-2">
                 Welcome back, {user.name}!
                 <motion.div
@@ -125,7 +125,7 @@ export default function WelcomeBanner() {
                 </motion.div>
               </h2>
               <p className="text-blue-100">
-                We're excited to see you again. Click anywhere on this banner
+                We are excited to see you again. Click anywhere on this banner
                 for a surprise!
               </p>
             </div>

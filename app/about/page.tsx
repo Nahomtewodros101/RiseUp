@@ -75,11 +75,12 @@ export default function AboutPage() {
                   industries.
                 </p>
                 <p>
-                  Our name, Qemem, comes from the ancient word for "innovation"
-                  - a principle that has guided our approach from day one. We
-                  believe in pushing boundaries, exploring new technologies, and
-                  constantly evolving our skills to deliver cutting-edge
-                  solutions.
+                  Our name, Qemem, comes from the amharic word for &quot;spice&quot;  which
+                  reflects our commitment to adding flavor and uniqueness to
+                  every project we undertake. We believe that every line of code
+                  we write has the potential to make a positive impact on the
+                  world, and we are dedicated to creating solutions that not
+                  only meet but exceed our clients expectations.
                 </p>
               </div>
             </div>
@@ -111,7 +112,7 @@ export default function AboutPage() {
                 <h3 className="text-xl font-bold mb-2">Innovation</h3>
                 <p className="text-gray-500 dark:text-gray-400">
                   We embrace new technologies and approaches, constantly pushing
-                  the boundaries of what's possible in digital development.
+                  the boundaries of what is possible in digital development.
                 </p>
               </div>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border">
@@ -120,7 +121,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-bold mb-2">Quality</h3>
                 <p className="text-gray-500 dark:text-gray-400">
-                  We're committed to excellence in everything we do, from clean
+                  We are committed to excellence in everything we do, from clean
                   code to intuitive user experiences and reliable performance.
                 </p>
               </div>
@@ -179,7 +180,7 @@ export default function AboutPage() {
           >
             <h2 className="text-3xl font-bold mb-4">Ready to Work With Us?</h2>
             <p className="max-w-[600px] mx-auto mb-8 text-gray-500 dark:text-gray-400">
-              Let's discuss how we can help bring your ideas to life with our
+              Let us discuss how we can help bring your ideas to life with our
               expertise in web development, mobile apps, and digital solutions.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

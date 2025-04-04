@@ -96,7 +96,7 @@ export default function SettingsPage() {
     setIsSubmitting(true);
     setError(null);
     setSuccess(null);
-
+    console.log("Submitting password change:", data);
     try {
       // In a real app, you would call your API to change the password
       await new Promise((resolve) => setTimeout(resolve, 1000));

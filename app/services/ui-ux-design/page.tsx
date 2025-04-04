@@ -87,10 +87,10 @@ export default function UiUxDesignPage() {
                   are not only beautiful but also functional and accessible.
                 </p>
                 <p>
-                  Whether you're building a new product from scratch or
+                  Whether you&apos;re building a new product from scratch or
                   improving an existing one, our design process ensures that
                   every interaction is thoughtfully considered and optimized for
-                  your users' needs.
+                  your users&apos; needs.
                 </p>
               </div>
               <div className="mt-8">

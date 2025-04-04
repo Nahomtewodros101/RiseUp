@@ -37,7 +37,7 @@ export default function Error({
           </motion.div>
           <h1 className="text-3xl font-bold mb-2">Something Went Wrong</h1>
           <p className="text-gray-500 dark:text-gray-400 mb-8">
-            We're sorry, but we encountered an unexpected error. Our team has
+            We are sorry, but we encountered an unexpected error. Our team has
             been notified and is working to fix the issue.
           </p>
         </div>

@@ -59,12 +59,13 @@ export default function TermsOfServicePage() {
           >
             <h2>Agreement to Terms</h2>
             <p>
+              {/* i hate linting problems */}
               These Terms of Service constitute a legally binding agreement made
-              between you, whether personally or on behalf of an entity ("you")
-              and Qemem Devs ("we," "us" or "our"), concerning your access to
+              between you, whether personally or on behalf of an entity (&apos;you&apos;)
+              and Qemem Devs (&apos;we,&apos; &apos;us&apos; or &apos;our&apos;), concerning your access to
               and use of our website as well as any other media form, media
               channel, mobile website or mobile application related, linked, or
-              otherwise connected thereto (collectively, the "Site").
+              otherwise connected thereto (collectively, the &apos;Site&apos;).
             </p>
             <p>
               You agree that by accessing the Site, you have read, understood,
@@ -79,15 +80,15 @@ export default function TermsOfServicePage() {
               Unless otherwise indicated, the Site is our proprietary property
               and all source code, databases, functionality, software, website
               designs, audio, video, text, photographs, and graphics on the Site
-              (collectively, the "Content") and the trademarks, service marks,
-              and logos contained therein (the "Marks") are owned or controlled
+              (collectively, the &apos;Content&apos;) and the trademarks, service marks,
+              and logos contained therein (the &apos;Marks&apos;) are owned or controlled
               by us or licensed to us, and are protected by copyright and
               trademark laws and various other intellectual property rights and
               unfair competition laws of the United States, international
               copyright laws, and international conventions.
             </p>
             <p>
-              The Content and the Marks are provided on the Site "AS IS" for
+              The Content and the Marks are provided on the Site &apos;AS IS&apos; for
               your information and personal use only. Except as expressly
               provided in these Terms of Service, no part of the Site and no
               Content or Marks may be copied, reproduced, aggregated,
@@ -167,7 +168,7 @@ export default function TermsOfServicePage() {
             <p>
               You acknowledge and agree that any questions, comments,
               suggestions, ideas, feedback, or other information regarding the
-              Site ("Submissions") provided by you to us are non-confidential
+              Site (&apos;Submissions&apos;) provided by you to us are non-confidential
               and shall become our sole property. We shall own exclusive rights,
               including all intellectual property rights, and shall be entitled
               to the unrestricted use and dissemination of these Submissions for

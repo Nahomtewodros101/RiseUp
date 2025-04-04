@@ -22,6 +22,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Blog } from "@/types";
 
 // Blog post schema for form validation
 const blogFormSchema = z.object({
@@ -57,7 +58,7 @@ export default function BlogForm({
   const [newTag, setNewTag] = useState("");
 
   // Initialize form with default values or existing blog data
-  const form = useForm<BlogFormValues, any, BlogFormValues>({
+  const form = useForm<BlogFormValues, Blog, BlogFormValues>({
     resolver: zodResolver(blogFormSchema),
     defaultValues: initialData || {
       title: "",

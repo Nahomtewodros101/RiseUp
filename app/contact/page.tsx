@@ -18,6 +18,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
+import { errors } from "jose";
 
 const MapComponent = dynamic(() => import("@/components/MapComponent"), {
   ssr: false,
@@ -77,9 +78,13 @@ export default function ContactPage() {
         subject: "",
         message: "",
       });
-    } catch (err: any) {
+    } catch (err) {
       setIsSubmitting(false);
-      setError(err.message || "Something went wrong, please try again.");
+      if (err instanceof Error) {
+        setError(err.message || "Something went wrong, please try again.");
+      } else {
+        setError("Something went wrong, please try again.");
+      }
     }
   };
 

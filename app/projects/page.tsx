@@ -14,7 +14,6 @@ export default function ProjectsPage() {
   const [isContentReady, setIsContentReady] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ export default function ProjectsPage() {
         const data = await response.json();
 
         // Normalize the data to ensure tags are an array
-        const normalizedData = data.map((project: any) => ({
+        const normalizedData = data.map((project: Project) => ({
           ...project,
           tags: Array.isArray(project.tags) ? project.tags : [], // Ensure it's an array
         }));
@@ -48,17 +47,7 @@ export default function ProjectsPage() {
     fetchProjects();
   }, []);
 
-  const handleCategoryChange = (category: string): void => {
-    setSelectedCategory(category);
-    if (category === "All") {
-      setFilteredProjects(projects);
-    } else {
-      const filtered = projects.filter(
-        (project: Project) => project.tags && project.tags.includes(category) // Check if the category is in tags
-      );
-      setFilteredProjects(filtered);
-    }
-  };
+
 
   if (!isContentReady || isLoading) {
     return (

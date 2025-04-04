@@ -1,35 +1,20 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 
-// GET a single project by ID
 export async function GET(req: NextRequest) {
-  try {
-    const url = new URL(req.url);
-    const id = url.pathname.split("/").pop(); // grabs the [id] from the path
+  const id = req.nextUrl.pathname.split("/").pop();
 
-    if (!id || typeof id !== "string") {
-      return NextResponse.json(
-        { error: "Invalid project ID" },
-        { status: 400 }
-      );
-    }
-
-    const project = await prisma.project.findUnique({
-      where: { id },
+  if (!id) {
+    return new Response(JSON.stringify({ error: "ID is required" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
     });
-
-    if (!project) {
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(project);
-  } catch (error) {
-    console.error("Failed to fetch project:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch project" },
-      { status: 500 }
-    );
   }
+
+  return new Response(JSON.stringify({ message: `Team ID is ${id}` }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
 }
 
 // DELETE a project by ID

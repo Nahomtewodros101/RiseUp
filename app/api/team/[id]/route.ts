@@ -22,8 +22,6 @@ const teamMemberSchema = z.object({
 const partialTeamMemberSchema = teamMemberSchema.partial();
 
 // GET a single team member by ID
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   const id = req.nextUrl.pathname.split("/").pop();

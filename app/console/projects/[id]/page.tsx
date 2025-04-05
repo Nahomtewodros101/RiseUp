@@ -27,7 +27,15 @@ export default async function EditProjectPage({
         <p className="text-muted-foreground mt-2">Update project information</p>
       </div>
 
-      <ProjectForm initialData={project} isEditing />
+      <ProjectForm
+        initialData={{
+          ...project,
+          projectType: project.projectType as "website" | "app" | "ui-ux" | "cloud-services" | "dev-ops",
+          link: project.link ?? undefined,
+          testimonial: project.testimonial ?? undefined,
+        }}
+        isEditing
+      />
     </div>
   );
 }

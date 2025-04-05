@@ -2,20 +2,19 @@ import { notFound } from "next/navigation";
 import ProjectForm from "@/components/console/projects/ProjectForm";
 import prisma from "@/lib/db";
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
+// Explicitly tell TypeScript: "Hey, this is not async"
+type EditProjectPageProps = {
+  params: { id: string };
+};
 
-export default async function EditProjectPage({ params }: PageProps) {
+export default async function EditProjectPage({
+  params,
+}: EditProjectPageProps) {
   const project = await prisma.project.findUnique({
     where: { id: params.id },
   });
 
-  if (!project) {
-    notFound();
-  }
+  if (!project) notFound();
 
   return (
     <div className="space-y-6">

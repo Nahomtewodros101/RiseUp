@@ -26,10 +26,6 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { getCurrentUser } from "@/lib/auth";
-import { isAdmin } from "@/lib/auth";
-import Link from "next/link";
-
 const passwordSchema = z
   .object({
     currentPassword: z.string().min(1, "Current password is required"),
@@ -49,13 +45,21 @@ export default function SettingsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
+  // Define the UserType interface
+  interface UserType {
+    name: string;
+    email: string;
+    role: string;
+  }
+
+  const [user, setUser] = useState<UserType | null>(null);
   const [isLoading, setIsLoading] = useState(false); // Define isLoading state
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         setIsLoading(true);
+
         const response = await fetch("/api/auth/me", {
           cache: "no-store",
           credentials: "include",
@@ -102,6 +106,8 @@ export default function SettingsPage() {
       );
     } finally {
       setIsSubmitting(false);
+      console.log("Form submitted:", isLoading);
+      console.log("Form data:", data);
     }
   };
 
@@ -147,8 +153,6 @@ export default function SettingsPage() {
                   <p className="mt-1">2025</p>
                 </div>
               </div>
-
-           
             </CardContent>
           </Card>
         </TabsContent>

@@ -23,6 +23,19 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 
+// Define the Job type
+interface Job {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  salary: string;
+  description: string;
+  responsibilities: string[];
+  requirements: string[];
+}
+
 export default function CareersPage() {
   const [isContentReady, setIsContentReady] = useState(false);
 
@@ -45,7 +58,7 @@ export default function CareersPage() {
       type: "Full-time",
       salary: "$120,000 - $150,000",
       description:
-        "We're looking for an experienced Frontend Developer to join our team and help build beautiful, responsive web applications.",
+        "We&apos;re looking for an experienced Frontend Developer to join our team and help build beautiful, responsive web applications.",
       responsibilities: [
         "Develop new user-facing features using React.js",
         "Build reusable components and libraries for future use",
@@ -69,7 +82,7 @@ export default function CareersPage() {
       type: "Full-time",
       salary: "$90,000 - $120,000",
       description:
-        "We're seeking a talented UX/UI Designer to create amazing user experiences for our clients' digital products.",
+        "We&apos;re seeking a talented UX/UI Designer to create amazing user experiences for our clients&apos; digital products.",
       responsibilities: [
         "Create user flows, wireframes, prototypes, and mockups",
         "Design UI elements and components",
@@ -117,7 +130,7 @@ export default function CareersPage() {
       type: "Full-time",
       salary: "$100,000 - $130,000",
       description:
-        "We're looking for an experienced Project Manager to lead our client projects from inception to completion.",
+        "We&apos;re looking for an experienced Project Manager to lead our client projects from inception to completion.",
       responsibilities: [
         "Manage project scope, timeline, and budget",
         "Coordinate with development teams and clients",
@@ -371,12 +384,12 @@ export default function CareersPage() {
             transition={{ duration: 0.5, delay: 1 }}
           >
             <h2 className="text-2xl font-bold mb-4">
-              Don't See a Perfect Fit?
+              Don&apos;t See a Perfect Fit?
             </h2>
             <p className="max-w-[600px] mx-auto mb-6 text-blue-100">
-              We're always looking for talented individuals to join our team.
-              Send us your resume and we'll keep you in mind for future
-              opportunities.
+              We&apos;re always looking for talented individuals to join our
+              team. Send us your resume and we&apos;ll keep you in mind for
+              future opportunities.
             </p>
             <Button
               asChild
@@ -398,7 +411,7 @@ export default function CareersPage() {
 }
 
 // Job Card Component
-function JobCard({ job }: { job: any }) {
+function JobCard({ job }: { job: Job }) {
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-6">

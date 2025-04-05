@@ -1,7 +1,6 @@
 // pages/api/projects/[id].js
 
 import prisma from "@/lib/db";
-import { NextApiRequest, NextApiResponse } from "next";
 
 export async function DELETE(
   req: Request,

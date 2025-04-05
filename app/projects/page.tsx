@@ -7,7 +7,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { motion } from "framer-motion";
-import Skeleton from "@/components/Skeleton";
 import { Project } from "@/types/index";
 
 export default function ProjectsPage() {
@@ -32,7 +31,7 @@ export default function ProjectsPage() {
         // Normalize the data to ensure tags are an array
         const normalizedData = data.map((project: Project) => ({
           ...project,
-          tags: Array.isArray(project.tags) ? project.tags : [], // Ensure it's an array
+          tags: Array.isArray(project.tags) ? project.tags : [], 
         }));
 
         setProjects(normalizedData);
@@ -46,7 +45,7 @@ export default function ProjectsPage() {
     };
 
     fetchProjects();
-  }, []);
+  }, [projects]);
 
   if (!isContentReady || isLoading) {
     return null;

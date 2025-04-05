@@ -62,7 +62,6 @@ import { useRouter } from "next/navigation";
 import type { TeamMember } from "@/types";
 
 export default function TeamPage() {
-  const router = useRouter();
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -173,9 +172,6 @@ export default function TeamPage() {
   };
 
   // Handle select change for new member form
-  const handleSelectChange = (value: string, name: string) => {
-    setNewMember((prev) => ({ ...prev, [name]: value }));
-  };
 
   // Handle switch change for new member form
   const handleSwitchChange = (checked: boolean, name: string) => {
@@ -600,8 +596,8 @@ export default function TeamPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the team member "
-              {memberToDelete?.name}". This action cannot be undone.
+              This will permanently delete the team member &quot;
+              {memberToDelete?.name}&quot;. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

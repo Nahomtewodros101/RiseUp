@@ -203,7 +203,7 @@ export default function TeamPage() {
           >
             <h2 className="text-2xl font-bold mb-4">Join Our Team</h2>
             <p className="max-w-[600px] mx-auto mb-6 text-gray-500 dark:text-gray-400">
-              We're always looking for talented individuals to join our growing
+              We are always looking for talented individuals to join our growing
               team. Check out our open positions.
             </p>
             <Button className="bg-blue-600 hover:bg-blue-700" asChild>

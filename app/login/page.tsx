@@ -1,19 +1,8 @@
-// app/login/page.tsx (Server-side logic)
-import LoginForm from "@/components/auth/login-form"
-import { getCurrentUser } from "@/lib/auth"
-import { redirect } from "next/navigation"
+// app/login/page.tsx
+import LoginForm from "@/components/auth/login-form";
+import LoginCheck from "@/components/auth/LoginCheck";
 
-export default async function LoginPage() {
-  const user = await getCurrentUser()
-
-  if (user) {
-    if (user.role === "admin") {
-      redirect("/console")
-    } else {
-      redirect("/")
-    }
-  }
-
+export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 px-4 py-12">
       <div className="w-full max-w-4xl">
@@ -22,10 +11,14 @@ export default async function LoginPage() {
             <span className="font-bold text-xl">QD</span>
           </div>
           <h1 className="text-2xl font-bold">Qemem Devs</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">Login to your account</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">
+            Login to your account
+          </p>
         </div>
         <LoginForm />
       </div>
+      <LoginCheck />{" "}
+      {/* This is where we handle the user check and redirection */}
     </div>
-  )
+  );
 }

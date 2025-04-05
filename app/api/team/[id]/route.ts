@@ -3,7 +3,7 @@ import { z } from "zod";
 import prisma from "@/lib/db";
 import { authMiddleware } from "@/lib/auth";
 
-// Team member schema for validation
+// Team member schema
 const teamMemberSchema = z.object({
   name: z.string().min(1, "Name is required"),
   role: z.string().min(1, "Role is required"),
@@ -18,25 +18,18 @@ const teamMemberSchema = z.object({
   order: z.number().int().default(0),
 });
 
-// Partial update schema for PATCH requests
+// For PATCH requests
 const partialTeamMemberSchema = teamMemberSchema.partial();
 
-// GET a single team member by ID
-
-export async function GET(req: NextRequest) {
-  const id = req.nextUrl.pathname.split("/").pop();
-
-  if (!id) {
-    return NextResponse.json(
-      { error: "Team member ID is required" },
-      { status: 400 }
-    );
-  }
+// GET: Fetch team member by ID
+export async function GET(
+  _: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const { id } = params;
 
   try {
-    const teamMember = await prisma.teamMember.findUnique({
-      where: { id },
-    });
+    const teamMember = await prisma.teamMember.findUnique({ where: { id } });
 
     if (!teamMember) {
       return NextResponse.json(
@@ -47,144 +40,119 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(teamMember);
   } catch (error) {
-    console.error("Failed to fetch team member:", error);
+    console.error("GET error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch team member" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
 }
 
-// PUT (update) a team member by ID
+// PUT: Full update
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // Check authentication
   const authError = await authMiddleware(req, ["admin"]);
   if (authError) return authError;
 
-  try {
-    // Check if team member exists
-    const existingTeamMember = await prisma.teamMember.findUnique({
-      where: { id: params.id },
-    });
+  const { id } = params;
 
-    if (!existingTeamMember) {
-      return NextResponse.json(
-        { error: "Team member not found" },
-        { status: 404 }
-      );
+  try {
+    const existing = await prisma.teamMember.findUnique({ where: { id } });
+    if (!existing) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    // Parse and validate request body
     const body = await req.json();
-    const validatedData = teamMemberSchema.safeParse(body);
+    const parsed = teamMemberSchema.safeParse(body);
 
-    if (!validatedData.success) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Invalid input data", details: validatedData.error.format() },
+        { error: "Invalid data", details: parsed.error.format() },
         { status: 400 }
       );
     }
 
-    // Update team member
-    const updatedTeamMember = await prisma.teamMember.update({
-      where: { id: params.id },
-      data: validatedData.data,
+    const updated = await prisma.teamMember.update({
+      where: { id },
+      data: parsed.data,
     });
 
-    return NextResponse.json(updatedTeamMember);
+    return NextResponse.json(updated);
   } catch (error) {
-    console.error("Failed to update team member:", error);
+    console.error("PUT error:", error);
     return NextResponse.json(
-      { error: "Failed to update team member" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
 }
 
-// PATCH (partial update) a team member by ID
+// PATCH: Partial update
 export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // Check authentication
   const authError = await authMiddleware(req, ["admin"]);
   if (authError) return authError;
 
-  try {
-    // Check if team member exists
-    const existingTeamMember = await prisma.teamMember.findUnique({
-      where: { id: params.id },
-    });
+  const { id } = params;
 
-    if (!existingTeamMember) {
-      return NextResponse.json(
-        { error: "Team member not found" },
-        { status: 404 }
-      );
+  try {
+    const existing = await prisma.teamMember.findUnique({ where: { id } });
+    if (!existing) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    // Parse and validate request body
     const body = await req.json();
-    const validatedData = partialTeamMemberSchema.safeParse(body);
+    const parsed = partialTeamMemberSchema.safeParse(body);
 
-    if (!validatedData.success) {
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Invalid input data", details: validatedData.error.format() },
+        { error: "Invalid data", details: parsed.error.format() },
         { status: 400 }
       );
     }
 
-    // Update team member
-    const updatedTeamMember = await prisma.teamMember.update({
-      where: { id: params.id },
-      data: validatedData.data,
+    const updated = await prisma.teamMember.update({
+      where: { id },
+      data: parsed.data,
     });
 
-    return NextResponse.json(updatedTeamMember);
+    return NextResponse.json(updated);
   } catch (error) {
-    console.error("Failed to update team member:", error);
+    console.error("PATCH error:", error);
     return NextResponse.json(
-      { error: "Failed to update team member" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
 }
 
-// DELETE a team member by ID
+// DELETE: Remove team member
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  // Check authentication
   const authError = await authMiddleware(req, ["admin"]);
   if (authError) return authError;
 
-  try {
-    // Check if team member exists
-    const existingTeamMember = await prisma.teamMember.findUnique({
-      where: { id: params.id },
-    });
+  const { id } = params;
 
-    if (!existingTeamMember) {
-      return NextResponse.json(
-        { error: "Team member not found" },
-        { status: 404 }
-      );
+  try {
+    const existing = await prisma.teamMember.findUnique({ where: { id } });
+    if (!existing) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    // Delete team member
-    await prisma.teamMember.delete({
-      where: { id: params.id },
-    });
+    await prisma.teamMember.delete({ where: { id } });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Failed to delete team member:", error);
+    console.error("DELETE error:", error);
     return NextResponse.json(
-      { error: "Failed to delete team member" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

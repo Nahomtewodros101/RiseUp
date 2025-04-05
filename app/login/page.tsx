@@ -1,20 +1,17 @@
-
+// app/login/page.tsx (Server-side logic)
 import LoginForm from "@/components/auth/login-form"
 import { getCurrentUser } from "@/lib/auth"
 import { redirect } from "next/navigation"
 
 export default async function LoginPage() {
-  // Check if user is already logged in
   const user = await getCurrentUser()
 
-  // If user is already logged in and is admin, redirect to console
-  if (user && user.role === "admin") {
-    redirect("/console")
-  }
-
-  // If user is already logged in but not admin, redirect to home
   if (user) {
-    redirect("/")
+    if (user.role === "admin") {
+      redirect("/console")
+    } else {
+      redirect("/")
+    }
   }
 
   return (
@@ -32,4 +29,3 @@ export default async function LoginPage() {
     </div>
   )
 }
-

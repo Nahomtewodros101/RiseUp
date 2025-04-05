@@ -1,6 +1,5 @@
 // app/login/page.tsx
 import LoginForm from "@/components/auth/login-form";
-import LoginCheck from "@/components/auth/LoginCheck";
 
 export default function LoginPage() {
   return (
@@ -17,8 +16,6 @@ export default function LoginPage() {
         </div>
         <LoginForm />
       </div>
-      <LoginCheck />{" "}
-      {/* This is where we handle the user check and redirection */}
     </div>
   );
 }

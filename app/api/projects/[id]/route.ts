@@ -1,32 +1,33 @@
-// pages/api/projects/[id].js
+// app/api/projects/[id]/route.ts
 
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 
 export async function DELETE(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const { id } = params;
 
+    // Delete project by id
     const deletedProject = await prisma.project.delete({
       where: { id: id },
     });
 
     if (!deletedProject) {
-      return new Response(JSON.stringify({ message: "Project not found" }), {
-        status: 404,
-      });
+      return NextResponse.json(
+        { message: "Project not found" },
+        { status: 404 }
+      );
     }
 
-    return new Response(
-      JSON.stringify({ message: "Project deleted successfully" }),
+    return NextResponse.json(
+      { message: "Project deleted successfully" },
       { status: 200 }
     );
   } catch (error) {
     console.error("Error deleting project:", error);
-    return new Response(JSON.stringify({ message: "Server error" }), {
-      status: 500,
-    });
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }

@@ -6,29 +6,6 @@ type ContactParams = {
   params: {
     id: string;
   };
-};
-
-// GET handler to retrieve a specific contact by ID
-export async function GET(request: NextRequest, context: ContactParams) {
-  try {
-    const id = context.params.id;
-
-    const contact = await prisma.contact.findUnique({
-      where: { id },
-    });
-
-    if (!contact) {
-      return NextResponse.json({ error: "Contact not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(contact);
-  } catch (error) {
-    console.error("Error fetching contact:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch contact" },
-      { status: 500 }
-    );
-  }
 }
 
 // DELETE handler to remove a contact by ID

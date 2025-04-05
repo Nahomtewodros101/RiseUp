@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import ProjectForm from "@/components/console/projects/ProjectForm";
 import prisma from "@/lib/db";
-import type { Metadata, ResolvingMetadata } from "next";
 
 interface PageProps {
   params: {

@@ -58,7 +58,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
 import type { TeamMember } from "@/types";
 
 export default function TeamPage() {

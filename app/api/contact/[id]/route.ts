@@ -1,90 +1,18 @@
-import { type NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/db";
+import { NextApiRequest, NextApiResponse } from "next";
 
-// GET handler to retrieve a specific contact by ID
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+type Params = { id: string };
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
 ) {
-  try {
-    const id = String(params.id); 
-   
-    const contact = await prisma.contact.findUnique({
-      where: { id },
-    });
+  const { id } = req.query; // Extracting 'id' from the route parameters
 
-    if (!contact) {
-      return NextResponse.json({ error: "Contact not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(contact);
-  } catch (error) {
-    console.error("Error fetching contact:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch contact" },
-      { status: 500 }
-    );
-  }
-}
-
-// DELETE handler to remove a contact by ID
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const id = params.id;
-
-    const existingContact = await prisma.contact.findUnique({
-      where: { id },
-    });
-
-    if (!existingContact) {
-      return NextResponse.json({ error: "Contact not found" }, { status: 404 });
-    }
-
-    await prisma.contact.delete({
-      where: { id },
-    });
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Error deleting contact:", error);
-    return NextResponse.json(
-      { error: "Failed to delete contact" },
-      { status: 500 }
-    );
-  }
-}
-
-// PUT handler to update a contact by ID
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const id = params.id;
-    const body = await request.json();
-
-    const existingContact = await prisma.contact.findUnique({
-      where: { id },
-    });
-
-    if (!existingContact) {
-      return NextResponse.json({ error: "Contact not found" }, { status: 404 });
-    }
-
-    const updatedContact = await prisma.contact.update({
-      where: { id },
-      data: body,
-    });
-
-    return NextResponse.json(updatedContact);
-  } catch (error) {
-    console.error("Error updating contact:", error);
-    return NextResponse.json(
-      { error: "Failed to update contact" },
-      { status: 500 }
-    );
+  if (typeof id === "string") {
+    // Process the 'id' safely
+    return res.status(200).json({ message: `Received ID: ${id}` });
+  } else {
+    // Handle the case where 'id' is invalid or not provided
+    return res.status(400).json({ error: "Invalid ID" });
   }
 }

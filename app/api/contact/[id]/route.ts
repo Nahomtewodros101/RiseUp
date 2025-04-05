@@ -1,13 +1,17 @@
 import { type NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/db";
+import  prisma  from "@/lib/db";
+
+// Define the correct params type for Next.js 15 route handlers
+type ContactParams = {
+  params: {
+    id: string;
+  };
+};
 
 // GET handler to retrieve a specific contact by ID
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, context: ContactParams) {
   try {
-    const id = params.id;
+    const id = context.params.id;
 
     const contact = await prisma.contact.findUnique({
       where: { id },
@@ -28,12 +32,9 @@ export async function GET(
 }
 
 // DELETE handler to remove a contact by ID
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, context: ContactParams) {
   try {
-    const id = params.id;
+    const id = context.params.id;
 
     // Check if contact exists
     const existingContact = await prisma.contact.findUnique({
@@ -60,12 +61,9 @@ export async function DELETE(
 }
 
 // PUT handler to update a contact by ID
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, context: ContactParams) {
   try {
-    const id = params.id;
+    const id = context.params.id;
     const body = await request.json();
 
     // Check if contact exists

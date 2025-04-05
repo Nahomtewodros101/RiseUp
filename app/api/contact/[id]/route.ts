@@ -35,7 +35,6 @@ export async function DELETE(
   try {
     const id = params.id;
 
-    // Check if contact exists
     const existingContact = await prisma.contact.findUnique({
       where: { id },
     });
@@ -44,7 +43,6 @@ export async function DELETE(
       return NextResponse.json({ error: "Contact not found" }, { status: 404 });
     }
 
-    // Delete the contact
     await prisma.contact.delete({
       where: { id },
     });
@@ -68,7 +66,6 @@ export async function PUT(
     const id = params.id;
     const body = await request.json();
 
-    // Check if contact exists
     const existingContact = await prisma.contact.findUnique({
       where: { id },
     });
@@ -77,7 +74,6 @@ export async function PUT(
       return NextResponse.json({ error: "Contact not found" }, { status: 404 });
     }
 
-    // Update the contact
     const updatedContact = await prisma.contact.update({
       where: { id },
       data: body,

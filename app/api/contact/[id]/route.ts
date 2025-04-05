@@ -4,10 +4,10 @@ import prisma from "@/lib/db";
 // GET handler to retrieve a specific contact by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
+    const { id } = context.params; // Destructure the `id` from context.params
 
     const contact = await prisma.contact.findUnique({
       where: { id },

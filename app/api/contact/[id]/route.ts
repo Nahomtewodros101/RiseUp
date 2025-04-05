@@ -1,10 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function GET(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query; // Extracting 'id' from the route parameters
 
   if (typeof id === "string") {

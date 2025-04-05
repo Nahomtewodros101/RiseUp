@@ -1,13 +1,12 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from 'next/server';
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query; // Extracting 'id' from the route parameters
+export async function GET(req: Request) {
+  const { id } = req.url; // Extract the dynamic ID from the URL
 
-  if (typeof id === "string") {
-    // Process the 'id' safely
-    return res.status(200).json({ message: `Received ID: ${id}` });
+  // Assuming ID is extracted from the URL, let's check it
+  if (id) {
+    return NextResponse.json({ message: `Received ID: ${id}` });
   } else {
-    // Handle the case where 'id' is invalid or not provided
-    return res.status(400).json({ error: "Invalid ID" });
+    return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
   }
 }

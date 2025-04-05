@@ -99,27 +99,4 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
-// DELETE project
-export async function DELETE(req: NextRequest) {
-  // Check authentication
-  const authError = await authMiddleware(req, ["admin"]);
-  if (authError) return authError;
 
-  try {
-    // Parse and validate request body
-    const { id } = await req.json();
-
-    // Delete project
-    const project = await prisma.project.delete({
-      where: { id },
-    });
-
-    return NextResponse.json(project);
-  } catch (error) {
-    console.error("Failed to delete project:", error);
-    return NextResponse.json(
-      { error: "Failed to delete project" },
-      { status: 500 }
-    );
-  }
-}

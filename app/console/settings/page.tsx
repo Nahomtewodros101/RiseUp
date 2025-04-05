@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +26,10 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Password change schema
+import { getCurrentUser } from "@/lib/auth";
+import { isAdmin } from "@/lib/auth";
+import Link from "next/link";
+
 const passwordSchema = z
   .object({
     currentPassword: z.string().min(1, "Current password is required"),
@@ -46,13 +49,35 @@ export default function SettingsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [adminData, setAdminData] = useState<{
-    name: string;
-    email: string;
-    role: string;
-  } | null>(null);
+  const [user, setUser] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false); // Define isLoading state
 
-  // Initialize password form
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch("/api/auth/me", {
+          cache: "no-store",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   const passwordForm = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordSchema),
     defaultValues: {
@@ -62,48 +87,14 @@ export default function SettingsPage() {
     },
   });
 
-  // Fetch admin data on mount
-  useEffect(() => {
-    const fetchAdminData = async () => {
-      try {
-        // Example fetch to get logged-in admin data from your API
-        const response = await fetch("/api/auth/current-admin", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Or get it from cookies, session, etc.
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch admin data");
-        }
-        const data = await response.json();
-        setAdminData(data);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err.message
-            : "An error occurred while fetching admin data"
-        );
-      }
-    };
-
-    fetchAdminData();
-  }, []);
-
-  // Password form submission handler
   const onPasswordSubmit = async (data: PasswordFormValues) => {
     setIsSubmitting(true);
     setError(null);
     setSuccess(null);
-    console.log("Submitting password change:", data);
+
     try {
-      // In a real app, you would call your API to change the password
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Reset form
       passwordForm.reset();
-
       setSuccess("Password updated successfully");
     } catch (err) {
       setError(
@@ -141,25 +132,23 @@ export default function SettingsPage() {
               <div className="grid gap-6 md:grid-cols-2">
                 <div>
                   <label className="text-sm font-medium">Name</label>
-                  <p className="mt-1">{adminData?.name || "Loading..."}</p>
+                  <p className="mt-1">{user?.name}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium">Email</label>
-                  <p className="mt-1">{adminData?.email || "Loading..."}</p>
+                  <p className="mt-1">{user?.email}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium">Role</label>
-                  <p className="mt-1">{adminData?.role || "Loading..."}</p>
+                  <p className="mt-1">{user?.role}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Account Created</label>
-                  <p className="mt-1">January 1, 2023</p>
+                  <label className="text-sm font-medium">Joined</label>
+                  <p className="mt-1">2025</p>
                 </div>
               </div>
 
-              <div className="flex justify-end">
-                <Button variant="outline">Edit Profile</Button>
-              </div>
+           
             </CardContent>
           </Card>
         </TabsContent>

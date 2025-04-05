@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Users,
-  Eye,
-  TrendingUp,
-  TrendingDown,
-} from "lucide-react";
+import { Users, Eye, TrendingUp, TrendingDown } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -163,7 +158,7 @@ export default function ConsoleDashboard() {
               <Link href="/console/projects/new">Add New Project</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/console/team/new">Add Team Member</Link>
+              <Link href="/console/team">Add Team Member</Link>
             </Button>
             <Button asChild variant="outline">
               <Link href="/" target="_blank">

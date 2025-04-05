@@ -86,7 +86,7 @@ export default function AboutPage() {
             </div>
             <div className="relative h-[400px] rounded-lg overflow-hidden">
               <Image
-                src="/placeholder.svg?height=400&width=600"
+                src="/team.png"
                 alt="Qemem Devs team"
                 fill
                 className="object-cover"

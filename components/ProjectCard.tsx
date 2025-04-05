@@ -12,13 +12,12 @@ export default function ProjectCard({
   thumbnail,
   techStack,
   link,
-
   projectType,
   testimonial,
   featured,
 }: Project) {
   return (
-    <Card className="overflow-hidden group">
+    <Card className="overflow-hidden group w-full sm:w-80 md:w-96 lg:w-[400px] xl:w-[500px] mx-2 opacity-100 transition-opacity duration-1000 ease-in-out carousel-card">
       <div className="relative aspect-video overflow-hidden">
         <Image
           src={thumbnail || "/placeholder.svg"}
@@ -29,7 +28,7 @@ export default function ProjectCard({
       </div>
       <CardContent className="p-6">
         <h3 className="text-xl font-bold mb-2">{title}</h3>
-        <p className="text-gray-500 dark:text-gray-400 mb-4">{description}</p>
+        <p className="text-gray-500 dark:text-gray-400  mb-4">{description}</p>
 
         {featured && (
           <Badge

@@ -49,11 +49,7 @@ export default function ProjectsPage() {
   }, []);
 
   if (!isContentReady || isLoading) {
-    return (
-      <div className="min-h-screen max-w-7xl mx-auto flex items-center justify-center">
-        <Skeleton />
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -85,7 +81,7 @@ export default function ProjectsPage() {
           </div>
 
           {/* Projects Grid */}
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 lg:space-x-28">
             {filteredProjects.map((project, index) => (
               <motion.div
                 key={index}

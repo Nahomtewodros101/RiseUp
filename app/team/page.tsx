@@ -1,95 +1,67 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Github, Linkedin, Twitter } from "lucide-react";
+import { ArrowLeft, Github, Linkedin, Twitter, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
+import type { TeamMember } from "@/types";
 
 export default function TeamPage() {
   const [isContentReady, setIsContentReady] = useState(false);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Set content as ready after the loading screen has had time to show
     const timer = setTimeout(() => {
       setIsContentReady(true);
-    }, 2100); // Slightly longer than the loading screen duration
+    }, 2100);
 
     return () => clearTimeout(timer);
   }, []);
 
-  // Sample team data
-  const teamMembers = [
-    {
-      name: "Alex Johnson",
-      role: "Founder & CEO",
-      bio: "10+ years of experience in software development and tech entrepreneurship.",
-      image: "/placeholder.svg?height=400&width=400",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#",
-      },
-    },
-    {
-      name: "Sarah Chen",
-      role: "CTO",
-      bio: "Expert in cloud architecture and distributed systems with a background in AI research.",
-      image: "/placeholder.svg?height=400&width=400",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#",
-      },
-    },
-    {
-      name: "Michael Rodriguez",
-      role: "Lead Developer",
-      bio: "Full-stack developer specializing in React and Node.js ecosystems.",
-      image: "/placeholder.svg?height=400&width=400",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#",
-      },
-    },
-    {
-      name: "Priya Patel",
-      role: "UI/UX Designer",
-      bio: "Award-winning designer with a passion for creating intuitive user experiences.",
-      image: "/placeholder.svg?height=400&width=400",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#",
-      },
-    },
-    {
-      name: "David Kim",
-      role: "Mobile Developer",
-      bio: "Specialist in cross-platform mobile development with React Native and Flutter.",
-      image: "/placeholder.svg?height=400&width=400",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#",
-      },
-    },
-    {
-      name: "Emma Wilson",
-      role: "Project Manager",
-      bio: "Certified Scrum Master with experience managing complex tech projects.",
-      image: "/placeholder.svg?height=400&width=400",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#",
-      },
-    },
-  ];
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch("/api/team");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch team members");
+        }
+
+        const data = await response.json();
+
+        // Sort team members by order field
+        const sortedMembers = data.sort(
+          (a: TeamMember, b: TeamMember) => a.order - b.order
+        );
+
+        // Filter out inactive members
+        const activeMembers = sortedMembers.filter(
+          (member: TeamMember) => member.isActive
+        );
+
+        setTeamMembers(activeMembers);
+      } catch (err) {
+        console.error("Error fetching team members:", err);
+        setError(
+          err instanceof Error
+            ? err.message
+            : "An error occurred while fetching team members"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isContentReady) {
+      fetchTeamMembers();
+    }
+  }, [isContentReady]);
 
   if (!isContentReady) {
     return null; // Return nothing while loading screen is showing
@@ -122,63 +94,122 @@ export default function TeamPage() {
             </motion.div>
           </div>
 
-          {/* Team Grid */}
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={index}
-                className="group relative overflow-hidden rounded-lg border bg-background p-2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="aspect-square overflow-hidden rounded-lg">
-                  <Image
-                    src={member.image || "/placeholder.svg"}
-                    alt={member.name}
-                    width={400}
-                    height={400}
-                    className="object-cover transition-transform group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="font-bold text-xl">{member.name}</h3>
-                  <p className="text-blue-600 dark:text-blue-400 font-medium">
-                    {member.role}
-                  </p>
-                  <p className="mt-2 text-gray-500 dark:text-gray-400">
-                    {member.bio}
-                  </p>
-                  <div className="mt-4 flex space-x-3">
-                    <Link
-                      href={member.social.twitter}
-                      className="text-gray-500 hover:text-blue-500 dark:hover:text-blue-400"
-                    >
-                      <Twitter className="h-5 w-5" />
-                      <span className="sr-only">Twitter</span>
-                    </Link>
-                    <Link
-                      href={member.social.linkedin}
-                      className="text-gray-500 hover:text-blue-500 dark:hover:text-blue-400"
-                    >
-                      <Linkedin className="h-5 w-5" />
-                      <span className="sr-only">LinkedIn</span>
-                    </Link>
-                    <Link
-                      href={member.social.github}
-                      className="text-gray-500 hover:text-blue-500 dark:hover:text-blue-400"
-                    >
-                      <Github className="h-5 w-5" />
-                      <span className="sr-only">GitHub</span>
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* Loading State */}
+          {isLoading && (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="h-10 w-10 animate-spin text-blue-600 dark:text-blue-400" />
+            </div>
+          )}
 
-         
+          {/* Error State */}
+          {error && (
+            <div className="text-center py-20">
+              <p className="text-red-500 dark:text-red-400 mb-4">{error}</p>
+              <Button
+                onClick={() => window.location.reload()}
+                variant="outline"
+              >
+                Try Again
+              </Button>
+            </div>
+          )}
+
+          {/* Team Grid */}
+          {!isLoading && !error && (
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {teamMembers.map((member, index) => (
+                <motion.div
+                  key={member.id}
+                  className="group relative overflow-hidden rounded-lg border bg-background p-2"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  whileHover={{ y: -5 }}
+                >
+                  <div className="aspect-square overflow-hidden rounded-lg">
+                    <Image
+                      src={member.image || "/placeholder.svg"}
+                      alt={member.name}
+                      width={400}
+                      height={400}
+                      className="object-cover transition-transform group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold text-xl">{member.name}</h3>
+                    <p className="text-blue-600 dark:text-blue-400 font-medium">
+                      {member.role}
+                    </p>
+                    <p className="mt-2 text-gray-500 dark:text-gray-400">
+                      {member.bio}
+                    </p>
+                    <div className="mt-4 flex space-x-3">
+                      {member.socialLinks.twitter && (
+                        <Link
+                          href={member.socialLinks.twitter}
+                          className="text-gray-500 hover:text-blue-500 dark:hover:text-blue-400"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Twitter className="h-5 w-5" />
+                          <span className="sr-only">Twitter</span>
+                        </Link>
+                      )}
+                      {member.socialLinks.linkedin && (
+                        <Link
+                          href={member.socialLinks.linkedin}
+                          className="text-gray-500 hover:text-blue-500 dark:hover:text-blue-400"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Linkedin className="h-5 w-5" />
+                          <span className="sr-only">LinkedIn</span>
+                        </Link>
+                      )}
+                      {member.socialLinks.github && (
+                        <Link
+                          href={member.socialLinks.github}
+                          className="text-gray-500 hover:text-blue-500 dark:hover:text-blue-400"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Github className="h-5 w-5" />
+                          <span className="sr-only">GitHub</span>
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          {/* No Team Members State */}
+          {!isLoading && !error && teamMembers.length === 0 && (
+            <div className="text-center py-20">
+              <p className="text-gray-500 dark:text-gray-400 mb-4">
+                No team members found.
+              </p>
+            </div>
+          )}
+
+          {/* Join Our Team Section */}
+          <motion.div
+            className="mt-20 rounded-lg bg-blue-50 dark:bg-blue-900/20 p-8 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-2xl font-bold mb-4">Join Our Team</h2>
+            <p className="max-w-[600px] mx-auto mb-6 text-gray-500 dark:text-gray-400">
+              We're always looking for talented individuals to join our growing
+              team. Check out our open positions.
+            </p>
+            <Button className="bg-blue-600 hover:bg-blue-700" asChild>
+              <Link href="/careers">View Open Positions</Link>
+            </Button>
+          </motion.div>
         </div>
       </main>
       <Footer />

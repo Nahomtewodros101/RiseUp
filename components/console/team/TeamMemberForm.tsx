@@ -28,12 +28,7 @@ const teamMemberFormSchema = z.object({
   role: z.string().min(1, "Role is required"),
   bio: z.string().min(1, "Bio is required"),
   image: z.string().min(1, "Image URL is required"),
-  socialLinks: z.object({
-    twitter: z.string().optional(),
-    linkedin: z.string().optional(),
-    github: z.string().optional(),
-  }),
-  isActive: z.boolean().optional(),
+  isActive: z.boolean().default(true).optional(),
   order: z.number().int().min(0, "Order must be a positive number"),
 });
 
@@ -60,11 +55,6 @@ export default function TeamMemberForm({
       role: "",
       bio: "",
       image: "",
-      socialLinks: {
-        twitter: "",
-        linkedin: "",
-        github: "",
-      },
       isActive: true,
       order: 0,
     },
@@ -77,7 +67,6 @@ export default function TeamMemberForm({
 
     try {
       const url = isEditing ? `/api/team/${initialData?.id}` : "/api/team";
-
       const method = isEditing ? "PUT" : "POST";
 
       const response = await fetch(url, {
@@ -241,68 +230,12 @@ export default function TeamMemberForm({
                         />
                       </FormControl>
                       <FormDescription>
-                        URL for the team member&apos; profile image
+                        URL for the team member&apos;s profile image
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
-                <div className="mt-6 space-y-6">
-                  <FormField
-                    control={form.control}
-                    name="socialLinks.twitter"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Twitter URL (Optional)</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="https://twitter.com/username"
-                            {...field}
-                            disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="socialLinks.linkedin"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>LinkedIn URL (Optional)</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="https://linkedin.com/in/username"
-                            {...field}
-                            disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="socialLinks.github"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>GitHub URL (Optional)</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="https://github.com/username"
-                            {...field}
-                            disabled={isSubmitting}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
               </CardContent>
             </Card>
           </div>

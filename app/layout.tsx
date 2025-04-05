@@ -3,7 +3,7 @@ import "@/app/globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import LoadingScreen from "@/components/LoadingScreen";
 import BackgroundGrid from "@/components/BacgroundGrid";
-
+import CookieConsent from "../components/CookieConsent";
 export const metadata = {
   title: "Qemem Devs - Tech Startup",
   description:
@@ -30,6 +30,7 @@ export default function RootLayout({
         >
           <BackgroundGrid />
           <LoadingScreen />
+          <CookieConsent />
           {children}
         </ThemeProvider>
       </body>

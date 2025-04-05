@@ -5,6 +5,7 @@ import { authMiddleware } from "@/lib/auth";
 
 // Team member schema for validation
 const teamMemberSchema = z.object({
+  id: z.string().optional(), // Optional ID field
   name: z.string().min(1, "Name is required"),
   role: z.string().min(1, "Role is required"),
   bio: z.string().min(1, "Bio is required"),
@@ -35,7 +36,6 @@ export async function GET() {
   }
 }
 
-// POST new team member
 export async function POST(req: NextRequest) {
   // Check authentication
   const authError = await authMiddleware(req, ["admin"]);
@@ -44,16 +44,19 @@ export async function POST(req: NextRequest) {
   try {
     // Parse and validate request body
     const body = await req.json();
+    console.log("Received body:", body); // Log the incoming request data
+
     const validatedData = teamMemberSchema.safeParse(body);
 
     if (!validatedData.success) {
+      console.error("Validation failed:", validatedData.error.format());
       return NextResponse.json(
         { error: "Invalid input data", details: validatedData.error.format() },
         { status: 400 }
       );
     }
 
-    // Create new team member
+    // Proceed with creating the team member
     const teamMember = await prisma.teamMember.create({
       data: validatedData.data,
     });
@@ -62,8 +65,13 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Failed to create team member:", error);
     return NextResponse.json(
-      { error: "Failed to create team member" },
+      {
+        error: "Failed to create team member",
+        message: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
 }
+
+

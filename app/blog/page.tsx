@@ -11,12 +11,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function BlogPage() {
   const [isContentReady, setIsContentReady] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-
+  const router = useRouter();
   useEffect(() => {
     // Set content as ready after the loading screen has had time to show
     const timer = setTimeout(() => {
@@ -30,19 +31,19 @@ export default function BlogPage() {
   const blogPosts = [
     {
       id: "1",
-      title: "The Future of Web Development: Trends to Watch in 2023",
-      slug: "future-web-development-trends-2023",
+      title: "The Future of Web Development: Trends to Watch in 2025",
+      slug: "future-web-development-trends-2025",
       excerpt:
         "Explore the emerging technologies and methodologies that are shaping the future of web development.",
       content: "",
-      coverImage: "/placeholder.svg?height=400&width=800",
+      coverImage: "/website.jpg",
       tags: ["Web Development", "Trends", "Technology"],
       published: true,
-      publishedAt: "2023-03-15T00:00:00Z",
+      publishedAt: "2025-03-15T00:00:00Z",
       author: {
         id: "1",
-        name: "Alex Johnson",
-        image: "/placeholder.svg?height=100&width=100",
+        name: "Nahom Tewodros",
+        image: "/user.png",
       },
     },
     {
@@ -52,14 +53,14 @@ export default function BlogPage() {
       excerpt:
         "Learn how to create web applications that are accessible to all users, including those with disabilities.",
       content: "",
-      coverImage: "/placeholder.svg?height=400&width=800",
+      coverImage: "/app.jpg",
       tags: ["Accessibility", "Web Development", "UI/UX"],
       published: true,
-      publishedAt: "2023-02-28T00:00:00Z",
+      publishedAt: "2025-02-28T00:00:00Z",
       author: {
         id: "2",
-        name: "Sarah Chen",
-        image: "/placeholder.svg?height=100&width=100",
+        name: "Abenezer Wasihun",
+        image: "/user.png",
       },
     },
     {
@@ -69,14 +70,14 @@ export default function BlogPage() {
       excerpt:
         "Discover strategies to improve the performance of your React applications and deliver a better user experience.",
       content: "",
-      coverImage: "/placeholder.svg?height=400&width=800",
+      coverImage: "/react.png",
       tags: ["React", "Performance", "JavaScript"],
       published: true,
-      publishedAt: "2023-02-10T00:00:00Z",
+      publishedAt: "2025-02-10T00:00:00Z",
       author: {
         id: "3",
-        name: "Michael Rodriguez",
-        image: "/placeholder.svg?height=100&width=100",
+        name: "Beka Dessalegn",
+        image: "/user.png",
       },
     },
     {
@@ -86,31 +87,31 @@ export default function BlogPage() {
       excerpt:
         "Explore how artificial intelligence is transforming the way we build and interact with web applications.",
       content: "",
-      coverImage: "/placeholder.svg?height=400&width=800",
+      coverImage: "/ai.jpg",
       tags: ["AI", "Web Development", "Technology"],
       published: true,
-      publishedAt: "2023-01-20T00:00:00Z",
+      publishedAt: "2025-01-20T00:00:00Z",
       author: {
         id: "1",
-        name: "Alex Johnson",
-        image: "/placeholder.svg?height=100&width=100",
+        name: "Estifanos Neway",
+        image: "/user.png",
       },
     },
     {
       id: "5",
-      title: "Responsive Design in 2023: Beyond Media Queries",
+      title: "Responsive Design in 2025: Beyond Media Queries",
       slug: "responsive-design-beyond-media-queries",
       excerpt:
         "Learn about advanced techniques for creating truly responsive web experiences that go beyond traditional media queries.",
       content: "",
-      coverImage: "/placeholder.svg?height=400&width=800",
+      coverImage: "/res.png",
       tags: ["Responsive Design", "CSS", "UI/UX"],
       published: true,
-      publishedAt: "2023-01-05T00:00:00Z",
+      publishedAt: "2025-01-05T00:00:00Z",
       author: {
         id: "4",
-        name: "Priya Patel",
-        image: "/placeholder.svg?height=100&width=100",
+        name: "Kaleab Taye",
+        image: "/user.png",
       },
     },
     {
@@ -120,14 +121,14 @@ export default function BlogPage() {
       excerpt:
         "A step-by-step guide to integrating TypeScript into your Next.js projects for improved type safety and developer experience.",
       content: "",
-      coverImage: "/placeholder.svg?height=400&width=800",
+      coverImage: "/ts.jpg",
       tags: ["TypeScript", "Next.js", "JavaScript"],
       published: true,
       publishedAt: "2022-12-15T00:00:00Z",
       author: {
         id: "3",
-        name: "Michael Rodriguez",
-        image: "/placeholder.svg?height=100&width=100",
+        name: "Nebiyu Yohhanes",
+        image: "/user.png",
       },
     },
   ];
@@ -147,7 +148,9 @@ export default function BlogPage() {
   if (!isContentReady) {
     return null; // Return nothing while loading screen is showing
   }
-
+  const handleClick = () => {
+    router.push("/blog");
+  };
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -391,8 +394,12 @@ export default function BlogPage() {
                 placeholder="Your email address"
                 type="email"
                 className="flex-1"
+                autoComplete="email"
               />
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button
+                onClick={handleClick}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
                 Subscribe
               </Button>
             </div>

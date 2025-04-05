@@ -161,7 +161,7 @@ export default function Home() {
                 {error}
               </div>
             ) : (
-              <div className="grid gap-6 mt-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              <div className="grid gap-6 mt-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:space-x-52">
                 {featuredProjects.map((project) => (
                   <ProjectCard key={project.id} {...project} />
                 ))}
@@ -171,7 +171,7 @@ export default function Home() {
         </section>
 
         {/* Why Choose Us Section */}
-        <section className="relative py-20 bg-blue-600/90 dark:bg-blue-700">
+        <section className="relative py-20 bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 dark:bg-gradient-to-r dark:from-blue-800 dark:via-blue-900 dark:to-blue-900">
           {/* Background Grid */}
           <BackgroundGrid />
 
@@ -181,16 +181,15 @@ export default function Home() {
               className="text-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.7 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl font-bold text-black tracking-tight sm:text-5xl">
+              <h2 className="text-4xl font-bold text-white tracking-tight sm:text-5xl">
                 Why Choose Us?
               </h2>
-              <p className="max-w-[600px] mx-auto mt-6 text-gray-200">
+              <p className="max-w-[600px] mx-auto mt-6 text-gray-200 text-lg">
                 We are more than just a service; we are a movement, shaping the
-                future together. Here&apos;s why you should ride the wave with
-                us.
+                future together. Here’s why you should ride the wave with us.
               </p>
             </motion.div>
 
@@ -200,17 +199,22 @@ export default function Home() {
                 (item, index) => (
                   <motion.div
                     key={index}
-                    className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:transform-gpu hover:bg-white hover:text-black"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    className="bg-blue-600 p-8 rounded-xl shadow-2xl transition-all duration-700 ease-in-out hover:bg-gradient-to-l hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 hover:scale-105"
+                    whileHover={{ rotate: 360 }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
+                    transition={{
+                      duration: 1,
+                      delay: index * 0.2,
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 10,
+                    }}
                   >
-                    <h3 className="text-2xl font-semibold text-gray-800 dark:text-white">
+                    <h3 className="text-2xl font-semibold text-white">
                       {item}
                     </h3>
-                    <p className="text-lg text-gray-600 dark:text-gray-400 mt-4">
+                    <p className="text-lg text-gray-100 mt-4">
                       {item === "Expertise"
                         ? "With years of hands-on experience, we’re not just knowledgeable, we’re masters of our craft, ready to turn your ideas into reality."
                         : item === "Innovation"

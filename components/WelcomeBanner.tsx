@@ -81,37 +81,37 @@ export default function WelcomeBanner() {
     <AnimatePresence>
       <motion.div
         className="relative mb-8 overflow-hidden"
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, height: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.6 }}
       >
         <motion.div
-          className="bg-gradient-to-r from-blue-600 to-blue-400 rounded-lg p-6 pr-12 text-white shadow-lg"
-          whileHover={{ scale: 1.01 }}
-          transition={{ duration: 0.2 }}
+          className="bg-gradient-to-r from-indigo-600 to-indigo-500 rounded-xl p-8 pr-16 text-white shadow-xl transform transition-all"
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.3 }}
           onClick={triggerConfetti}
         >
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-2 right-2 text-white hover:bg-blue-500/20"
+            className="absolute top-4 right-4 text-white hover:bg-indigo-500/30"
             onClick={handleDismiss}
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
             <span className="sr-only">Dismiss</span>
           </Button>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <motion.div
               animate={{ rotate: [0, 20, 0, 20, 0] }}
               transition={{ duration: 1.5, delay: 0.5, repeat: 0 }}
             >
-              <Wave className="h-8 w-8 text-white" />
+              <Wave className="h-10 w-10 text-white" />
             </motion.div>
 
             <div className="flex justify-center items-center flex-col">
-              <h2 className="text-xl font-bold flex items-center gap-2">
+              <h2 className="text-3xl font-extrabold flex items-center gap-3">
                 Welcome back, {user.name}!
                 <motion.div
                   animate={{ rotate: 360 }}
@@ -121,21 +121,24 @@ export default function WelcomeBanner() {
                     ease: "linear",
                   }}
                 >
-                  <Sparkles className="h-5 w-5 text-yellow-300" />
+                  <Sparkles className="h-6 w-6 text-yellow-400" />
                 </motion.div>
               </h2>
-              <p className="text-blue-100">
-                We are excited to see you again. Click anywhere on this banner
-                for a surprise!
+              <p className="text-indigo-200 text-lg mt-2">
+                We&apos;re thrilled to see you again! Click anywhere on this
+                banner for a surprise!
               </p>
             </div>
           </div>
 
           {user.role === "admin" && (
-            <div className="mt-3 bg-blue-700/30 p-2 rounded text-sm">
-              <span className="font-semibold">Admin access:</span> You have
+            <div className="mt-4 bg-indigo-700/40 p-3 rounded-lg text-sm">
+              <span className="font-semibold">Admin Access:</span> You have
               access to the{" "}
-              <a href="/console" className="underline hover:text-blue-200">
+              <a
+                href="/console"
+                className="underline text-indigo-100 hover:text-indigo-200"
+              >
                 admin console
               </a>
               .

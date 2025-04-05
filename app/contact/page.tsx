@@ -18,12 +18,13 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
-
+import { useRouter } from "next/navigation";
 const MapComponent = dynamic(() => import("@/components/MapComponent"), {
   ssr: false,
 });
 
 export default function ContactPage() {
+  const router = useRouter();
   const [isContentReady, setIsContentReady] = useState(false);
   const [formState, setFormState] = useState({
     name: "",
@@ -77,6 +78,7 @@ export default function ContactPage() {
         subject: "",
         message: "",
       });
+      router.push("/");
     } catch (err) {
       setIsSubmitting(false);
       if (err instanceof Error) {

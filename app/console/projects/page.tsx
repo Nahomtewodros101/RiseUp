@@ -92,22 +92,27 @@ export default function ProjectsPage() {
     return matchesSearch && matchesType;
   });
 
-  // Handle project deletion
-  const handleDeleteProject = async (id: string) => {
-    try {
-      const response = await fetch(`/api/projects/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete project");
-      }
+// Handle project deletion
+const handleDeleteProject = async (projectId: string) => {
+  try {
+    const response = await fetch(`/api/projects/${projectId}`, {
+      method: 'DELETE',
+    });
 
-      // Remove the project from the state
-      setProjects(projects.filter((project) => project.id !== id));
-    } catch (error) {
-      console.error("Failed to delete project:", error);
+    if (!response.ok) {
+      throw new Error('Failed to delete project');
     }
-  };
+
+    // Update the state to remove the deleted project
+    setProjects((prevProjects) =>
+      prevProjects.filter((project) => project.id !== projectId)
+    );
+  } catch (error) {
+    console.error('Error deleting project:', error);
+    alert('An error occurred while deleting the project. Please try again.');
+  }
+};
+
 
   // Get badge color based on project type
   const getProjectTypeBadge = (type: string) => {

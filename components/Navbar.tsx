@@ -106,6 +106,7 @@ export default function Navbar() {
     { href: "/projects", label: "Projects" },
     { href: "/team", label: "Team" },
     { href: "/contact", label: "Contact" },
+    { href: "/careers", label: "Talent" },
   ];
 
   return (
@@ -218,11 +219,10 @@ export default function Navbar() {
           )}
 
           {user && user.role === "admin" ? (
-            <Link
-              href="/console"
-              className="text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-black px-6 py-2 rounded-lg shadow-lg hover:from-blue-600 hover:to-black/90 hover:text-gray-100 hover:shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105"
-            >
-              Admin Console
+            <Link href="/console">
+              <Button variant="outline" className="w-full gap-2">
+                Dashboard
+              </Button>
             </Link>
           ) : null}
 

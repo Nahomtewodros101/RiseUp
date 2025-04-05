@@ -69,3 +69,41 @@
 ::selection {
   @apply bg-blue-300;
 }
+/* Add this to your global CSS or a relevant component CSS file */
+
+@keyframes slideFade {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.carousel-container {
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-content {
+  display: flex;
+  flex-wrap: nowrap;
+  animation: slideFade 10s linear infinite;
+}
+
+.carousel-card {
+  margin-right: 20px; /* Space between cards */
+  opacity: 1; /* Start with fully visible cards */
+  transition: opacity 2s ease-out; /* Smooth fade-out transition */
+}
+
+.carousel-card:nth-child(odd) {
+  animation-delay: 3s; /* Delay for odd cards to start fading at different times */
+}
+
+.carousel-card:nth-child(even) {
+  animation-delay: 6s; /* Delay for even cards */
+}

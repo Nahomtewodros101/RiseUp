@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-type Params = { id: string };
 
 export default async function handler(
   req: NextApiRequest,

@@ -1,17 +1,15 @@
 import { notFound } from "next/navigation";
 import ProjectForm from "@/components/console/projects/ProjectForm";
 import prisma from "@/lib/db";
+import type { Metadata, ResolvingMetadata } from "next";
 
-interface EditProjectPageProps {
+interface PageProps {
   params: {
     id: string;
   };
 }
 
-export default async function EditProjectPage({
-  params,
-}: EditProjectPageProps) {
-  // Fetch project data
+export default async function EditProjectPage({ params }: PageProps) {
   const project = await prisma.project.findUnique({
     where: { id: params.id },
   });
@@ -30,7 +28,12 @@ export default async function EditProjectPage({
       <ProjectForm
         initialData={{
           ...project,
-          projectType: project.projectType as "website" | "app" | "ui-ux" | "cloud-services" | "dev-ops",
+          projectType: project.projectType as
+            | "website"
+            | "app"
+            | "ui-ux"
+            | "cloud-services"
+            | "dev-ops",
           link: project.link ?? undefined,
           testimonial: project.testimonial ?? undefined,
         }}

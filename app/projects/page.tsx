@@ -28,14 +28,13 @@ export default function ProjectsPage() {
         const response = await fetch("/api/projects");
         const data = await response.json();
 
-        // Normalize the data to ensure tags are an array
         const normalizedData = data.map((project: Project) => ({
           ...project,
           tags: Array.isArray(project.tags) ? project.tags : [], 
         }));
 
         setProjects(normalizedData);
-        setFilteredProjects(normalizedData); // Initially show all projects
+        setFilteredProjects(normalizedData); 
         setIsLoading(false);
         console.log("Fetched projects:", projects);
       } catch (error) {

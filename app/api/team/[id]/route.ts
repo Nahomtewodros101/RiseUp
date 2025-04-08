@@ -2,8 +2,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { authMiddleware } from "@/lib/auth";
 
-// PUT (update) a team member by ID
-export async function PUT(
+// PATCH (update) a team member's status (e.g., activate or deactivate)
+export async function PATCH(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
@@ -28,16 +28,31 @@ export async function PUT(
 
     const body = await req.json();
 
+    // Only updating the 'isActive' status
+    if (typeof body.isActive !== "boolean") {
+      return NextResponse.json(
+        { error: "Invalid 'isActive' value" },
+        { status: 400 }
+      );
+    }
+
     const updatedTeamMember = await prisma.teamMember.update({
       where: { id },
-      data: body,
+      data: {
+        isActive: body.isActive,
+      },
     });
 
     return NextResponse.json(updatedTeamMember);
   } catch (error) {
-    console.error("Failed to update team member:", error);
+    console.error("Failed to update team member status:", error);
     return NextResponse.json(
-      { error: "Failed to update team member" },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to update team member status",
+      },
       { status: 500 }
     );
   }

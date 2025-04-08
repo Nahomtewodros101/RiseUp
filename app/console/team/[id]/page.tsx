@@ -3,17 +3,15 @@ import TeamMemberForm from "@/components/console/team/TeamMemberForm";
 import prisma from "@/lib/db";
 
 interface EditTeamMemberPageProps {
-  params: Promise<{ id: string }>;  
+  params: Promise<{ id: string }>;
 }
 
 export default async function EditTeamMemberPage({
   params,
 }: EditTeamMemberPageProps) {
-
   const { id } = await params;
 
   try {
-    
     const teamMember = await prisma.teamMember.findUnique({
       where: { id },
     });
@@ -33,7 +31,19 @@ export default async function EditTeamMemberPage({
           </p>
         </div>
 
-        <TeamMemberForm initialData={teamMember} isEditing />
+        <TeamMemberForm
+          initialData={{
+            ...teamMember,
+            socialLinks: teamMember.socialLinks as
+              | {
+                  twitter?: string;
+                  linkedin?: string;
+                  github?: string;
+                }
+              | undefined,
+          }}
+          isEditing
+        />
       </div>
     );
   } catch (error) {

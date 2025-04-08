@@ -22,7 +22,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-// Team member schema for form validation
+// Updated schema to include socialLinks
 const teamMemberFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   role: z.string().min(1, "Role is required"),
@@ -30,6 +30,11 @@ const teamMemberFormSchema = z.object({
   image: z.string().min(1, "Image URL is required"),
   isActive: z.boolean().default(true).optional(),
   order: z.number().int().min(0, "Order must be a positive number"),
+  socialLinks: z.object({
+    twitter: z.string().url().optional(),
+    linkedin: z.string().url().optional(),
+    github: z.string().url().optional(),
+  }).optional(),
 });
 
 type TeamMemberFormValues = z.infer<typeof teamMemberFormSchema>;
@@ -47,7 +52,6 @@ export default function TeamMemberForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize form with default values or existing team member data
   const form = useForm<TeamMemberFormValues>({
     resolver: zodResolver(teamMemberFormSchema),
     defaultValues: initialData || {
@@ -57,10 +61,14 @@ export default function TeamMemberForm({
       image: "",
       isActive: true,
       order: 0,
+      socialLinks: {
+        twitter: "",
+        linkedin: "",
+        github: "",
+      },
     },
   });
 
-  // Form submission handler
   const onSubmit = async (data: TeamMemberFormValues) => {
     setIsSubmitting(true);
     setError(null);
@@ -232,6 +240,64 @@ export default function TeamMemberForm({
                       <FormDescription>
                         URL for the team member&apos;s profile image
                       </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <FormField
+                  control={form.control}
+                  name="socialLinks.twitter"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Twitter</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="https://twitter.com/username"
+                          {...field}
+                          disabled={isSubmitting}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="socialLinks.linkedin"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>LinkedIn</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="https://linkedin.com/in/username"
+                          {...field}
+                          disabled={isSubmitting}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="socialLinks.github"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>GitHub</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="https://github.com/username"
+                          {...field}
+                          disabled={isSubmitting}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

@@ -15,10 +15,11 @@ model User {
   email     String   @unique
   name      String
   password  String
-  role      String   @default("user") // "user" or "admin"
+  role      String   @default("user") 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  blogs     Blog[]   // Relation to blogs
+  blogs     Blog[]  
+  lastLogin DateTime?
 }
 
 model Project {
@@ -26,10 +27,10 @@ model Project {
   title       String
   description String
   thumbnail   String
-  techStack   String[] // Array of technologies
+  techStack   String[] 
   link        String?
-  images      String[] // Array of image URLs
-  projectType String   // "website", "app", "ui-design"
+  images      String[] 
+  projectType String  
   testimonial String?
   featured    Boolean  @default(false)
   createdAt   DateTime @default(now())
@@ -42,7 +43,7 @@ model TeamMember {
   role        String
   bio         String
   image       String
-  socialLinks Json     // JSON object with social links
+  socialLinks Json     
   isActive    Boolean  @default(true)
   order       Int      @default(0)
   createdAt   DateTime @default(now())

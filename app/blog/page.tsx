@@ -3,31 +3,29 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Search, Calendar } from "lucide-react";
+import { ArrowLeft, Search, Calendar, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function BlogPage() {
   const [isContentReady, setIsContentReady] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const router = useRouter();
+  const [selectedBlog, setSelectedBlog] = useState<any | null>(null);
+
   useEffect(() => {
-    // Set content as ready after the loading screen has had time to show
     const timer = setTimeout(() => {
       setIsContentReady(true);
-    }, 2100); // Slightly longer than the loading screen duration
+    }, 2100);
 
     return () => clearTimeout(timer);
   }, []);
 
-  // Sample blog posts data
   const blogPosts = [
     {
       id: "1",
@@ -133,10 +131,8 @@ export default function BlogPage() {
     },
   ];
 
-  // Get all unique tags from blog posts
   const allTags = Array.from(new Set(blogPosts.flatMap((post) => post.tags)));
 
-  // Filter blog posts based on search query and selected tag
   const filteredPosts = blogPosts.filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -146,11 +142,9 @@ export default function BlogPage() {
   });
 
   if (!isContentReady) {
-    return null; // Return nothing while loading screen is showing
+    return null;
   }
-  const handleClick = () => {
-    router.push("/blog");
-  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -178,7 +172,6 @@ export default function BlogPage() {
             </motion.div>
           </div>
 
-          {/* Search and Filter Section */}
           <motion.div
             className="mb-10"
             initial={{ opacity: 0, y: 20 }}
@@ -208,7 +201,6 @@ export default function BlogPage() {
               </div>
             </div>
 
-            {/* Tags */}
             <div className="flex flex-wrap gap-2 mt-4">
               {allTags.map((tag, index) => (
                 <Badge
@@ -227,186 +219,135 @@ export default function BlogPage() {
             </div>
           </motion.div>
 
-          {/* Featured Post */}
-          {filteredPosts.length > 0 && (
-            <motion.div
-              className="mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <Link href={`/blog/${filteredPosts[0].slug}`}>
-                <Card className="overflow-hidden">
-                  <div className="relative aspect-video">
-                    <Image
-                      src={filteredPosts[0].coverImage || "/placeholder.svg"}
-                      alt={filteredPosts[0].title}
-                      fill
-                      className="object-cover transition-transform duration-300 hover:scale-105"
-                    />
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {filteredPosts[0].tags.map((tag, index) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    <h2 className="text-2xl font-bold mb-2">
-                      {filteredPosts[0].title}
-                    </h2>
-                    <p className="text-gray-500 dark:text-gray-400 mb-4">
-                      {filteredPosts[0].excerpt}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <div className="relative h-8 w-8 rounded-full overflow-hidden mr-2">
-                          <Image
-                            src={
-                              filteredPosts[0].author.image ||
-                              "/placeholder.svg"
-                            }
-                            alt={filteredPosts[0].author.name}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
-                          {filteredPosts[0].author.name}
-                        </span>
-                      </div>
-                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        {new Date(
-                          filteredPosts[0].publishedAt
-                        ).toLocaleDateString()}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            </motion.div>
-          )}
-
-          {/* Blog Posts Grid */}
-          {filteredPosts.length > 1 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {filteredPosts.slice(1).map((post, index) => (
-                <motion.div
-                  key={post.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredPosts.map((post, index) => (
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+              >
+                <div
+                  className="cursor-pointer"
+                  onClick={() => setSelectedBlog(post)}
                 >
-                  <Link href={`/blog/${post.slug}`}>
-                    <Card className="overflow-hidden h-full flex flex-col">
-                      <div className="relative aspect-video">
-                        <Image
-                          src={post.coverImage || "/placeholder.svg"}
-                          alt={post.title}
-                          fill
-                          className="object-cover transition-transform duration-300 hover:scale-105"
-                        />
+                  <Card className="overflow-hidden h-full flex flex-col">
+                    <div className="relative aspect-video">
+                      <Image
+                        src={post.coverImage || "/placeholder.svg"}
+                        alt={post.title}
+                        fill
+                        className="object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
+                    <CardContent className="p-6 flex-1 flex flex-col">
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {post.tags.slice(0, 2).map((tag, index) => (
+                          <Badge
+                            key={index}
+                            variant="secondary"
+                            className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                        {post.tags.length > 2 && (
+                          <Badge variant="outline">
+                            +{post.tags.length - 2}
+                          </Badge>
+                        )}
                       </div>
-                      <CardContent className="p-6 flex-1 flex flex-col">
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {post.tags.slice(0, 2).map((tag, index) => (
-                            <Badge
-                              key={index}
-                              variant="secondary"
-                              className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-                            >
-                              {tag}
-                            </Badge>
-                          ))}
-                          {post.tags.length > 2 && (
-                            <Badge variant="outline">
-                              +{post.tags.length - 2}
-                            </Badge>
-                          )}
-                        </div>
-                        <h3 className="text-xl font-bold mb-2">{post.title}</h3>
-                        <p className="text-gray-500 dark:text-gray-400 mb-4 flex-1">
-                          {post.excerpt}
-                        </p>
-                        <div className="flex items-center justify-between mt-auto">
-                          <div className="flex items-center">
-                            <div className="relative h-6 w-6 rounded-full overflow-hidden mr-2">
-                              <Image
-                                src={post.author.image || "/placeholder.svg"}
-                                alt={post.author.name}
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                              {post.author.name}
-                            </span>
+                      <h3 className="text-xl font-bold mb-2">{post.title}</h3>
+                      <p className="text-gray-500 dark:text-gray-400 mb-4 flex-1">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center justify-between mt-auto">
+                        <div className="flex items-center">
+                          <div className="relative h-6 w-6 rounded-full overflow-hidden mr-2">
+                            <Image
+                              src={post.author.image || "/placeholder.svg"}
+                              alt={post.author.name}
+                              fill
+                              className="object-cover"
+                            />
                           </div>
-                          <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                            <Calendar className="h-3 w-3 mr-1" />
-                            {new Date(post.publishedAt).toLocaleDateString()}
-                          </div>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            {post.author.name}
+                          </span>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          ) : filteredPosts.length === 0 ? (
-            <div className="text-center py-12">
-              <h3 className="text-xl font-bold mb-2">No posts found</h3>
-              <p className="text-gray-500 dark:text-gray-400 mb-4">
-                Try adjusting your search or filter criteria
-              </p>
-              <Button
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedTag(null);
-                }}
-              >
-                Reset Filters
-              </Button>
-            </div>
-          ) : null}
-
-          {/* Newsletter Signup */}
-          <motion.div
-            className="mt-20 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-8 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <h2 className="text-2xl font-bold mb-4">
-              Subscribe to Our Newsletter
-            </h2>
-            <p className="max-w-[600px] mx-auto mb-6 text-gray-500 dark:text-gray-400">
-              Stay updated with our latest articles, tutorials, and company news
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-              <Input
-                placeholder="Your email address"
-                type="email"
-                className="flex-1"
-                autoComplete="email"
-              />
-              <Button
-                onClick={handleClick}
-                className="bg-blue-600 hover:bg-blue-700"
-              >
-                Subscribe
-              </Button>
-            </div>
-          </motion.div>
+                        <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                          <Calendar className="h-3 w-3 mr-1" />
+                          {new Date(post.publishedAt).toLocaleDateString()}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </main>
       <Footer />
+
+      {/* Modal */}
+      <AnimatePresence>
+        {selectedBlog && (
+          <motion.div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-3xl w-full p-6 relative"
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              transition={{ duration: 0.3 }}
+            >
+              <button
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                onClick={() => setSelectedBlog(null)}
+              >
+                <X className="h-6 w-6" />
+              </button>
+              <div className="relative w-full h-64 mb-6">
+                <Image
+                  src={selectedBlog.coverImage || "/placeholder.svg"}
+                  alt={selectedBlog.title}
+                  layout="fill"
+                  className="object-cover rounded-lg"
+                />
+              </div>
+              <h2 className="text-2xl font-bold mb-4">{selectedBlog.title}</h2>
+              <p className="text-gray-500 dark:text-gray-400 mb-4">
+                {selectedBlog.content || selectedBlog.excerpt}
+              </p>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="relative h-8 w-8 rounded-full overflow-hidden mr-2">
+                    <Image
+                      src={selectedBlog.author.image || "/placeholder.svg"}
+                      alt={selectedBlog.author.name}
+                      width={32}
+                      height={32}
+                      className="object-cover"
+                    />
+                  </div>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                    {selectedBlog.author.name}
+                  </span>
+                </div>
+                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                  <Calendar className="h-4 w-4 mr-1" />
+                  {new Date(selectedBlog.publishedAt).toLocaleDateString()}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

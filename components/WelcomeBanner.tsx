@@ -87,8 +87,7 @@ export default function WelcomeBanner() {
         transition={{ duration: 0.6 }}
       >
         <motion.div
-          className="bg-gradient-to-r from-indigo-600 to-indigo-500 rounded-xl p-8 pr-16 text-white shadow-xl transform transition-all"
-          whileHover={{ scale: 1.05 }}
+          className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl p-8 pr-16 text-white shadow-xl transform transition-all"
           transition={{ duration: 0.3 }}
           onClick={triggerConfetti}
         >
@@ -124,7 +123,7 @@ export default function WelcomeBanner() {
                   <Sparkles className="h-6 w-6 text-yellow-400" />
                 </motion.div>
               </h2>
-              <p className="text-indigo-200 text-lg mt-2">
+              <p className="text-indigo-200 text-center text-lg mt-2">
                 We&apos;re thrilled to see you again! Click anywhere on this
                 banner for a surprise!
               </p>

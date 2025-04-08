@@ -1,5 +1,6 @@
-// app/login/page.tsx
 import LoginForm from "@/components/auth/login-form";
+import Link from "next/link";
+import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
@@ -7,14 +8,18 @@ export default function LoginPage() {
       <div className="w-full max-w-4xl">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center rounded-lg bg-blue-600 text-white p-2 w-12 h-12 mb-4">
-            <span className="font-bold text-xl">QD</span>
+            <Link href="/" className="font-bold text-xl">
+              QD
+            </Link>
           </div>
           <h1 className="text-2xl font-bold">Qemem Devs</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2">
             Login to your account
           </p>
         </div>
-        <LoginForm />
+        <Suspense fallback={<div>Loading...</div>}>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   );

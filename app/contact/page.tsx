@@ -264,9 +264,9 @@ export default function ContactPage() {
                     <div>
                       <h4 className="font-medium">Address</h4>
                       <p className="text-gray-500 dark:text-gray-400">
-                        123 Tech Avenue, Suite 400
+                        Addis Ababa , Ethiopia
                         <br />
-                        San Francisco, CA 94107
+                        Spokane ,  WD 
                       </p>
                     </div>
                   </div>
@@ -288,7 +288,6 @@ export default function ContactPage() {
                       <p className="text-gray-500 dark:text-gray-400">
                         +1 (555) 123-4567
                         <br />
-                        Mon-Fri, 9am-6pm PST
                       </p>
                     </div>
                   </div>

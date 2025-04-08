@@ -63,6 +63,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
+        {/* Welcome Banner */}
         <div className="container px-4 md:px-6 pt-8">
           <WelcomeBanner />
         </div>
@@ -158,7 +159,7 @@ export default function Home() {
               </div>
             ) : error ? (
               <div className="flex justify-center mt-10 text-red-500 font-semibold">
-                {error}
+                <p>Sorry! no products to show currently </p>
               </div>
             ) : (
               <div className="grid gap-6 mt-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:space-x-52">
@@ -199,8 +200,7 @@ export default function Home() {
                 (item, index) => (
                   <motion.div
                     key={index}
-                    className="bg-blue-600 p-8 rounded-xl shadow-2xl transition-all duration-700 ease-in-out hover:bg-gradient-to-l hover:from-blue-600 hover:via-blue-700 hover:to-blue-800 hover:scale-105"
-                    whileHover={{ rotate: 360 }}
+                    className="relative group bg-blue-600 p-8 rounded-xl shadow-2xl overflow-hidden transition-transform duration-500 hover:scale-105"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{
@@ -211,10 +211,13 @@ export default function Home() {
                       damping: 10,
                     }}
                   >
-                    <h3 className="text-2xl font-semibold text-white">
+                    {/* border animation */}
+                    <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-white transition-all duration-1000 ease-in-out pointer-events-none"></div>
+
+                    <h3 className="text-2xl font-semibold text-white z-10 relative">
                       {item}
                     </h3>
-                    <p className="text-lg text-gray-100 mt-4">
+                    <p className="text-lg text-gray-100 mt-4 z-10 relative">
                       {item === "Expertise"
                         ? "With years of hands-on experience, we’re not just knowledgeable, we’re masters of our craft, ready to turn your ideas into reality."
                         : item === "Innovation"

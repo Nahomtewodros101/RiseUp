@@ -4,10 +4,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function SignupPage() {
-  // Check if user is already logged in
   const user = await getCurrentUser();
 
-  // If user is already logged in, redirect to home
   if (user) {
     redirect("/");
   }

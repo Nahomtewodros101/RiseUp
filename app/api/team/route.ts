@@ -35,7 +35,7 @@ export async function GET() {
     );
   }
 }
-
+// Post a new Team memeber
 export async function POST(req: NextRequest) {
   // Check authentication
   const authError = await authMiddleware(req, ["admin"]);
@@ -56,7 +56,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Proceed with creating the team member
     const teamMember = await prisma.teamMember.create({
       data: validatedData.data,
     });

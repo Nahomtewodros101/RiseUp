@@ -18,13 +18,11 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
 const MapComponent = dynamic(() => import("@/components/MapComponent"), {
   ssr: false,
 });
 
 export default function ContactPage() {
-  const router = useRouter();
   const [isContentReady, setIsContentReady] = useState(false);
   const [formState, setFormState] = useState({
     name: "",
@@ -34,7 +32,7 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null); // Error state
+  const [error, setError] = useState<string | null>(null); 
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -57,7 +55,6 @@ export default function ContactPage() {
     setError(null); // Reset any previous errors
 
     try {
-      // Replace with your actual API endpoint
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
@@ -78,7 +75,6 @@ export default function ContactPage() {
         subject: "",
         message: "",
       });
-      router.push("/");
     } catch (err) {
       setIsSubmitting(false);
       if (err instanceof Error) {

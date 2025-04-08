@@ -2,7 +2,6 @@ import { type NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { authMiddleware } from "@/lib/auth";
 
-// PATCH (update) a team member's status (e.g., activate or deactivate)
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -27,30 +26,39 @@ export async function PATCH(
 
     const body = await request.json();
 
-    // Only updating the 'isActive' status
-    if (typeof body.isActive !== "boolean") {
-      return NextResponse.json(
-        { error: "Invalid 'isActive' value" },
-        { status: 400 }
-      );
+    const updateData: any = {};
+
+    if (body.isActive !== undefined) {
+      if (typeof body.isActive !== "boolean") {
+        return NextResponse.json(
+          { error: "Invalid 'isActive' value" },
+          { status: 400 }
+        );
+      }
+      updateData.isActive = body.isActive;
     }
+
+    if (body.name) updateData.name = body.name;
+    if (body.role) updateData.role = body.role;
+    if (body.bio) updateData.bio = body.bio;
+    if (body.image) updateData.image = body.image;
+    if (body.socialLinks) updateData.socialLinks = body.socialLinks;
+    if (body.order !== undefined) updateData.order = body.order;
 
     const updatedTeamMember = await prisma.teamMember.update({
       where: { id },
-      data: {
-        isActive: body.isActive,
-      },
+      data: updateData,
     });
 
     return NextResponse.json(updatedTeamMember);
   } catch (error) {
-    console.error("Failed to update team member status:", error);
+    console.error("Failed to update team member:", error);
     return NextResponse.json(
       {
         error:
           error instanceof Error
             ? error.message
-            : "Failed to update team member status",
+            : "Failed to update team member",
       },
       { status: 500 }
     );

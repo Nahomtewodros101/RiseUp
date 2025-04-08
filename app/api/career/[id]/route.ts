@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/db";
-import { authMiddleware } from "@/lib/auth";
 
 // Job schema for validation
 const jobSchema = z.object({
@@ -55,7 +54,7 @@ export async function PATCH(
 ) {
   const { id } = await params;
 
-
+ console.log(id);
   try {
     // Extract job ID from URL parameters
     const { id } = await params;

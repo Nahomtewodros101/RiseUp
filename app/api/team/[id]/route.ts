@@ -2,6 +2,16 @@ import { type NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { authMiddleware } from "@/lib/auth";
 
+type UpdateData = {
+  isActive?: boolean;
+  name?: string;
+  role?: string;
+  bio?: string;
+  image?: string;
+  socialLinks?: string;
+  order?: number;
+};
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -26,7 +36,7 @@ export async function PATCH(
 
     const body = await request.json();
 
-    const updateData: any = {};
+    const updateData: UpdateData = {};
 
     if (body.isActive !== undefined) {
       if (typeof body.isActive !== "boolean") {

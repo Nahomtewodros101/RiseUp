@@ -123,9 +123,9 @@ export default function Navbar() {
             className="flex items-center justify-center rounded-lg bg-blue-600 text-white p-1 w-8 h-8"
             whileHover={{ rotate: 5 }}
           >
-            <span className="font-bold text-sm">QD</span>
+            <span className="font-bold text-sm">⬆️</span>
           </motion.div>
-          <span className="font-bold text-xl">Qemem Devs</span>
+          <span className="font-bold text-xl">Rise Up!</span>
         </Link>
 
         {/* Desktop Navigation */}

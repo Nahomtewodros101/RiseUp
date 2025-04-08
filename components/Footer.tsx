@@ -19,28 +19,28 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <Link
-                href="#"
+                href="https://x.com/@estifanos_neway"
                 className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
               <Link
-                href="#"
+                href="https://www.instagram.com/Estifanos_Neway"
                 className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 <Instagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
               </Link>
               <Link
-                href="#"
+                href="https://github.com/Estifanos-Neway"
                 className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 <Github className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
               </Link>
               <Link
-                href="#"
+                href="https://www.linkedin.com/in/estifanos-neway/"
                 className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 <Linkedin className="h-5 w-5" />
@@ -114,6 +114,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
+                 
                   href="/services/cloud-solutions"
                   className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
                 >
@@ -135,7 +136,7 @@ export default function Footer() {
                   href="mailto:hello@qememdevs.com"
                   className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
                 >
-                  chefche@qememdevs.com
+                  Estifanos.neway.d@gmail.com
                 </Link>
               </li>
               <li>
@@ -143,7 +144,7 @@ export default function Footer() {
                   href="tel:+15551234567"
                   className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
                 >
-                  +1 (555) 123-4567
+                  +251 963 18 29 98
                 </Link>
               </li>
             </ul>

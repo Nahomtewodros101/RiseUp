@@ -266,7 +266,7 @@ export default function ContactPage() {
                       <p className="text-gray-500 dark:text-gray-400">
                         Addis Ababa , Ethiopia
                         <br />
-                        Spokane ,  WD 
+                        Spokane , WD
                       </p>
                     </div>
                   </div>
@@ -277,7 +277,7 @@ export default function ContactPage() {
                       <p className="text-gray-500 dark:text-gray-400">
                         hello@qememdevs.com
                         <br />
-                        support@qememdevs.com
+                        Estifanos.neway.d@gmail.com
                       </p>
                     </div>
                   </div>
@@ -286,8 +286,7 @@ export default function ContactPage() {
                     <div>
                       <h4 className="font-medium">Phone</h4>
                       <p className="text-gray-500 dark:text-gray-400">
-                        +1 (555) 123-4567
-                        <br />
+                        +251 963 18 29 98 <br />
                       </p>
                     </div>
                   </div>

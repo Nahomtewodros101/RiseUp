@@ -1,14 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Users,
-  FolderKanban,
-  Eye,
-  TrendingUp,
-  TrendingDown,
-  UserCheck,
-} from "lucide-react";
+import { Users, FolderKanban, TrendingUp, UserCheck } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -35,8 +28,6 @@ export default function ConsoleDashboard() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
-  const [isLoadingProjects, setIsLoadingProjects] = useState(true);
-  const [isLoadingTeam, setIsLoadingTeam] = useState(true);
 
   useEffect(() => {
     // Fetch dashboard data

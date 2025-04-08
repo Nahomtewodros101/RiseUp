@@ -12,11 +12,28 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  coverImage: string;
+  tags: string[];
+  published: boolean;
+  publishedAt: string;
+  author: {
+    id: string;
+    name: string;
+    image: string;
+  };
+}
+
 export default function BlogPage() {
   const [isContentReady, setIsContentReady] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [selectedBlog, setSelectedBlog] = useState<any | null>(null);
+  const [selectedBlog, setSelectedBlog] = useState<BlogPost | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {

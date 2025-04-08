@@ -3,7 +3,6 @@ import db from "@/lib/db";
 
 export async function GET() {
   try {
-    
     let totalUsers = 0;
     let activeUsers = 0;
 
@@ -26,6 +25,7 @@ export async function GET() {
       activeUsers,
     });
   } catch (error) {
+    console.error("Failed to fetch user count:", error);
     return NextResponse.json(
       {
         totalUsers: 0,

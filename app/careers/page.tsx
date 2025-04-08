@@ -22,19 +22,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-
-// Define the Job type
-interface Job {
-  id: string;
-  title: string;
-  department: string;
-  location: string;
-  type: string;
-  salary: string;
-  description: string;
-  responsibilities: string[];
-  requirements: string[];
-}
+import { Job } from "@/types";
 
 export default function CareersPage() {
   const [isContentReady, setIsContentReady] = useState(false);

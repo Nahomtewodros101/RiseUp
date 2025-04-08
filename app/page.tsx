@@ -137,7 +137,7 @@ export default function Home() {
 
         {/* Featured Projects Section */}
         <section className="py-20 bg-gray-50 dark:bg-gray-900">
-          <div className="container px-4 md:px-6">
+          <div className="flex-col justify-center items-center w-full px-4 md:px-6">
             <motion.div
               className="text-center"
               initial={{ opacity: 0, y: 20 }}
@@ -159,13 +159,18 @@ export default function Home() {
               </div>
             ) : error ? (
               <div className="flex justify-center mt-10 text-red-500 font-semibold">
-                <p>Sorry! no products to show currently </p>
+                <p>Sorry! no products to show currently</p>
               </div>
             ) : (
-              <div className="grid gap-6 mt-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:space-x-52">
-                {featuredProjects.map((project) => (
-                  <ProjectCard key={project.id} {...project} />
-                ))}
+              <div className="w-full flex justify-center items-center  px-4 md:px-6">
+                <div className="mt-12 ">
+                  {/* This grid container is for the project cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    {featuredProjects.map((project) => (
+                      <ProjectCard key={project.id} {...project} />
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>

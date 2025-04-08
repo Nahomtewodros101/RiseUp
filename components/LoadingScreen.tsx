@@ -37,7 +37,7 @@ export default function LoadingScreen() {
                 repeatType: "reverse",
               }}
             >
-              <span className="font-bold text-xl">QD</span>
+              <span className="font-bold text-xl">'👨🏾‍💻'</span>
             </motion.div>
 
             {/* Loading text */}

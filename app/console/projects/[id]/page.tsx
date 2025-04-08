@@ -4,11 +4,11 @@ import prisma from "@/lib/db";
 
 export default async function EditProjectPage({
   params: rawParams,
-}: { params: { id: string } }) {
-  // Await params if necessary
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const params = await rawParams;
 
-  // Fetch project data
   const project = await prisma.project.findUnique({
     where: { id: params.id },
   });

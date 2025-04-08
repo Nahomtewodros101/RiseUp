@@ -8,7 +8,8 @@ export async function DELETE(
 ) {
   try {
     const { id } = await context.params;
-
+    console.log("Contact ID is required", request.url);
+    console.log("Contact ID is required", id);
     if (!id) {
       return NextResponse.json(
         { error: "Contact ID is required" },

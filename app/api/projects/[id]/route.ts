@@ -48,7 +48,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-
+  console.log(request.url);
   try {
     const project = await prisma.project.delete({
       where: { id },

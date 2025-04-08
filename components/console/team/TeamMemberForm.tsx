@@ -75,7 +75,7 @@ export default function TeamMemberForm({
 
     try {
       const url = isEditing ? `/api/team/${initialData?.id}` : "/api/team";
-      const method = isEditing ? "PUT" : "POST";
+      const method = isEditing ? "PATCH" : "POST";
 
       const response = await fetch(url, {
         method,

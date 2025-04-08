@@ -4,14 +4,13 @@ import { authMiddleware } from "@/lib/auth";
 
 // PATCH (update) a team member's status (e.g., activate or deactivate)
 export async function PATCH(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { params } = context;
   const { id } = await params;
 
   // Check authentication
-  const authError = await authMiddleware(req, ["admin"]);
+  const authError = await authMiddleware(request, ["admin"]);
   if (authError) return authError;
 
   try {
@@ -26,7 +25,7 @@ export async function PATCH(
       );
     }
 
-    const body = await req.json();
+    const body = await request.json();
 
     // Only updating the 'isActive' status
     if (typeof body.isActive !== "boolean") {

@@ -253,11 +253,7 @@ export default function CareersPage() {
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {career.applications?.length || 0}
-                      </Badge>
-                    </TableCell>
+
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

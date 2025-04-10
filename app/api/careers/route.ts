@@ -38,20 +38,15 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const authError = await authMiddleware(request, ["admin"]);
-  if (authError) return authError;
-
   try {
     const data = await request.json();
 
     const requiredFields = [
-      "title",
-      "department",
-      "location",
-      "type",
-      "description",
-      "responsibilities",
-      "requirements",
+      "careerId",
+      "fullName",
+      "email",
+      "phone",
+      "resumeUrl",
     ];
     for (const field of requiredFields) {
       if (!data[field]) {
@@ -62,25 +57,32 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const career = await db.career.create({
+    const career = await db.career.findUnique({
+      where: { id: data.careerId },
+    });
+    if (!career) {
+      return NextResponse.json(
+        { error: "Invalid careerId: Career not found" },
+        { status: 400 }
+      );
+    }
+
+    const application = await db.jobApplication.create({
       data: {
-        title: data.title,
-        department: data.department,
-        location: data.location,
-        type: data.type,
-        salary: data.salary,
-        description: data.description,
-        responsibilities: data.responsibilities,
-        requirements: data.requirements,
-        isActive: data.isActive ?? true,
+        careerId: data.careerId,
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        resumeUrl: data.resumeUrl,
+        coverLetter: data.coverLetter || "",
       },
     });
 
-    return NextResponse.json(career, { status: 201 });
+    return NextResponse.json(application, { status: 201 });
   } catch (error) {
-    console.error("Error creating career:", error);
+    console.error("Error creating application:", error);
     return NextResponse.json(
-      { error: "Failed to create career" },
+      { error: "Failed to create application" },
       { status: 500 }
     );
   }

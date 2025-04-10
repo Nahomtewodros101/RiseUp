@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation"; // Import useParams
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Briefcase, MapPin, Clock, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface ApplicationData {
 }
 
 export default function CareerDetailsPage() {
-  const params = useParams(); // Use useParams to get the id
+  const params = useParams();
   const [job, setJob] = useState<Job | null>(null);
   const [applicationData, setApplicationData] = useState<ApplicationData>({
     careerId: "",
@@ -43,6 +43,8 @@ export default function CareerDetailsPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingJob, setLoadingJob] = useState(true);
+  const [hasApplied, setHasApplied] = useState(false); // Track if the user has already applied
+  const [successMessage, setSuccessMessage] = useState(""); // Track success message
 
   useEffect(() => {
     const fetchJobListing = async () => {
@@ -61,6 +63,13 @@ export default function CareerDetailsPage() {
           ...prev,
           careerId: id || "",
         }));
+
+        // Check if the user has already applied
+        const applicationCheck = await fetch(`/api/careers/${id}/check`);
+        if (applicationCheck.ok) {
+          const { hasApplied } = await applicationCheck.json();
+          setHasApplied(hasApplied);
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -86,13 +95,27 @@ export default function CareerDetailsPage() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
+      // Check again if the user has already applied before submitting
+      const applicationCheck = await fetch(`/api/careers/${job?.id}/check`);
+      if (applicationCheck.ok) {
+        const { hasApplied } = await applicationCheck.json();
+        if (hasApplied) {
+          setHasApplied(true);
+          return;
+        }
+      }
+
       const res = await fetch("/api/careers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(applicationData),
       });
-      if (!res.ok) throw new Error("Failed to submit application");
-      alert("Application submitted successfully!");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to submit application");
+      }
+
+      setSuccessMessage("🎉 Good luck! We'll be in touch soon.");
       setApplicationData({
         careerId: job?.id || "",
         fullName: "",
@@ -101,13 +124,53 @@ export default function CareerDetailsPage() {
         resumeUrl: "",
         coverLetter: "",
       });
+      setHasApplied(true);
     } catch (err) {
       console.error(err);
-      alert("Submission failed. Try again.");
+      if (err instanceof Error) {
+        alert(err.message || "Submission failed. Try again.");
+      } else {
+        alert("Submission failed. Try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (hasApplied) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-blue-800">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-black text-lg font-semibold text-center"
+        >
+          <svg
+            className="h-12 w-12 text-black mb-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
+            />
+          </svg>
+          You have already submitted an application for this position. Please
+          wait patiently for us to reach out to you.
+        </motion.div>
+        <Link href="/careers">
+          <Button variant="ghost" className="mt-4 text-black">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Careers
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   if (loadingJob) {
     return (
@@ -225,6 +288,11 @@ export default function CareerDetailsPage() {
             className="mb-20"
           >
             <h2 className="text-2xl font-bold text-blue-800 mb-4">Apply Now</h2>
+            {successMessage && (
+              <div className="p-4 mb-4 text-green-800 bg-green-100 rounded">
+                {successMessage}
+              </div>
+            )}
             <form
               onSubmit={handleSubmitApplication}
               className="space-y-4 bg-white p-6 rounded shadow"

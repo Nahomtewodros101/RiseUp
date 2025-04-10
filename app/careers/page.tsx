@@ -221,7 +221,17 @@ export default function CareersPage() {
   );
 }
 
-function JobCard({ job }: { job: any }) {
+interface Job {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  salary: string;
+  description: string;
+}
+
+function JobCard({ job }: { job: Job }) {
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-6">

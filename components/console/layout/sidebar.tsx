@@ -15,7 +15,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Menu,
-  FileText,
   Briefcase,
   Shield,
 } from "lucide-react";

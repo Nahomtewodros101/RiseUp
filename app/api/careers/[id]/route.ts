@@ -10,37 +10,96 @@ export async function GET(
   if (authError) return authError;
 
   try {
-    const { id: careerId } = await context.params;
+    const { id: careerId } = await context.params; // Await the promise here
 
+    // Fetch the career by ID
     const career = await db.career.findUnique({
       where: { id: careerId },
-      select: {
-        id: true,
-        title: true,
-      },
     });
 
     if (!career) {
       return NextResponse.json({ error: "Career not found" }, { status: 404 });
     }
 
-    const applications = await db.jobApplication.findMany({
-      where: {
-        careerId: careerId,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
+    // Return the career details
+    return NextResponse.json(career, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching career:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch career" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const authError = await authMiddleware(request, ["admin"]);
+  if (authError) return authError;
+
+  try {
+    const { id: careerId } = await context.params;
+
+    const existingCareer = await db.career.findUnique({
+      where: { id: careerId },
     });
 
-    return NextResponse.json({
-      career,
-      applications,
+    if (!existingCareer) {
+      return NextResponse.json({ error: "Career not found" }, { status: 404 });
+    }
+
+    // Delete the career
+    const deletedCareer = await db.career.delete({
+      where: { id: careerId },
     });
+
+    return NextResponse.json(deletedCareer, { status: 200 });
   } catch (error) {
-    console.error("Error fetching applications:", error);
+    console.error("Error deleting career:", error);
     return NextResponse.json(
-      { error: "Failed to fetch applications" },
+      { error: "Failed to delete career" },
+      { status: 500 }
+    );
+  }
+}
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const authError = await authMiddleware(request, ["admin"]);
+  if (authError) return authError;
+
+  try {
+    const { id: careerId } = await context.params;
+    const body = await request.json();
+
+    if (!body || Object.keys(body).length === 0) {
+      return NextResponse.json(
+        { error: "Request body is empty or invalid" },
+        { status: 400 }
+      );
+    }
+
+    const existingCareer = await db.career.findUnique({
+      where: { id: careerId },
+    });
+
+    if (!existingCareer) {
+      return NextResponse.json({ error: "Career not found" }, { status: 404 });
+    }
+
+    const updatedCareer = await db.career.update({
+      where: { id: careerId },
+      data: body,
+    });
+
+    return NextResponse.json(updatedCareer, { status: 200 });
+  } catch (error) {
+    console.error("Error updating career:", error);
+    return NextResponse.json(
+      { error: "Failed to update career" },
       { status: 500 }
     );
   }

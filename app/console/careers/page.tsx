@@ -104,7 +104,6 @@ export default function CareersPage() {
     fetchCareers();
   }, []);
 
-  // Filter careers based on search query and department
   const filteredCareers = careers.filter((career) => {
     const matchesSearch =
       career.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -116,12 +115,10 @@ export default function CareersPage() {
     return matchesSearch && matchesDepartment;
   });
 
-  // Get unique departments for filter
   const departments = Array.from(
     new Set(careers.map((career) => career.department))
   );
 
-  // Handle career deletion
   const handleDeleteCareer = async () => {
     if (!careerToDelete) return;
 
@@ -132,10 +129,16 @@ export default function CareersPage() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete career");
+        const errorData = await response.json();
+        if (errorData.error === "Application not found") {
+          alert("The career you are trying to delete does not exist.");
+          setDeleteDialogOpen(false);
+          setCareerToDelete(null);
+          return;
+        }
+        throw new Error(errorData.error || "Failed to delete career");
       }
 
-      // Update the state to remove the deleted career
       setCareers((prevCareers) =>
         prevCareers.filter((career) => career.id !== careerToDelete)
       );
@@ -144,9 +147,14 @@ export default function CareersPage() {
       setCareerToDelete(null);
     } catch (error) {
       console.error("Error deleting career:", error);
-      alert("An error occurred while deleting the career. Please try again.");
+      alert(
+        error instanceof Error
+          ? error.message
+          : "An error occurred while deleting the career. Please try again."
+      );
     } finally {
       setIsDeleting(false);
+      window.location.reload();
     }
   };
 

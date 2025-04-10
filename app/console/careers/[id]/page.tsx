@@ -78,18 +78,22 @@ export default function EditCareerPage() {
         }
 
         const career = await response.json();
+        console.log("Fetched career data:", career);
 
-        form.reset({
-          title: career.title,
-          department: career.department,
-          location: career.location,
-          type: career.type,
-          salary: career.salary || "",
-          description: career.description,
-          responsibilities: career.responsibilities,
-          requirements: career.requirements,
-          isActive: career.isActive,
-        });
+        // Check if career data is valid and reset the form with it
+        if (career) {
+          form.reset({
+            title: career.title || "",
+            department: career.department || "",
+            location: career.location || "",
+            type: career.type || "",
+            salary: career.salary || "",
+            description: career.description || "",
+            responsibilities: career.responsibilities || [""],
+            requirements: career.requirements || [""],
+            isActive: career.isActive ?? true,
+          });
+        }
 
         setIsLoading(false);
       } catch (error) {
@@ -100,7 +104,7 @@ export default function EditCareerPage() {
     };
 
     fetchCareer();
-  }, [id, form]);
+  }, [id, form]); // Ensure form is included as a dependency to update properly
 
   const onSubmit = async (data: CareerFormValues) => {
     setIsSubmitting(true);
@@ -267,7 +271,7 @@ export default function EditCareerPage() {
               {/* Responsibilities */}
               <div className="space-y-2">
                 <FormLabel>Responsibilities</FormLabel>
-                {form.watch("responsibilities").map((_, index) => (
+                {(form.watch("responsibilities") || []).map((_, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <FormField
                       control={form.control}
@@ -287,7 +291,9 @@ export default function EditCareerPage() {
                       type="button"
                       variant="ghost"
                       onClick={() => removeResponsibility(index)}
-                      disabled={form.watch("responsibilities").length <= 1}
+                      disabled={
+                        (form.watch("responsibilities") || []).length <= 1
+                      }
                     >
                       <Trash2 className="w-4 h-4 text-red-500" />
                     </Button>
@@ -302,7 +308,7 @@ export default function EditCareerPage() {
               {/* Requirements */}
               <div className="space-y-2">
                 <FormLabel>Requirements</FormLabel>
-                {form.watch("requirements").map((_, index) => (
+                {(form.watch("requirements") || []).map((_, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <FormField
                       control={form.control}
@@ -322,7 +328,7 @@ export default function EditCareerPage() {
                       type="button"
                       variant="ghost"
                       onClick={() => removeRequirement(index)}
-                      disabled={form.watch("requirements").length <= 1}
+                      disabled={(form.watch("requirements") || []).length <= 1}
                     >
                       <Trash2 className="w-4 h-4 text-red-500" />
                     </Button>

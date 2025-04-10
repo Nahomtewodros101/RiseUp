@@ -1,317 +1,376 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Briefcase,
-  MapPin,
-  Clock,
-  DollarSign,
-} from "lucide-react";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
-type Job = {
-  id: string;
-  title: string;
-  department: string;
-  location: string;
-  type: string;
-  salary: string;
-  description: string;
-};
+// Career form schema
+const careerFormSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  department: z.string().min(1, "Department is required"),
+  location: z.string().min(1, "Location is required"),
+  type: z.string().min(1, "Job type is required"),
+  salary: z.string().optional(),
+  description: z.string().min(1, "Description is required"),
+  responsibilities: z
+    .array(z.string())
+    .min(1, "At least one responsibility is required"),
+  requirements: z
+    .array(z.string())
+    .min(1, "At least one requirement is required"),
+  isActive: z.boolean({
+    required_error: "Active status is required",
+  }),
+});
 
-type JobApplication = {
-  careerId: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  resumeUrl: string;
-  coverLetter?: string;
-};
+type CareerFormValues = z.infer<typeof careerFormSchema>;
 
-export default function CareersPage() {
-  const [isContentReady, setIsContentReady] = useState(false);
-  const [jobListings, setJobListings] = useState<Job[]>([]);
-  const [loadingJobs, setLoadingJobs] = useState(true);
-  const [applicationData, setApplicationData] = useState<JobApplication>({
-    careerId: "",
-    fullName: "",
-    email: "",
-    phone: "",
-    resumeUrl: "",
-    coverLetter: "",
-  });
+export default function EditCareerPage() {
+  const router = useRouter();
+  const params = useParams();
+  const id = params?.id as string;
+
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const form = useForm<CareerFormValues>({
+    resolver: zodResolver(careerFormSchema),
+    defaultValues: {
+      title: "",
+      department: "",
+      location: "",
+      type: "",
+      salary: "",
+      description: "",
+      responsibilities: [""],
+      requirements: [""],
+      isActive: true,
+    },
+  });
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsContentReady(true), 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    if (!id) return;
 
-  useEffect(() => {
-    const fetchJobListings = async () => {
+    const fetchCareer = async () => {
       try {
-        const response = await fetch("/api/careers");
-        if (!response.ok) throw new Error("Failed to fetch job listings");
-        const data = await response.json();
-        setJobListings(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoadingJobs(false);
+        const response = await fetch(`/api/careers/${id}`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch career");
+        }
+
+        const career = await response.json();
+        console.log("Fetched career data:", career);
+
+        form.reset({
+          title: career.title || "",
+          department: career.department || "",
+          location: career.location || "",
+          type: career.type || "",
+          salary: career.salary || "",
+          description: career.description || "",
+          responsibilities: career.responsibilities || [""],
+          requirements: career.requirements || [""],
+          isActive: career.isActive ?? true,
+        });
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching career:", error);
+        setError("Failed to load career data. Please try again.");
+        setIsLoading(false);
       }
     };
-    fetchJobListings();
-  }, []);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setApplicationData((prev) => ({ ...prev, [name]: value }));
-  };
+    fetchCareer();
+  }, [id, form]);
 
-  const handleSubmitApplication = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
+  const onSubmit = async (data: CareerFormValues) => {
     setIsSubmitting(true);
+    setError(null);
+
     try {
-      const res = await fetch("/api/careers/applications", {
-        method: "POST",
+      const response = await fetch(`/api/careers/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(applicationData),
+        body: JSON.stringify(data),
       });
 
-      const responseBody = await res.json().catch(() => null);
-
-      if (!res.ok) {
-        throw new Error(
-          `Failed to submit application: ${res.status} ${
-            responseBody?.error || ""
-          }`
-        );
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to update career");
       }
 
-      setApplicationData({
-        careerId: "",
-        fullName: "",
-        email: "",
-        phone: "",
-        resumeUrl: "",
-        coverLetter: "",
-      });
-
-      setShowSuccessPopup(true);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("🔥 Submission error:", err.message);
-      } else {
-        console.error("🔥 Submission error:", err);
-      }
-      alert("❌ Submission failed. Check the console for more details.");
-    } finally {
+      router.push("/console/careers");
+      router.refresh();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred"
+      );
       setIsSubmitting(false);
     }
   };
 
-  if (!isContentReady) return null;
+  const addResponsibility = () => {
+    const current = form.getValues("responsibilities");
+    form.setValue("responsibilities", [...current, ""]);
+  };
+
+  const removeResponsibility = (index: number) => {
+    const current = form.getValues("responsibilities");
+    if (current.length > 1) {
+      form.setValue(
+        "responsibilities",
+        current.filter((_, i) => i !== index)
+      );
+    }
+  };
+
+  const addRequirement = () => {
+    const current = form.getValues("requirements");
+    form.setValue("requirements", [...current, ""]);
+  };
+
+  const removeRequirement = (index: number) => {
+    const current = form.getValues("requirements");
+    if (current.length > 1) {
+      form.setValue(
+        "requirements",
+        current.filter((_, i) => i !== index)
+      );
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <Loader2 className="animate-spin text-muted-foreground h-8 w-8" />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-500 via-blue-600 to-blue-700">
-      <Navbar />
-      <main className="flex-1 py-12 md:py-20">
-        <div className="container px-4 md:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-12"
-          >
-            <Link href="/">
-              <Button variant="ghost" className="mb-6 text-black">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back Home
-              </Button>
-            </Link>
-            <h1 className="text-4xl md:text-5xl font-bold text-black mb-2">
-              Careers at Qemem Devs
-            </h1>
-            <p className="text-black opacity-50 max-w-2xl">
-              Shape the future with code, craft, and creativity.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mb-16"
-          >
-            <h2 className="text-2xl font-bold text-black mb-4">Open Roles</h2>
-            {loadingJobs ? (
-              <p className="text-blue-600">Fetching opportunities...</p>
-            ) : (
-              <Tabs defaultValue="all">
-                <TabsList className="bg-blue-200 text-blue-900 mb-6">
-                  <TabsTrigger value="all">All</TabsTrigger>
-                  <TabsTrigger value="engineering">Engineering</TabsTrigger>
-                  <TabsTrigger value="design">Design</TabsTrigger>
-                  <TabsTrigger value="operations">Operations</TabsTrigger>
-                </TabsList>
-                <TabsContent value="all">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {jobListings.map((job) => (
-                      <JobCard key={job.id} job={job} />
-                    ))}
-                  </div>
-                </TabsContent>
-              </Tabs>
-            )}
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="mb-20"
-          >
-            <h2 className="text-2xl font-bold text-black mb-4">Apply Now</h2>
-            <form
-              onSubmit={handleSubmitApplication}
-              className="space-y-4 bg-white p-6 rounded shadow"
-            >
-              <select
-                name="careerId"
-                value={applicationData.careerId}
-                onChange={handleInputChange}
-                required
-                className="w-full p-2 border border-blue-300 rounded"
-              >
-                <option value="">Choose your fit from the openings</option>
-                {jobListings.length > 0 ? (
-                  jobListings.map((job) => (
-                    <option key={job.id} value={job.id}>
-                      {job.title}
-                    </option>
-                  ))
-                ) : (
-                  <option disabled>No openings</option>
+    <div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Edit Career</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Job Title</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Job Title" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </select>
-              <input
-                name="fullName"
-                value={applicationData.fullName}
-                onChange={handleInputChange}
-                placeholder="Full Name"
-                required
-                className="w-full p-2 border border-blue-300 rounded"
               />
-              <input
-                name="email"
-                type="email"
-                value={applicationData.email}
-                onChange={handleInputChange}
-                placeholder="Email"
-                required
-                className="w-full p-2 border border-blue-300 rounded"
+              <FormField
+                control={form.control}
+                name="department"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Department</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Department" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <input
-                name="phone"
-                type="tel"
-                value={applicationData.phone}
-                onChange={handleInputChange}
-                placeholder="Phone"
-                required
-                className="w-full p-2 border border-blue-300 rounded"
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Location</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Location" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <input
-                name="resumeUrl"
-                type="url"
-                value={applicationData.resumeUrl}
-                onChange={handleInputChange}
-                placeholder="Resume URL"
-                required
-                className="w-full p-2 border border-blue-300 rounded"
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Job Type</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Full-time, Part-time, etc."
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <textarea
-                name="coverLetter"
-                value={applicationData.coverLetter}
-                onChange={handleInputChange}
-                placeholder="Cover Letter (optional)"
-                className="w-full p-2 border border-blue-300 rounded"
+              <FormField
+                control={form.control}
+                name="salary"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Salary</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="e.g. $100,000/year" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700"
-              >
-                {isSubmitting ? "Submitting..." : "Submit Application"}
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} placeholder="Describe the role" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Responsibilities */}
+              <div className="space-y-2">
+                <FormLabel>Responsibilities</FormLabel>
+                {(form.watch("responsibilities") || []).map((_, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <FormField
+                      control={form.control}
+                      name={`responsibilities.${index}`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder={`Responsibility ${index + 1}`}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => removeResponsibility(index)}
+                      disabled={
+                        (form.watch("responsibilities") || []).length <= 1
+                      }
+                    >
+                      <Trash2 className="w-4 h-4 text-red-500" />
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" onClick={addResponsibility}>
+                  <Plus className="w-4 h-4 mr-1" />
+                  Add Responsibility
+                </Button>
+              </div>
+
+              {/* Requirements */}
+              <div className="space-y-2">
+                <FormLabel>Requirements</FormLabel>
+                {(form.watch("requirements") || []).map((_, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <FormField
+                      control={form.control}
+                      name={`requirements.${index}`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder={`Requirement ${index + 1}`}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => removeRequirement(index)}
+                      disabled={(form.watch("requirements") || []).length <= 1}
+                    >
+                      <Trash2 className="w-4 h-4 text-red-500" />
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" onClick={addRequirement}>
+                  <Plus className="w-4 h-4 mr-1" />
+                  Add Requirement
+                </Button>
+              </div>
+
+              {/* Active Toggle */}
+              <FormField
+                control={form.control}
+                name="isActive"
+                render={({ field }) => (
+                  <FormItem className="flex items-center justify-between border p-4 rounded-lg">
+                    <div>
+                      <FormLabel>Active</FormLabel>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              {/* Submit */}
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    Updating...
+                  </>
+                ) : (
+                  "Save Changes"
+                )}
               </Button>
             </form>
-          </motion.div>
-        </div>
-      </main>
-      <Footer />
-
-      {showSuccessPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg text-center">
-            <h2 className="text-xl font-bold mb-4">🎉 Good Luck!</h2>
-            <p className="mb-4">
-              Qemem Devs will get in contact with you soon.
-            </p>
-            <Button
-              onClick={() => setShowSuccessPopup(false)}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              Close
-            </Button>
-          </div>
-        </div>
-      )}
+          </Form>
+        </CardContent>
+      </Card>
     </div>
-  );
-}
-
-function JobCard({ job }: { job: Job }) {
-  return (
-    <Card className="bg-white border border-blue-200 shadow-md">
-      <CardContent className="p-6">
-        <h3 className="text-lg font-semibold text-blue-900 mb-2">
-          {job.title}
-        </h3>
-        <div className="flex flex-wrap gap-3 text-sm text-blue-700 mb-4">
-          <div className="flex items-center gap-1">
-            <Briefcase className="w-4 h-4" /> {job.department}
-          </div>
-          <div className="flex items-center gap-1">
-            <MapPin className="w-4 h-4" /> {job.location}
-          </div>
-          <div className="flex items-center gap-1">
-            <Clock className="w-4 h-4" /> {job.type}
-          </div>
-          <div className="flex items-center gap-1">
-            <DollarSign className="w-4 h-4" /> {job.salary}
-          </div>
-        </div>
-        <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
-          <Link href={`/careers/${job.id}`}>
-            View Job <ArrowRight className="ml-2 w-4 h-4" />
-          </Link>
-        </Button>
-      </CardContent>
-    </Card>
   );
 }

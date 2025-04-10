@@ -88,7 +88,6 @@ export default function ApplicationsPage() {
     return matchesSearch && matchesStatus;
   });
 
-  // Get status badge color
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "pending":

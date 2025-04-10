@@ -61,11 +61,7 @@ export default function Sidebar({
       href: "/console/team",
       icon: Users,
     },
-    {
-      title: "Blog",
-      href: "/console/blog",
-      icon: FileText,
-    },
+
     {
       title: "Settings",
       href: "/console/settings",

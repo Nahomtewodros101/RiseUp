@@ -49,7 +49,7 @@ export default function CareerApplicationsPage({
     const fetchApplications = async () => {
       setIsLoading(true);
       try {
-        const { id } = await params; // Resolve the params promise to get the id
+        const { id } = await params; 
         const response = await fetch(`/api/careers/${id}/applications`);
         if (!response.ok) {
           throw new Error("Failed to fetch applications");

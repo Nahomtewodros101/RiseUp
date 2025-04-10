@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
-import { authMiddleware } from "@/lib/auth";
 type CareerFilter = {
   isActive?: boolean;
   department?: string;

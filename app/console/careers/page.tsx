@@ -86,7 +86,7 @@ export default function CareersPage() {
     const fetchCareers = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch("/api/careers/");
+        const response = await fetch("/api/careers");
 
         if (!response.ok) {
           throw new Error("Failed to fetch careers");

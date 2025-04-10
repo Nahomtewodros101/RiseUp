@@ -30,7 +30,6 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-// post a new application by client
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();

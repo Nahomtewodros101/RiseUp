@@ -13,34 +13,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-
-type Job = {
-  id: string;
-  title: string;
-  department: string;
-  location: string;
-  type: string;
-  salary: string;
-  description: string;
-};
-
-type JobApplication = {
-  careerId: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  resumeUrl: string;
-  coverLetter?: string;
-};
+import { Job } from "@/types";
 
 export default function CareersPage() {
   const [isContentReady, setIsContentReady] = useState(false);
   const [jobListings, setJobListings] = useState<Job[]>([]);
   const [loadingJobs, setLoadingJobs] = useState(true);
-  const [applicationData, setApplicationData] = useState<JobApplication>({
+  const [applicationData, setApplicationData] = useState<ApplicationData>({
     careerId: "",
     fullName: "",
     email: "",
@@ -49,7 +32,27 @@ export default function CareersPage() {
     coverLetter: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
+  interface Job {
+    id: string;
+    title: string;
+    department: string;
+    location: string;
+    type: string;
+    salary: string;
+    description: string;
+    responsibilities: string[];
+    requirements: string[];
+  }
+
+  interface ApplicationData {
+    careerId: string;
+    fullName: string;
+    email: string;
+    phone: string;
+    resumeUrl: string;
+    coverLetter: string;
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => setIsContentReady(true), 1500);
@@ -74,7 +77,7 @@ export default function CareersPage() {
 
   const handleInputChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
     const { name, value } = e.target;
@@ -87,24 +90,13 @@ export default function CareersPage() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const res = await fetch("/api/careers/applications", {
+      const res = await fetch("/api/careers", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(applicationData),
       });
-
-      const responseBody = await res.json().catch(() => null);
-
-      if (!res.ok) {
-        throw new Error(
-          `Failed to submit application: ${res.status} ${
-            responseBody?.error || ""
-          }`
-        );
-      }
-
+      if (!res.ok) throw new Error("Failed to submit application");
+      alert("Application submitted successfully!");
       setApplicationData({
         careerId: "",
         fullName: "",
@@ -113,15 +105,9 @@ export default function CareersPage() {
         resumeUrl: "",
         coverLetter: "",
       });
-
-      setShowSuccessPopup(true);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("🔥 Submission error:", err.message);
-      } else {
-        console.error("🔥 Submission error:", err);
-      }
-      alert("❌ Submission failed. Check the console for more details.");
+    } catch (err) {
+      console.error(err);
+      alert("Submission failed. Try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -130,7 +116,7 @@ export default function CareersPage() {
   if (!isContentReady) return null;
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-500 via-blue-600 to-blue-700">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 via-blue-200 to-white">
       <Navbar />
       <main className="flex-1 py-12 md:py-20">
         <div className="container px-4 md:px-8">
@@ -141,15 +127,16 @@ export default function CareersPage() {
             className="mb-12"
           >
             <Link href="/">
-              <Button variant="ghost" className="mb-6 text-black">
+              <Button variant="ghost" className="mb-6 text-blue-700">
                 <ArrowLeft className="mr-2 h-4 w-4" /> Back Home
               </Button>
             </Link>
-            <h1 className="text-4xl md:text-5xl font-bold text-black mb-2">
-              Careers at Qemem Devs
+            <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">
+              Dream Big. Build Bigger.
             </h1>
-            <p className="text-black opacity-50 max-w-2xl">
-              Shape the future with code, craft, and creativity.
+            <p className="text-gray-600 max-w-2xl">
+              Careers at Qemem Devs — shape the future with code, craft, and
+              creativity.
             </p>
           </motion.div>
 
@@ -159,7 +146,9 @@ export default function CareersPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mb-16"
           >
-            <h2 className="text-2xl font-bold text-black mb-4">Open Roles</h2>
+            <h2 className="text-2xl font-bold text-blue-800 mb-4">
+              Open Roles
+            </h2>
             {loadingJobs ? (
               <p className="text-blue-600">Fetching opportunities...</p>
             ) : (
@@ -187,7 +176,7 @@ export default function CareersPage() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="mb-20"
           >
-            <h2 className="text-2xl font-bold text-black mb-4">Apply Now</h2>
+            <h2 className="text-2xl font-bold text-blue-800 mb-4">Apply Now</h2>
             <form
               onSubmit={handleSubmitApplication}
               className="space-y-4 bg-white p-6 rounded shadow"
@@ -199,7 +188,7 @@ export default function CareersPage() {
                 required
                 className="w-full p-2 border border-blue-300 rounded"
               >
-                <option value="">Choose your fit from the openings</option>
+                <option value="">Choose a position</option>
                 {jobListings.length > 0 ? (
                   jobListings.map((job) => (
                     <option key={job.id} value={job.id}>
@@ -264,23 +253,6 @@ export default function CareersPage() {
         </div>
       </main>
       <Footer />
-
-      {showSuccessPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg text-center">
-            <h2 className="text-xl font-bold mb-4">🎉 Good Luck!</h2>
-            <p className="mb-4">
-              Qemem Devs will get in contact with you soon.
-            </p>
-            <Button
-              onClick={() => setShowSuccessPopup(false)}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              Close
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -306,6 +278,7 @@ function JobCard({ job }: { job: Job }) {
             <DollarSign className="w-4 h-4" /> {job.salary}
           </div>
         </div>
+        <p className="text-gray-600 mb-4">{job.description}</p>
         <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
           <Link href={`/careers/${job.id}`}>
             View Job <ArrowRight className="ml-2 w-4 h-4" />

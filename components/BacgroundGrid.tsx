@@ -8,7 +8,6 @@ export default function BackgroundGrid() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Wait for component to mount to avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);

@@ -226,7 +226,7 @@ export default function WebDevelopmentPage() {
                   <li>Node.js</li>
                   <li>Express</li>
                   <li>Django</li>
-                  <li>Ruby on Rails</li>
+                  <li>Golang</li>
                   <li>PHP/Laravel</li>
                 </ul>
               </div>

@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-// Add a new interface for the user
 interface UserType {
   id: string;
   name: string;
@@ -45,12 +44,10 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
 
-  // Fetch current user data
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -78,7 +75,6 @@ export default function Navbar() {
     fetchUser();
   }, []);
 
-  // Update the handleLogout function to ensure proper logout
   const handleLogout = async () => {
     try {
       // Make the logout request
@@ -91,10 +87,8 @@ export default function Navbar() {
         throw new Error("Logout failed");
       }
 
-      // Clear user state immediately
       setUser(null);
 
-      // Force a complete page reload to clear all state
       window.location.href = "/";
     } catch (error) {
       console.error("Logout failed:", error);
@@ -105,8 +99,9 @@ export default function Navbar() {
     { href: "/", label: "Home" },
     { href: "/projects", label: "Projects" },
     { href: "/team", label: "Team" },
+    { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
-    { href: "/careers", label: "Talent" },
+    { href: "/careers", label: "Talent", isBeta: true },
   ];
 
   return (
@@ -134,24 +129,34 @@ export default function Navbar() {
             const isActive = pathname === link.href;
 
             return (
-              <Link
-                key={index}
-                href={link.href}
-                className={`relative text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
-                  isActive
-                    ? "text-blue-600 dark:text-blue-400"
-                    : "text-gray-600 dark:text-gray-300"
-                }`}
-              >
-                {link.label}
-                {isActive && (
-                  <motion.span
-                    className="absolute -bottom-1 left-0 h-0.5 w-full bg-blue-600 dark:bg-blue-400"
-                    layoutId="navbar-indicator"
-                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                  />
+              <div key={index} className="relative flex flex-col items-center">
+                {link.isBeta && (
+                  <span className="absolute -top-4 text-xs font-semibold text-blue-400 animate-pulse">
+                    &#123;Beta&#125;
+                  </span>
                 )}
-              </Link>
+                <Link
+                  href={link.href}
+                  className={`relative text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
+                    isActive
+                      ? "text-blue-600 dark:text-blue-400"
+                      : "text-gray-600 dark:text-gray-300"
+                  }`}
+                >
+                  {link.label}
+                  {isActive && (
+                    <motion.span
+                      className="absolute -bottom-1 left-0 h-0.5 w-full bg-blue-600 dark:bg-blue-400"
+                      layoutId="navbar-indicator"
+                      transition={{
+                        type: "spring",
+                        stiffness: 350,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                </Link>
+              </div>
             );
           })}
         </nav>
@@ -298,11 +303,8 @@ export default function Navbar() {
                   <Link href="/console" className="text-sm font-medium">
                     Admin Console
                   </Link>
-                ) : (
-                  <Link href="/contact" className="text-sm font-medium">
-                    Get Started
-                  </Link>
-                )}
+                ) : null}
+                
               </nav>
             </div>
           </motion.div>

@@ -79,7 +79,7 @@ export default function ProjectsPage() {
           </div>
 
           {/* Projects Grid */}
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 lg:space-x-28">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 lg:mr-10">
             {filteredProjects.map((project, index) => (
               <motion.div
                 key={index}

@@ -31,7 +31,6 @@ export default function ConsoleDashboard() {
 
   
   useEffect(() => {
-    // Fetch dashboard data
     const fetchData = async () => {
       setIsLoading(true);
       try {

@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-
 interface Job {
   id: string;
   title: string;
@@ -43,8 +42,8 @@ export default function CareerDetailsPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingJob, setLoadingJob] = useState(true);
-  const [hasApplied, setHasApplied] = useState(false); // Track if the user has already applied
-  const [successMessage, setSuccessMessage] = useState(""); // Track success message
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchJobListing = async () => {
@@ -57,21 +56,18 @@ export default function CareerDetailsPage() {
 
         const response = await fetch(`/api/careers/${id}`);
         if (!response.ok) throw new Error("Failed to fetch job listing");
+
         const data = await response.json();
         setJob(data);
         setApplicationData((prev) => ({
           ...prev,
           careerId: id || "",
         }));
-
-        // Check if the user has already applied
-        const applicationCheck = await fetch(`/api/careers/${id}/check`);
-        if (applicationCheck.ok) {
-          const { hasApplied } = await applicationCheck.json();
-          setHasApplied(hasApplied);
-        }
       } catch (err) {
         console.error(err);
+        if (!errorMessage) {
+          setErrorMessage("Could not load job details. Try again later.");
+        }
       } finally {
         setLoadingJob(false);
       }
@@ -81,9 +77,7 @@ export default function CareerDetailsPage() {
   }, [params]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setApplicationData((prev) => ({ ...prev, [name]: value }));
@@ -94,22 +88,16 @@ export default function CareerDetailsPage() {
   ) => {
     e.preventDefault();
     setIsSubmitting(true);
-    try {
-      // Check again if the user has already applied before submitting
-      const applicationCheck = await fetch(`/api/careers/${job?.id}/check`);
-      if (applicationCheck.ok) {
-        const { hasApplied } = await applicationCheck.json();
-        if (hasApplied) {
-          setHasApplied(true);
-          return;
-        }
-      }
+    setErrorMessage("");
+    setSuccessMessage("");
 
+    try {
       const res = await fetch("/api/careers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(applicationData),
       });
+
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || "Failed to submit application");
@@ -124,53 +112,15 @@ export default function CareerDetailsPage() {
         resumeUrl: "",
         coverLetter: "",
       });
-      setHasApplied(true);
     } catch (err) {
       console.error(err);
-      if (err instanceof Error) {
-        alert(err.message || "Submission failed. Try again.");
-      } else {
-        alert("Submission failed. Try again.");
-      }
+      setErrorMessage(
+        err instanceof Error ? err.message : "Submission failed. Try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  if (hasApplied) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-blue-800">
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="text-black text-lg font-semibold text-center"
-        >
-          <svg
-            className="h-12 w-12 text-black mb-4"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
-            />
-          </svg>
-          You have already submitted an application for this position. Please
-          wait patiently for us to reach out to you.
-        </motion.div>
-        <Link href="/careers">
-          <Button variant="ghost" className="mt-4 text-black">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Careers
-          </Button>
-        </Link>
-      </div>
-    );
-  }
 
   if (loadingJob) {
     return (
@@ -213,15 +163,15 @@ export default function CareerDetailsPage() {
 
   if (!job) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-red-50">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-blue-500">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="text-red-600 text-lg font-semibold text-center"
+          className="text-white text-lg font-semibold text-center"
         >
           <svg
-            className="h-12 w-12 text-red-600 mb-4"
+            className="h-12 w-12 text-white mb-4"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -234,10 +184,12 @@ export default function CareerDetailsPage() {
               d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
             />
           </svg>
-          Job not found. Please check the URL or try again later.
+          Job not found. Please try again later.
+          <br />
+          If you have not logged in, please log in to view job details.
         </motion.div>
         <Link href="/careers">
-          <Button variant="ghost" className="mt-4 text-red-700">
+          <Button variant="ghost" className="mt-4 text-black">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Careers
           </Button>
         </Link>
@@ -246,7 +198,7 @@ export default function CareerDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 via-blue-200 to-white">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-100 via-blue-200 to-white">
       <Navbar />
       <main className="flex-1 py-12 md:py-20">
         <div className="container px-4 md:px-8">
@@ -288,61 +240,117 @@ export default function CareerDetailsPage() {
             className="mb-20"
           >
             <h2 className="text-2xl font-bold text-blue-800 mb-4">Apply Now</h2>
+
             {successMessage && (
               <div className="p-4 mb-4 text-green-800 bg-green-100 rounded">
                 {successMessage}
               </div>
             )}
+            {errorMessage && (
+              <div className="p-4 mb-4 text-red-800 bg-red-100 rounded">
+                {errorMessage}
+              </div>
+            )}
             <form
               onSubmit={handleSubmitApplication}
-              className="space-y-4 bg-white p-6 rounded shadow"
+              className="space-y-6 bg-gradient-to-b from-blue-50 to-blue-100 p-8 rounded-lg shadow-lg"
             >
-              <input
-                name="fullName"
-                value={applicationData.fullName}
-                onChange={handleInputChange}
-                placeholder="Full Name"
-                required
-                className="w-full p-2 border border-blue-300 rounded"
-              />
-              <input
-                name="email"
-                type="email"
-                value={applicationData.email}
-                onChange={handleInputChange}
-                placeholder="Email"
-                required
-                className="w-full p-2 border border-blue-300 rounded"
-              />
-              <input
-                name="phone"
-                type="tel"
-                value={applicationData.phone}
-                onChange={handleInputChange}
-                placeholder="Phone"
-                required
-                className="w-full p-2 border border-blue-300 rounded"
-              />
-              <input
-                name="resumeUrl"
-                type="url"
-                value={applicationData.resumeUrl}
-                onChange={handleInputChange}
-                placeholder="Resume URL"
-                required
-                className="w-full p-2 border border-blue-300 rounded"
-              />
-              <textarea
-                name="coverLetter"
-                value={applicationData.coverLetter}
-                onChange={handleInputChange}
-                placeholder="Cover Letter (optional)"
-                className="w-full p-2 border border-blue-300 rounded"
-              />
+              <h3 className="text-2xl font-semibold text-blue-800 text-center">
+                Applying for {job.title}
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="fullName"
+                    className="block text-sm font-medium text-blue-700"
+                  >
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    placeholder="Enter your full name"
+                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    value={applicationData.fullName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-blue-700"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    value={applicationData.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-blue-700"
+                  >
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    value={applicationData.phone}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="resumeUrl"
+                    className="block text-sm font-medium text-blue-700"
+                  >
+                    Resume URL
+                  </label>
+                  <input
+                    type="url"
+                    id="resumeUrl"
+                    name="resumeUrl"
+                    placeholder="Link to your resume"
+                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    value={applicationData.resumeUrl}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="coverLetter"
+                    className="block text-sm font-medium text-blue-700"
+                  >
+                    Cover Letter
+                  </label>
+                  <textarea
+                    id="coverLetter"
+                    name="coverLetter"
+                    placeholder="Write your cover letter here"
+                    className="w-full border border-blue-300 rounded-lg px-4 py-2 h-32 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    value={applicationData.coverLetter}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               >
                 {isSubmitting ? "Submitting..." : "Submit Application"}
               </Button>

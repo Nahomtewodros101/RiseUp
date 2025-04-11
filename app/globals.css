@@ -107,3 +107,4 @@
 .carousel-card:nth-child(even) {
   animation-delay: 6s; /* Delay for even cards */
 }
+

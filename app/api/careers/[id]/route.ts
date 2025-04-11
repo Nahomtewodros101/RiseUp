@@ -6,13 +6,9 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  const authError = await authMiddleware(request, ["admin"]);
-  if (authError) return authError;
-
   try {
-    const { id: careerId } = await context.params; // Await the promise here
+    const { id: careerId } = await context.params;
 
-    // Fetch the career by ID
     const career = await db.career.findUnique({
       where: { id: careerId },
     });
@@ -21,7 +17,6 @@ export async function GET(
       return NextResponse.json({ error: "Career not found" }, { status: 404 });
     }
 
-    // Return the career details
     return NextResponse.json(career, { status: 200 });
   } catch (error) {
     console.error("Error fetching career:", error);

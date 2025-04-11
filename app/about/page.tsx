@@ -16,17 +16,17 @@ export default function AboutPage() {
     // Set content as ready after the loading screen has had time to show
     const timer = setTimeout(() => {
       setIsContentReady(true);
-    }, 2100); // Slightly longer than the loading screen duration
+    }, 2100);
 
     return () => clearTimeout(timer);
   }, []);
 
   if (!isContentReady) {
-    return null; // Return nothing while loading screen is showing
+    return null;
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <main className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 py-12 md:py-24">
         <div className="container px-4 md:px-6">
@@ -63,7 +63,7 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold mb-6">Our Story</h2>
               <div className="space-y-4 text-gray-500 dark:text-gray-400">
                 <p>
-                  Founded in 2018, Qemem Devs began as a small team of
+                  Founded in 2022, Qemem Devs began as a small team of
                   passionate developers with a shared vision: to create digital
                   solutions that make a real difference for businesses and users
                   alike.
@@ -75,12 +75,13 @@ export default function AboutPage() {
                   industries.
                 </p>
                 <p>
-                  Our name, Qemem, comes from the amharic word for &quot;spice&quot;  which
-                  reflects our commitment to adding flavor and uniqueness to
-                  every project we undertake. We believe that every line of code
-                  we write has the potential to make a positive impact on the
-                  world, and we are dedicated to creating solutions that not
-                  only meet but exceed our clients expectations.
+                  Our name, Qemem, comes from the amharic word for
+                  &quot;spice&quot; which reflects our commitment to adding
+                  flavor and uniqueness to every project we undertake. We
+                  believe that every line of code we write has the potential to
+                  make a positive impact on the world, and we are dedicated to
+                  creating solutions that not only meet but exceed our clients
+                  expectations.
                 </p>
               </div>
             </div>
@@ -199,6 +200,6 @@ export default function AboutPage() {
         </div>
       </main>
       <Footer />
-    </div>
+    </main>
   );
 }

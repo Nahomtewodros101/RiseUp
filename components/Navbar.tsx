@@ -48,7 +48,6 @@ export default function Navbar() {
     setIsOpen(false);
   }, [pathname]);
 
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -101,7 +100,7 @@ export default function Navbar() {
     { href: "/team", label: "Team" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
-    { href: "/careers", label: "Talent", isBeta: true },
+    { href: "/talent", label: "Talent", isBeta: true, requiresAuth: true },
   ];
 
   return (
@@ -128,6 +127,13 @@ export default function Navbar() {
           {navLinks.map((link, index) => {
             const isActive = pathname === link.href;
 
+            const handleLinkClick = (e: React.MouseEvent) => {
+              if (link.requiresAuth && !user) {
+                e.preventDefault();
+                window.location.href = "/login";
+              }
+            };
+
             return (
               <div key={index} className="relative flex flex-col items-center">
                 {link.isBeta && (
@@ -137,6 +143,7 @@ export default function Navbar() {
                 )}
                 <Link
                   href={link.href}
+                  onClick={handleLinkClick}
                   className={`relative text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
                     isActive
                       ? "text-blue-600 dark:text-blue-400"
@@ -304,7 +311,6 @@ export default function Navbar() {
                     Admin Console
                   </Link>
                 ) : null}
-                
               </nav>
             </div>
           </motion.div>

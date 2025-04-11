@@ -45,7 +45,6 @@ interface JobApplication {
 
 type Params = Promise<{ id: string }>;
 
-// Main component for the Application Detail Page
 export default function ApplicationDetailPage({ params }: { params: Params }) {
   const [application, setApplication] = useState<JobApplication | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -91,7 +90,8 @@ export default function ApplicationDetailPage({ params }: { params: Params }) {
       <div className="flex h-[50vh] flex-col items-center justify-center">
         <h2 className="text-xl font-semibold">Application not found</h2>
         <p className="text-muted-foreground">
-          The application you are looking for does not exist or has been removed.
+          The application you are looking for does not exist or has been
+          removed.
         </p>
         <Button className="mt-4" asChild>
           <Link href="/console/careers/applications">Back to Applications</Link>
@@ -267,18 +267,17 @@ export default function ApplicationDetailPage({ params }: { params: Params }) {
             const response = await fetch(
               `/api/careers/applications/${application.id}`,
               {
-                method: "PATCH",
+                method: "PUT",
                 headers: {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ status }),
               }
             );
-
             if (!response.ok) {
               alert("Failed to update the application status");
             } else {
-              alert("Application status updated successfully");
+              window.location.href = "/console/careers/applications";
             }
           }}
         >

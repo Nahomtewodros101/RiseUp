@@ -36,7 +36,6 @@ export async function GET(
   }
 }
 
-// PUT update application status (admin only)
 export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -70,6 +69,42 @@ export async function PUT(
     console.error("Error updating application:", error);
     return new Response(
       JSON.stringify({ error: "Failed to update application" }),
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const authError = await authMiddleware(request, ["admin"]);
+  if (authError) return authError;
+
+  try {
+    const { id } = await context.params;
+
+    const existingApplication = await db.jobApplication.findUnique({
+      where: { id },
+    });
+
+    if (!existingApplication) {
+      return new Response(JSON.stringify({ error: "Application not found" }), {
+        status: 404,
+      });
+    }
+
+    await db.jobApplication.delete({
+      where: { id },
+    });
+
+    return new Response(JSON.stringify({ message: "Application deleted" }), {
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error deleting application:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to delete application" }),
       { status: 500 }
     );
   }

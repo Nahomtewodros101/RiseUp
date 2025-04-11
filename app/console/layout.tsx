@@ -17,7 +17,6 @@ export default function ConsoleLayout({
   const isMobile = useMobile();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-  // Close mobile sidebar when route changes
   useEffect(() => {
     setIsMobileSidebarOpen(false);
   }, [pathname]);

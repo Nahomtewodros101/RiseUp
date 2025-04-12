@@ -100,7 +100,7 @@ export default function Navbar() {
     { href: "/team", label: "Team" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
-    { href: "/talent", label: "Talent", isBeta: true, requiresAuth: true },
+    { href: "/careers", label: "Talent", isBeta: true, requiresAuth: true },
   ];
 
   return (

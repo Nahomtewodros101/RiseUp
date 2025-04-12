@@ -66,7 +66,7 @@ export default function PrivacyPolicyPage() {
             <p>
               Please read this Privacy Policy carefully. If you do not agree
               with the terms of this Privacy Policy, please do not access the
-              site or use our services.
+              site or us our services.
             </p>
 
             <h2>Information We Collect</h2>

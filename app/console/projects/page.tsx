@@ -12,10 +12,9 @@ import {
   MoreHorizontal,
   ExternalLink,
   Loader2,
-  Eye,
   Calendar,
   Star,
-  X
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -83,7 +82,7 @@ export default function ProjectsPage() {
   const [projectTypeFilter, setProjectTypeFilter] = useState("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+  const [viewMode, setViewMode] = useState<"table" | "grid">("grid"); // Changed to "grid"
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   useEffect(() => {
@@ -99,6 +98,7 @@ export default function ProjectsPage() {
         const data = await response.json();
         setProjects(data);
         setIsLoading(false);
+        console.log("Fetched projects:", setSelectedProject); 
       } catch (error) {
         console.error("Error fetching projects:", error);
         setIsLoading(false);
@@ -178,10 +178,7 @@ export default function ProjectsPage() {
   };
 
   // Open project preview
-  const openPreview = (project: Project) => {
-    setSelectedProject(project);
-    setPreviewOpen(true);
-  };
+
 
   return (
     <div className="space-y-6">
@@ -349,24 +346,6 @@ export default function ProjectsPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => openPreview(project)}
-                              >
-                                <Eye className="h-4 w-4" />
-                                <span className="sr-only">Preview</span>
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Preview Project</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon">
@@ -382,12 +361,7 @@ export default function ProjectsPage() {
                                 Edit
                               </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => openPreview(project)}
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              Preview
-                            </DropdownMenuItem>
+
                             {project.link && (
                               <DropdownMenuItem asChild>
                                 <Link
@@ -462,13 +436,6 @@ export default function ProjectsPage() {
                 </div>
               </CardContent>
               <CardFooter className="p-4 pt-0 flex justify-between">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => openPreview(project)}
-                >
-                  <Eye className="h-3 w-3 mr-1" /> Preview
-                </Button>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" asChild>
                     <Link href={`/console/projects/${project.id}`}>

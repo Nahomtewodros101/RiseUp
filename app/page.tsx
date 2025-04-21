@@ -21,6 +21,8 @@ import { motion } from "framer-motion";
 import { Project } from "@/types";
 import BackgroundGrid from "@/components/BacgroundGrid";
 import CountUp from "react-countup";
+import { Card, CardContent } from "../components/ui/card";
+import Image from "next/image";
 
 export default function Home() {
   const [isContentReady, setIsContentReady] = useState(false);
@@ -100,8 +102,11 @@ export default function Home() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4, duration: 0.8 }}
                   >
-                    Qemem Devs crafts innovative web, mobile, and software
-                    solutions tailored to your vision.
+                   Qmem Tech is a leading software development company, dedicated to
+                    delivering innovative solutions that drive success. Our team of
+                    expert developers and designers work tirelessly to create
+                    custom software solutions that meet the unique needs of our
+                    clients.
                   </motion.p>
                 </div>
                 <motion.div
@@ -381,84 +386,92 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Services Section */}
-
         {/* Testimonials Section */}
-        <section className="py-20 bg-transparent dark:bg-blue-900/30">
+        <section
+          id="testimonials"
+          className="w-full py-12 md:py-24 lg:py-32 bg-blue-600"
+        >
           <div className="container px-4 md:px-6">
-            <motion.div
-              className="text-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-blue-700 dark:text-blue-300">
-                What Our Clients Say
-              </h2>
-              <p className="max-w-[600px] mx-auto mt-4 text-gray-600 dark:text-gray-300">
-                Hear from those who’ve experienced our passion and expertise.
-              </p>
-            </motion.div>
-            <motion.div
-              className="grid grid-cols-1 md:grid-cols-3 gap-8"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-black px-3 py-1 text-sm text-white">
+                  Testimonials
+                </div>
+                <h2 className="text-3xl text-white font-bold tracking-tighter md:text-4xl">
+                  What Our Clients Say
+                </h2>
+                <p className="max-w-[900px] text-white md:text-xl">
+                  Don not just take our word for it. Here is what our clients have
+                  to say about working with us.
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
               {[
                 {
+                  name: "Sarah Johnson",
+                  role: "CEO, TechStart",
                   quote:
-                    "Qemem Devs turned our vision into a stunning reality!",
-                  author: "Jane Doe, CEO",
-                  company: "TechTrend Innovations",
+                    "Working with Qmem Tech transformed our business. Their team delivered a solution that exceeded our expectations and helped us scale rapidly.",
                   image: "/person-1.jpg",
                 },
                 {
-                  quote: "Their dedication and creativity are unmatched.",
-                  author: "John Smith, Founder",
-                  company: "GrowEasy Solutions",
+                  name: "Michael Chen",
+                  role: "CTO, GrowthLabs",
+                  quote:
+                    "The team at Qmem Tech is exceptional. They understood our complex requirements and delivered a robust platform that our users love.",
                   image: "/person-2.jpg",
                 },
                 {
-                  quote: "A seamless experience from start to finish.",
-                  author: "Emily Chen, CTO",
-                  company: "NextGen Apps",
+                  name: "Emily Rodriguez",
+                  role: "Founder, DataDrive",
+                  quote:
+                    "Qmem Tech data analytics solution gave us insights we never had before. It's been a game-changer for our decision-making process.",
                   image: "/person-3.jpg",
                 },
               ].map((testimonial, index) => (
-                <motion.div
-                  key={index}
-                  className="bg-white dark:bg-blue-800/50 p-10 rounded-xl shadow-xl border border-blue-200 dark:border-blue-700 flex flex-col items-center"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.2, duration: 0.6 }}
-                  viewport={{ once: true }}
-                >
-                  <motion.img
-                    src={testimonial.image}
-                    alt={testimonial.author}
-                    className="w-16 h-16 rounded-full object-cover mb-4 border-2 border-blue-300 dark:border-blue-500"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: index * 0.3, duration: 0.5 }}
-                    viewport={{ once: true }}
-                  />
-                  <p className="text-lg text-gray-600 dark:text-gray-200 italic text-center">
-                    “{testimonial.quote}”
-                  </p>
-                  <p className="mt-6 font-semibold text-xl text-blue-600 dark:text-blue-400">
-                    {testimonial.author}
-                  </p>
-                  <p className="text-gray-500 dark:text-gray-400 text-base">
-                    {testimonial.company}
-                  </p>
-                </motion.div>
+                <Card key={index} className="border-sky-100">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="flex items-center gap-2 text-sky-500">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          stroke="none"
+                        >
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="text-gray-500 italic">
+                    &quot;{testimonial.quote}&quot;
+                    </p>
+                    <div className="flex items-center gap-4">
+                      <div className="rounded-full bg-sky-100 w-12 h-12 flex items-center justify-center">
+                        <Image
+                          src={testimonial.image}
+                          alt={`${testimonial.name}'s picture`}
+                          className="rounded-full w-12 h-12 object-cover"
+                        />
+                      </div>
+                      <div>
+                        <p className="font-bold">{testimonial.name}</p>
+                        <p className="text-sm text-gray-500">
+                          {testimonial.role}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
-            </motion.div>
+            </div>
           </div>
         </section>
+
         {/* Blog Teaser Section */}
         <section className="py-20 bg-transparent dark:bg-blue-900/30">
           <div className="container px-4 md:px-6">
@@ -470,7 +483,7 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-blue-700 dark:text-blue-300">
-                Latest Insights
+                Latest Blog Insights
               </h2>
               <p className="max-w-[600px] mx-auto mt-4 text-gray-600 dark:text-gray-300">
                 Stay updated with our tips, trends, and tech insights.
@@ -507,7 +520,7 @@ export default function Home() {
                   viewport={{ once: true }}
                 >
                   <Link href={post.link}>
-                    <img
+                    <Image
                       src={post.image}
                       alt={post.title}
                       className="w-full h-48 object-cover"

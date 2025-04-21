@@ -5,7 +5,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import BackgroundGrid from "@/components/BacgroundGrid";
 import CookieConsent from "../components/CookieConsent";
 export const metadata = {
-  title: "Qemem Devs - Tech Startup",
+  title: "Qemem Tech - Tech Startup",
   description:
     "Transforming ideas into digital reality with cutting-edge technology solutions.",
 };

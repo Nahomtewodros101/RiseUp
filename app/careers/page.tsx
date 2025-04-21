@@ -104,45 +104,6 @@ export default function CareersPage() {
             </motion.div>
           </div>
 
-          {/* Why Join Us Section */}
-          <motion.div
-            className="mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-8 md:p-12">
-              <h2 className="text-2xl font-bold mb-6">Why Join Qemem Devs?</h2>
-              <div className="grid gap-6 md:grid-cols-3">
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-                  <h3 className="text-lg font-bold mb-2">
-                    Innovative Projects
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Work on cutting-edge technologies and challenging projects
-                    that make a real impact.
-                  </p>
-                </div>
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-                  <h3 className="text-lg font-bold mb-2">
-                    Growth Opportunities
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Continuous learning, mentorship, and clear paths for career
-                    advancement.
-                  </p>
-                </div>
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-                  <h3 className="text-lg font-bold mb-2">Inclusive Culture</h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    A diverse, supportive environment where every voice is
-                    valued and respected.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
           {/* Open Positions Section */}
           <motion.div
             className="mb-16"

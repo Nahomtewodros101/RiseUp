@@ -29,7 +29,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
@@ -101,11 +100,8 @@ export default function TeamPage() {
       const data = await response.json();
 
       // Sort team members by order field
-      const sortedMembers = data.sort(
-        (a: TeamMember, b: TeamMember) => a.order - b.order
-      );
 
-      setTeamMembers(sortedMembers);
+      setTeamMembers(data);
     } catch (error) {
       console.error("Failed to fetch team members:", error);
       console.error("Failed to fetch team members. Please try again.");
@@ -571,15 +567,6 @@ export default function TeamPage() {
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">
                   {member.bio}
                 </p>
-                <div className="flex items-center justify-between mt-4">
-                  <Badge variant="outline">Order: {member.order}</Badge>
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link href={`/console/team/${member.id}`}>
-                      <Edit className="mr-2 h-4 w-4" />
-                      Edit
-                    </Link>
-                  </Button>
-                </div>
               </CardContent>
             </Card>
           ))}

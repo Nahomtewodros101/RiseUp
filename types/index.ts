@@ -44,7 +44,6 @@ export interface TeamMember {
   image: string;
   socialLinks: SocialLinks;
   isActive: boolean;
-  order: number;
   createdAt: Date;
   updatedAt: Date;
 }

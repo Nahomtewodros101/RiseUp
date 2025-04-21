@@ -71,33 +71,12 @@ export default function Sidebar({
       href: "/console/careers",
       icon: Briefcase,
     },
+    {
+      title: "User Management",
+      href: "/console/admin/users",
+      icon: Shield,
+    },
   ];
-
-  const SidebarGroup = ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  );
-
-  const SidebarGroupLabel = ({ children }: { children: React.ReactNode }) => (
-    <div className="px-3 py-2 text-sm font-semibold text-gray-500 dark:text-gray-400">
-      {children}
-    </div>
-  );
-
-  const SidebarGroupContent = ({ children }: { children: React.ReactNode }) => (
-    <div className="space-y-1">{children}</div>
-  );
-
-  const SidebarMenu = ({ children }: { children: React.ReactNode }) => (
-    <nav className="flex-1 p-2 space-y-1">{children}</nav>
-  );
-
-  const SidebarMenuItem = ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  );
-
-  const SidebarMenuButton = ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  );
 
   return (
     <>
@@ -176,25 +155,6 @@ export default function Sidebar({
             );
           })}
         </nav>
-
-        <SidebarGroup>
-          <SidebarGroupLabel>Admin</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <Link
-                    href="/console/admin/users"
-                    className="flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    <Shield className="h-4 w-4" />
-                    {!isCollapsed && <span>User Management</span>}
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
 
         <div className="p-2 border-t">
           <Button

@@ -35,13 +35,8 @@ export default function TeamPage() {
 
         const data = await response.json();
 
-        // Sort team members by order field
-        const sortedMembers = data.sort(
-          (a: TeamMember, b: TeamMember) => a.order - b.order
-        );
-
         // Filter out inactive members
-        const activeMembers = sortedMembers.filter(
+        const activeMembers = data.filter(
           (member: TeamMember) => member.isActive
         );
 
@@ -64,7 +59,7 @@ export default function TeamPage() {
   }, [isContentReady]);
 
   if (!isContentReady) {
-    return null; // Return nothing while loading screen is showing
+    return null;
   }
 
   return (

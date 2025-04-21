@@ -29,12 +29,13 @@ const teamMemberFormSchema = z.object({
   bio: z.string().min(1, "Bio is required"),
   image: z.string().min(1, "Image URL is required"),
   isActive: z.boolean().default(true).optional(),
-  order: z.number().int().min(0, "Order must be a positive number"),
-  socialLinks: z.object({
-    twitter: z.string().url().optional(),
-    linkedin: z.string().url().optional(),
-    github: z.string().url().optional(),
-  }).optional(),
+  socialLinks: z
+    .object({
+      twitter: z.string().url().optional(),
+      linkedin: z.string().url().optional(),
+      github: z.string().url().optional(),
+    })
+    .optional(),
 });
 
 type TeamMemberFormValues = z.infer<typeof teamMemberFormSchema>;
@@ -60,7 +61,6 @@ export default function TeamMemberForm({
       bio: "",
       image: "",
       isActive: true,
-      order: 0,
       socialLinks: {
         twitter: "",
         linkedin: "",
@@ -164,31 +164,6 @@ export default function TeamMemberForm({
                           disabled={isSubmitting}
                         />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="order"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Display Order</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          min="0"
-                          {...field}
-                          onChange={(e) =>
-                            field.onChange(Number.parseInt(e.target.value) || 0)
-                          }
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Lower numbers appear first on the team page
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

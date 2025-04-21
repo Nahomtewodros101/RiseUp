@@ -74,7 +74,7 @@ export default function CareerDetailsPage() {
     };
 
     fetchJobListing();
-  }, [params]);
+  }, [params, errorMessage]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

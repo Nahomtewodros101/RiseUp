@@ -3,9 +3,8 @@ import { z } from "zod";
 import prisma from "@/lib/db";
 import { authMiddleware } from "@/lib/auth";
 
-// Team member schema for validation
 const teamMemberSchema = z.object({
-  id: z.string().optional(), // Optional ID field
+  id: z.string().optional(), 
   name: z.string().min(1, "Name is required"),
   role: z.string().min(1, "Role is required"),
   bio: z.string().min(1, "Bio is required"),
@@ -19,12 +18,9 @@ const teamMemberSchema = z.object({
   order: z.number().int().default(0),
 });
 
-// GET all team members
 export async function GET() {
   try {
-    const teamMembers = await prisma.teamMember.findMany({
-      orderBy: { order: "asc" },
-    });
+    const teamMembers = await prisma.teamMember.findMany({});
 
     return NextResponse.json(teamMembers);
   } catch (error) {
@@ -35,16 +31,13 @@ export async function GET() {
     );
   }
 }
-// Post a new Team memeber
 export async function POST(req: NextRequest) {
-  // Check authentication
   const authError = await authMiddleware(req, ["admin"]);
   if (authError) return authError;
 
   try {
-    // Parse and validate request body
     const body = await req.json();
-    console.log("Received body:", body); // Log the incoming request data
+    console.log("Received body:", body); 
 
     const validatedData = teamMemberSchema.safeParse(body);
 
@@ -72,5 +65,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-

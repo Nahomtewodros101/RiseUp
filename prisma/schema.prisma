@@ -4,11 +4,11 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
-
 
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -19,6 +19,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   blogs     Blog[]  
+  notifications Notification[] // Removed incorrect @relation
   lastLogin DateTime?
 }
 
@@ -45,7 +46,6 @@ model TeamMember {
   image       String
   socialLinks Json     
   isActive    Boolean  @default(true)
-  order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -81,13 +81,14 @@ model Job {
   description String
   location    String
   type        String
-  salary        String
+  salary      String
   experience  String
   responsibilities String[]
   requirements String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
 model Career {
   id              String    @id @default(auto()) @map("_id") @db.ObjectId
   title           String
@@ -116,4 +117,17 @@ model JobApplication {
   status          String    @default("pending") 
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+}
+
+model Notification {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  message         String
+  type            String
+  scheduled       Boolean   @default(false)
+  scheduledDate   DateTime?
+  targetAudience  String[]
+  isPriority      Boolean   @default(false)
+  createdBy       String    @db.ObjectId
+  creator         User      @relation(fields: [createdBy], references: [id])
+  createdAt       DateTime  @default(now())
 }

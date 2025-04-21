@@ -9,7 +9,6 @@ type UpdateData = {
   bio?: string;
   image?: string;
   socialLinks?: string;
-  order?: number;
 };
 
 export async function PATCH(
@@ -53,7 +52,6 @@ export async function PATCH(
     if (body.bio) updateData.bio = body.bio;
     if (body.image) updateData.image = body.image;
     if (body.socialLinks) updateData.socialLinks = body.socialLinks;
-    if (body.order !== undefined) updateData.order = body.order;
 
     const updatedTeamMember = await prisma.teamMember.update({
       where: { id },
@@ -69,6 +67,46 @@ export async function PATCH(
           error instanceof Error
             ? error.message
             : "Failed to update team member",
+      },
+      { status: 500 }
+    );
+  }
+}
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+
+  // Check authentication
+  const authError = await authMiddleware(request, ["admin"]);
+  if (authError) return authError;
+
+  try {
+    const existingTeamMember = await prisma.teamMember.findUnique({
+      where: { id },
+    });
+
+    if (!existingTeamMember) {
+      return NextResponse.json(
+        { error: "Team member not found" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.teamMember.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ message: "Team member deleted successfully" });
+  } catch (error) {
+    console.error("Failed to delete team member:", error);
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to delete team member",
       },
       { status: 500 }
     );

@@ -29,7 +29,6 @@ export default function ConsoleDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
 
-  
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -90,10 +89,17 @@ export default function ConsoleDashboard() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
         <div className="flex items-center gap-2">
           <Button asChild>
             <Link href="/console/projects/new">Add New Project</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/" target="_blank">
+              View Website
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/console/team/new">Add Team Member</Link>
           </Button>
         </div>
       </div>
@@ -167,25 +173,6 @@ export default function ConsoleDashboard() {
 
       {/* Quick Actions */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <Button asChild>
-              <Link href="/console/projects/new">Add New Project</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/console/team/new">Add Team Member</Link>
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/" target="_blank">
-                View Website
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-
         <Card>
           <CardHeader>
             <CardTitle>System Status</CardTitle>

@@ -21,7 +21,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -450,34 +449,6 @@ export default function NotificationModal({
                       onCheckedChange={setIsScheduled}
                     />
                   </div>
-                  {isScheduled && (
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !scheduledDate && "text-muted-foreground"
-                          )}
-                        >
-                          <Calendar className="mr-2 h-4 w-4" />
-                          {scheduledDate ? (
-                            format(scheduledDate, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 popover-content">
-                        <CalendarComponent
-                          mode="single"
-                          selected={scheduledDate || undefined}
-                          onSelect={(date) => setScheduledDate(date || null)}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  )}
                 </div>
 
                 <div className="space-y-2">

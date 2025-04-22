@@ -28,6 +28,7 @@
     "@radix-ui/react-tooltip": "^1.1.8",
     "@types/canvas-confetti": "^1.6.0",
     "@types/leaflet": "^1.9.17",
+    "@types/react-day-picker": "^5.2.1",
     "@types/react-leaflet": "^2.8.3",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",

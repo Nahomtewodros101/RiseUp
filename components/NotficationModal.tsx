@@ -5,7 +5,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   X,
   Send,
-  Calendar,
   Users,
   Info,
   AlertTriangle,

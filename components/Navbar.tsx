@@ -107,7 +107,7 @@ export default function Navbar() {
           credentials: "include",
         });
         if (response.ok) {
-          const data: Notification[] = await response.json(); 
+          const data: Notification[] = await response.json();
           const formattedNotifications = data.map((notif: Notification) => ({
             ...notif,
             createdAt: new Date(notif.createdAt),
@@ -178,8 +178,8 @@ export default function Navbar() {
   ];
 
   function handleNotificationSubmit(data: Notification): Promise<void> {
+    console.log(data);
     throw new Error("Function not implemented.");
-    
   }
 
   return (

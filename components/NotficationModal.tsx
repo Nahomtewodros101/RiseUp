@@ -12,6 +12,7 @@ import {
   CheckCircle,
   Bell,
   ChevronDown,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -31,23 +32,26 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 type NotificationType = "info" | "warning" | "success";
 
+interface Notification {
+  id: string;
+  message: string;
+  type: NotificationType;
+  scheduled: boolean;
+  scheduledDate: Date | null;
+  targetAudience: string[];
+  isPriority: boolean;
+  createdAt: Date;
+  creator: { name: string } | null;
+}
+
 interface NotificationModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  onSubmit: (data: {
-    message: string;
-    type: NotificationType;
-    scheduled: boolean;
-    scheduledDate: Date | null;
-    targetAudience: string[];
-    isPriority: boolean;
-  }) => void;
 }
 
 export default function NotificationModal({
   isOpen,
   closeModal,
-  onSubmit,
 }: NotificationModalProps) {
   const [message, setMessage] = useState("");
   const [notificationType, setNotificationType] =
@@ -57,16 +61,25 @@ export default function NotificationModal({
   const [targetAudience, setTargetAudience] = useState<string[]>(["all"]);
   const [isPriority, setIsPriority] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<string | null>(
+    null
+  );
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
+        !modalRef.current.contains(event.target as Node) &&
+        !Array.from(document.querySelectorAll(".popover-content")).some((el) =>
+          el.contains(event.target as Node)
+        )
       ) {
         closeModal();
-        console.log("Clicked outside the modal", isPreview);
       }
     };
 
@@ -77,31 +90,137 @@ export default function NotificationModal({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, closeModal , isPreview] );
+  }, [isOpen, closeModal]);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      fetchNotifications();
+    } else {
       setTimeout(() => {
-        setMessage("");
-        setNotificationType("info");
-        setIsScheduled(false);
-        setScheduledDate(null);
-        setTargetAudience(["all"]);
-        setIsPriority(false);
-        setIsPreview(false);
+        resetForm();
+        setNotifications([]);
+        setEditingId(null);
+        setDeletingId(null);
+        setDeleteConfirmOpen(null);
       }, 300);
     }
   }, [isOpen]);
 
-  const handleSubmit = () => {
-    onSubmit({
+  const fetchNotifications = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/notifications", {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const formattedNotifications = data.map((notif: any) => ({
+          ...notif,
+          createdAt: new Date(notif.createdAt),
+          scheduledDate: notif.scheduledDate
+            ? new Date(notif.scheduledDate)
+            : null,
+        }));
+        setNotifications(formattedNotifications);
+      } else {
+        console.error("Failed to fetch notifications:", await response.json());
+      }
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const data = {
       message,
       type: notificationType,
       scheduled: isScheduled,
-      scheduledDate,
+      scheduledDate: scheduledDate ? scheduledDate.toISOString() : null,
       targetAudience,
       isPriority,
-    });
+    };
+
+    try {
+      const url = editingId
+        ? `/api/notifications/${editingId}`
+        : "/api/notifications";
+      const method = editingId ? "PUT" : "POST";
+      const response = await fetch(url, {
+        method,
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const updatedNotification = await response.json();
+        const formattedNotification = {
+          ...updatedNotification,
+          createdAt: new Date(updatedNotification.createdAt),
+          scheduledDate: updatedNotification.scheduledDate
+            ? new Date(updatedNotification.scheduledDate)
+            : null,
+        };
+
+        setNotifications((prev) =>
+          editingId
+            ? prev.map((notif) =>
+                notif.id === editingId ? formattedNotification : notif
+              )
+            : [formattedNotification, ...prev]
+        );
+        resetForm();
+        setEditingId(null);
+      } else {
+        console.error("Failed to save notification:", await response.json());
+      }
+    } catch (error) {
+      console.error("Error saving notification:", error);
+    }
+  };
+
+  const handleEdit = (notification: Notification) => {
+    setEditingId(notification.id);
+    setMessage(notification.message);
+    setNotificationType(notification.type);
+    setIsScheduled(notification.scheduled);
+    setScheduledDate(notification.scheduledDate);
+    setTargetAudience(notification.targetAudience);
+    setIsPriority(notification.isPriority);
+    // Switch to Compose tab
+    setIsPreview(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    setDeletingId(id);
+    try {
+      const response = await fetch(`/api/notifications/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (response.ok) {
+        setNotifications((prev) => prev.filter((notif) => notif.id !== id));
+      } else {
+        console.error("Failed to delete notification:", await response.json());
+      }
+    } catch (error) {
+      console.error("Error deleting notification:", error);
+    } finally {
+      setDeletingId(null);
+      setDeleteConfirmOpen(null);
+    }
+  };
+
+  const resetForm = () => {
+    setMessage("");
+    setNotificationType("info");
+    setIsScheduled(false);
+    setScheduledDate(null);
+    setTargetAudience(["all"]);
+    setIsPriority(false);
+    setIsPreview(false);
   };
 
   const toggleAudience = (audience: string) => {
@@ -117,8 +236,8 @@ export default function NotificationModal({
     setTargetAudience(newAudience.length ? newAudience : ["all"]);
   };
 
-  const getNotificationIcon = () => {
-    switch (notificationType) {
+  const getNotificationIcon = (type: NotificationType) => {
+    switch (type) {
       case "info":
         return <Info className="h-5 w-5 text-blue-500" />;
       case "warning":
@@ -128,8 +247,8 @@ export default function NotificationModal({
     }
   };
 
-  const getNotificationColor = () => {
-    switch (notificationType) {
+  const getNotificationColor = (type: NotificationType) => {
+    switch (type) {
       case "info":
         return "bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800";
       case "warning":
@@ -160,7 +279,7 @@ export default function NotificationModal({
           <div className="flex items-center justify-between border-b p-4">
             <h2 className="text-xl font-semibold flex items-center gap-2">
               <Bell className="h-5 w-5 text-blue-600" />
-              Post Notification
+              Notification Manager
             </h2>
             <Button
               variant="ghost"
@@ -174,7 +293,7 @@ export default function NotificationModal({
 
           <Tabs defaultValue="compose" className="w-full">
             <div className="px-4 border-b">
-              <TabsList className="grid grid-cols-2">
+              <TabsList className="grid grid-cols-3">
                 <TabsTrigger
                   value="compose"
                   onClick={() => setIsPreview(false)}
@@ -183,6 +302,9 @@ export default function NotificationModal({
                 </TabsTrigger>
                 <TabsTrigger value="preview" onClick={() => setIsPreview(true)}>
                   Preview
+                </TabsTrigger>
+                <TabsTrigger value="manage" onClick={() => setIsPreview(false)}>
+                  Manage
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -274,7 +396,10 @@ export default function NotificationModal({
                         <ChevronDown className="h-4 w-4 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0" align="start">
+                    <PopoverContent
+                      className="w-[200px] p-0 popover-content"
+                      align="start"
+                    >
                       <div className="p-2">
                         <div
                           className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md cursor-pointer"
@@ -294,35 +419,31 @@ export default function NotificationModal({
                             )}
                           </div>
                         </div>
-                        {["Developers", "Designers", "Managers", "Clients"].map(
-                          (audience) => (
+                        {["Admins", "Clients"].map((audience) => (
+                          <div
+                            key={audience}
+                            className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md cursor-pointer"
+                            onClick={() =>
+                              toggleAudience(audience.toLowerCase())
+                            }
+                          >
+                            <span>{audience}</span>
                             <div
-                              key={audience}
-                              className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md cursor-pointer"
-                              onClick={() =>
-                                toggleAudience(audience.toLowerCase())
-                              }
+                              className={cn(
+                                "w-4 h-4 rounded-full border",
+                                targetAudience.includes(audience.toLowerCase())
+                                  ? "bg-blue-600 border-blue-600"
+                                  : "border-gray-300 dark:border-gray-600"
+                              )}
                             >
-                              <span>{audience}</span>
-                              <div
-                                className={cn(
-                                  "w-4 h-4 rounded-full border",
-                                  targetAudience.includes(
-                                    audience.toLowerCase()
-                                  )
-                                    ? "bg-blue-600 border-blue-600"
-                                    : "border-gray-300 dark:border-gray-600"
-                                )}
-                              >
-                                {targetAudience.includes(
-                                  audience.toLowerCase()
-                                ) && (
-                                  <CheckCircle className="h-4 w-4 text-white" />
-                                )}
-                              </div>
+                              {targetAudience.includes(
+                                audience.toLowerCase()
+                              ) && (
+                                <CheckCircle className="h-4 w-4 text-white" />
+                              )}
                             </div>
-                          )
-                        )}
+                          </div>
+                        ))}
                       </div>
                     </PopoverContent>
                   </Popover>
@@ -357,7 +478,7 @@ export default function NotificationModal({
                           )}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
+                      <PopoverContent className="w-auto p-0 popover-content">
                         <CalendarComponent
                           mode="single"
                           selected={scheduledDate || undefined}
@@ -425,9 +546,13 @@ export default function NotificationModal({
                     </Badge>
                   </div>
                 </div>
-                <div className={cn("p-4", getNotificationColor())}>
+                <div
+                  className={cn("p-4", getNotificationColor(notificationType))}
+                >
                   <div className="flex gap-3">
-                    <div className="mt-1">{getNotificationIcon()}</div>
+                    <div className="mt-1">
+                      {getNotificationIcon(notificationType)}
+                    </div>
                     <div>
                       {message ? (
                         <p className="whitespace-pre-wrap">{message}</p>
@@ -441,6 +566,155 @@ export default function NotificationModal({
                 </div>
               </div>
             </TabsContent>
+
+            <TabsContent value="manage" className="p-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Manage Notifications</h3>
+                {isLoading ? (
+                  <p className="text-gray-500">Loading notifications...</p>
+                ) : notifications.length === 0 ? (
+                  <p className="text-gray-500">No notifications found.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {notifications.map((notification) => (
+                      <div
+                        key={notification.id}
+                        className="border rounded-lg overflow-hidden"
+                      >
+                        <div className="p-4 bg-gray-50 dark:bg-gray-800 border-b flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-8 w-8">
+                              <AvatarFallback className="bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
+                                {notification.creator?.name?.charAt(0) || "A"}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-medium">
+                                {notification.creator?.name || "Unknown Admin"}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {notification.scheduled &&
+                                notification.scheduledDate
+                                  ? format(
+                                      notification.scheduledDate,
+                                      "MMM d, yyyy"
+                                    )
+                                  : format(
+                                      notification.createdAt,
+                                      "MMM d, yyyy"
+                                    )}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {notification.isPriority && (
+                              <Badge
+                                variant="outline"
+                                className="bg-red-50 text-red-600 border-red-200"
+                              >
+                                Priority
+                              </Badge>
+                            )}
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                notification.type === "info" &&
+                                  "bg-blue-50 text-blue-600 border-blue-200",
+                                notification.type === "warning" &&
+                                  "bg-amber-50 text-amber-600 border-amber-200",
+                                notification.type === "success" &&
+                                  "bg-green-50 text-green-600 border-green-200"
+                              )}
+                            >
+                              {notification.type.charAt(0).toUpperCase() +
+                                notification.type.slice(1)}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div
+                          className={cn(
+                            "p-4",
+                            getNotificationColor(notification.type)
+                          )}
+                        >
+                          <div className="flex gap-3">
+                            <div className="mt-1">
+                              {getNotificationIcon(notification.type)}
+                            </div>
+                            <div>
+                              <p className="whitespace-pre-wrap">
+                                {notification.message}
+                              </p>
+                              <p className="text-sm text-gray-500 mt-2">
+                                Audience:{" "}
+                                {notification.targetAudience.join(", ") ||
+                                  "All"}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="p-4 bg-gray-50 dark:bg-gray-900 border-t flex justify-end gap-2">
+                          <Popover
+                            open={deleteConfirmOpen === notification.id}
+                            onOpenChange={(open) =>
+                              setDeleteConfirmOpen(
+                                open ? notification.id : null
+                              )
+                            }
+                          >
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                disabled={deletingId === notification.id}
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                {deletingId === notification.id
+                                  ? "Deleting..."
+                                  : "Delete"}
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-[300px] p-4 popover-content">
+                              <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                  <AlertTriangle className="h-5 w-5 text-amber-500" />
+                                  <h4 className="font-semibold">
+                                    Confirm Deletion
+                                  </h4>
+                                </div>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">
+                                  Are you sure you want to delete this
+                                  notification? This action cannot be undone.
+                                </p>
+                                <div className="flex justify-end gap-2">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => setDeleteConfirmOpen(null)}
+                                  >
+                                    Cancel
+                                  </Button>
+                                  <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() =>
+                                      handleDelete(notification.id)
+                                    }
+                                    disabled={deletingId === notification.id}
+                                  >
+                                    Delete
+                                  </Button>
+                                </div>
+                              </div>
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
           </Tabs>
 
           <div className="flex justify-end gap-2 p-4 border-t bg-gray-50 dark:bg-gray-900">
@@ -449,11 +723,17 @@ export default function NotificationModal({
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={!message}
+              disabled={!message || isLoading}
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               <Send className="mr-2 h-4 w-4" />
-              {isScheduled ? "Schedule Notification" : "Post Notification"}
+              {editingId
+                ? isScheduled
+                  ? "Update Scheduled Notification"
+                  : "Update Notification"
+                : isScheduled
+                ? "Schedule Notification"
+                : "Post Notification"}
             </Button>
           </div>
         </motion.div>

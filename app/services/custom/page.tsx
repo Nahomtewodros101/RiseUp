@@ -13,16 +13,15 @@ export default function CustomSoftwarePage() {
   const [isContentReady, setIsContentReady] = useState(false);
 
   useEffect(() => {
-    // Set content as ready after the loading screen has had time to show
     const timer = setTimeout(() => {
       setIsContentReady(true);
-    }, 2100); // Slightly longer than the loading screen duration
+    }, 2100); 
 
     return () => clearTimeout(timer);
   }, []);
 
   if (!isContentReady) {
-    return null; // Return nothing while loading screen is showing
+    return null; 
   }
 
   return (

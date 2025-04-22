@@ -40,14 +40,12 @@ interface Notification {
   message: string;
   type: "info" | "warning" | "success";
   scheduled: boolean;
-  scheduledDate: string | null;
+  scheduledDate: Date | null;
   targetAudience: string[];
   isPriority: boolean;
-  createdAt: string;
-  creator: { name: string } | null; 
+  createdAt: Date;
+  creator: { name: string } | null;
 }
-
-
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,7 +56,7 @@ export default function Navbar() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const notificationRef = useRef<HTMLButtonElement>(null); // Renamed and typed
+  const notificationRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -110,7 +108,14 @@ export default function Navbar() {
         });
         if (response.ok) {
           const data = await response.json();
-          setNotifications(data);
+          const formattedNotifications = data.map((notif: any) => ({
+            ...notif,
+            createdAt: new Date(notif.createdAt),
+            scheduledDate: notif.scheduledDate
+              ? new Date(notif.scheduledDate)
+              : null,
+          }));
+          setNotifications(formattedNotifications);
         } else {
           console.error(
             "Failed to fetch notifications:",
@@ -138,42 +143,6 @@ export default function Navbar() {
       window.location.href = "/";
     } catch (error) {
       console.error("Logout failed:", error);
-    }
-  };
-
-  const handleNotificationSubmit = async (data: {
-    message: string;
-    type: "info" | "warning" | "success";
-    scheduled: boolean;
-    scheduledDate: Date | null;
-    targetAudience: string[];
-    isPriority: boolean;
-  }) => {
-    try {
-      const response = await fetch("/api/notifications", {
-        method: "POST",
-        body: JSON.stringify({
-          ...data,
-          scheduledDate: data.scheduledDate
-            ? data.scheduledDate.toISOString()
-            : null,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        const newNotification = await response.json();
-        setNotifications((prev) => [newNotification, ...prev]);
-        setIsNotificationModalOpen(false);
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to post notification:", errorData);
-      }
-    } catch (error) {
-      console.error("Failed to post notification:", error);
     }
   };
 
@@ -205,7 +174,7 @@ export default function Navbar() {
     { href: "/team", label: "Team" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
-    { href: "/careers", label: "Talent", isBeta: true, requiresAuth: true },
+    { href: "/jobs", label: "Jobs" },
   ];
 
   return (
@@ -231,24 +200,10 @@ export default function Navbar() {
         <nav className="hidden md:flex gap-6">
           {navLinks.map((link, index) => {
             const isActive = pathname === link.href;
-
-            const handleLinkClick = (e: React.MouseEvent) => {
-              if (link.requiresAuth && !user) {
-                e.preventDefault();
-                window.location.href = "/login";
-              }
-            };
-
             return (
               <div key={index} className="relative flex flex-col items-center">
-                {link.isBeta && (
-                  <span className="absolute -top-4 text-xs font-semibold text-blue-400 animate-pulse">
-                    Beta
-                  </span>
-                )}
                 <Link
                   href={link.href}
-                  onClick={handleLinkClick}
                   className={`relative text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
                     isActive
                       ? "text-blue-600 dark:text-blue-400"
@@ -271,6 +226,31 @@ export default function Navbar() {
               </div>
             );
           })}
+          {user && user.role === "admin" && (
+            <div className="relative flex flex-col items-center">
+              <Link
+                href="/console"
+                className={`relative text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
+                  pathname === "/console"
+                    ? "text-blue-600 dark:text-blue-400"
+                    : "text-gray-600 dark:text-gray-300"
+                }`}
+              >
+                Admin Console
+                {pathname === "/console" && (
+                  <motion.span
+                    className="absolute -bottom-1 left-0 h-0.5 w-full bg-blue-600 dark:bg-blue-400"
+                    layoutId="navbar-indicator"
+                    transition={{
+                      type: "spring",
+                      stiffness: 350,
+                      damping: 30,
+                    }}
+                  />
+                )}
+              </Link>
+            </div>
+          )}
         </nav>
 
         <div className="flex items-center gap-4">
@@ -280,25 +260,23 @@ export default function Navbar() {
             <>
               {user ? (
                 <>
-                  {user && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="relative"
-                      onClick={() => setIsPreviewOpen(true)}
-                      ref={notificationRef} // Updated ref name
-                    >
-                      <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                      {notifications.length > 0 && (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"
-                          layoutId="notification-dot"
-                        />
-                      )}
-                    </Button>
-                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative"
+                    onClick={() => setIsPreviewOpen(true)}
+                    ref={notificationRef}
+                  >
+                    <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    {notifications.length > 0 && (
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"
+                        layoutId="notification-dot"
+                      />
+                    )}
+                  </Button>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
@@ -409,7 +387,11 @@ export default function Navbar() {
                   <>
                     <Link
                       href="/console"
-                      className="text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400"
+                      className={`text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
+                        pathname === "/console"
+                          ? "text-blue-600 dark:text-blue-400"
+                          : "text-gray- depart: true"
+                      }`}
                     >
                       Admin Console
                     </Link>
@@ -451,7 +433,6 @@ export default function Navbar() {
       <NotificationModal
         isOpen={isNotificationModalOpen}
         closeModal={() => setIsNotificationModalOpen(false)}
-        onSubmit={handleNotificationSubmit}
       />
 
       {/* Notification Preview Dialog */}

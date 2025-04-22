@@ -456,6 +456,8 @@ export default function Home() {
                           src={testimonial.image}
                           alt={`${testimonial.name}'s picture`}
                           className="rounded-full w-12 h-12 object-cover"
+                          width={48}
+                          height={48}
                         />
                       </div>
                       <div>
@@ -518,12 +520,16 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.2, duration: 0.6 }}
                   viewport={{ once: true }}
+                  
                 >
                   <Link href={post.link}>
                     <Image
                       src={post.image}
                       alt={post.title}
                       className="w-full h-48 object-cover"
+                      width={400}
+                      height={200}
+                      priority
                     />
                     <div className="p-8">
                       <h3 className="text-2xl font-semibold text-blue-600 dark:text-blue-400">

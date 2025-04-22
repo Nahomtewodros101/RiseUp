@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -27,9 +26,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
 type NotificationType = "info" | "warning" | "success";
-
 interface Notification {
   id: string;
   message: string;
@@ -41,13 +38,11 @@ interface Notification {
   createdAt: Date;
   creator: { name: string } | null;
 }
-
 interface NotificationModalProps {
   isOpen: boolean;
   closeModal: () => void;
   onSubmit: (data: Notification) => Promise<void>;
 }
-
 export default function NotificationModal({
   isOpen,
   closeModal,
@@ -68,7 +63,6 @@ export default function NotificationModal({
     null
   );
   const modalRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -91,7 +85,6 @@ export default function NotificationModal({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, closeModal, isPreview]);
-
   useEffect(() => {
     if (isOpen) {
       fetchNotifications();
@@ -105,7 +98,6 @@ export default function NotificationModal({
       }, 300);
     }
   }, [isOpen]);
-
   const fetchNotifications = async () => {
     setIsLoading(true);
     try {
@@ -131,8 +123,11 @@ export default function NotificationModal({
       setIsLoading(false);
     }
   };
-
   const handleSubmit = async () => {
+    if (!message.trim()) return;
+
+    setIsLoading(true);
+
     const data = {
       message,
       type: notificationType,
@@ -173,14 +168,29 @@ export default function NotificationModal({
         );
         resetForm();
         setEditingId(null);
+
+        // Switch to manage tab after successful submission
+        document
+          .querySelector('[value="manage"]')
+          ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       } else {
-        console.error("Failed to save notification:", await response.json());
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Failed to save notification:", errorData);
+        alert(
+          `Failed to save notification: ${errorData.message || "Unknown error"}`
+        );
       }
     } catch (error) {
       console.error("Error saving notification:", error);
+      alert(
+        `Error saving notification: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
-
   const handleDelete = async (id: string) => {
     setDeletingId(id);
     try {
@@ -200,7 +210,6 @@ export default function NotificationModal({
       setDeleteConfirmOpen(null);
     }
   };
-
   const resetForm = () => {
     setMessage("");
     setNotificationType("info");
@@ -210,7 +219,6 @@ export default function NotificationModal({
     setIsPriority(false);
     setIsPreview(false);
   };
-
   const toggleAudience = (audience: string) => {
     if (audience === "all") {
       setTargetAudience(["all"]);
@@ -223,7 +231,6 @@ export default function NotificationModal({
 
     setTargetAudience(newAudience.length ? newAudience : ["all"]);
   };
-
   const getNotificationIcon = (type: NotificationType) => {
     switch (type) {
       case "info":
@@ -234,7 +241,6 @@ export default function NotificationModal({
         return <CheckCircle className="h-5 w-5 text-green-500" />;
     }
   };
-
   const getNotificationColor = (type: NotificationType) => {
     switch (type) {
       case "info":
@@ -245,9 +251,7 @@ export default function NotificationModal({
         return "bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800";
     }
   };
-
   if (!isOpen) return null;
-
   return (
     <AnimatePresence>
       <motion.div
@@ -683,17 +687,26 @@ export default function NotificationModal({
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={!message || isLoading}
+              disabled={!message.trim() || isLoading}
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
-              <Send className="mr-2 h-4 w-4" />
-              {editingId
-                ? isScheduled
-                  ? "Update Scheduled Notification"
-                  : "Update Notification"
-                : isScheduled
-                ? "Schedule Notification"
-                : "Post Notification"}
+              {isLoading ? (
+                <>
+                  <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                  {editingId ? "Updating..." : "Posting..."}
+                </>
+              ) : (
+                <>
+                  <Send className="mr-2 h-4 w-4" />
+                  {editingId
+                    ? isScheduled
+                      ? "Update Scheduled Notification"
+                      : "Update Notification"
+                    : isScheduled
+                    ? "Schedule Notification"
+                    : "Post Notification"}
+                </>
+              )}
             </Button>
           </div>
         </motion.div>

@@ -31,7 +31,7 @@ export default function Header() {
         if (response.ok) {
           const data = await response.json();
           setUser(data.user);
-          setHasNotifications(data.hasNotifications); 
+          setHasNotifications(data.hasNotifications);
         }
       } catch (error) {
         console.error("Failed to fetch user:", error);
@@ -78,7 +78,6 @@ export default function Header() {
       });
 
       if (response.ok) {
-      
         const toast = document.createElement("div");
         toast.className =
           "fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg z-50";

@@ -47,6 +47,7 @@ interface Notification {
 interface NotificationModalProps {
   isOpen: boolean;
   closeModal: () => void;
+  onSubmit: (data: Notification) => Promise<void>;
 }
 
 export default function NotificationModal({
@@ -91,7 +92,7 @@ export default function NotificationModal({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, closeModal]);
+  }, [isOpen, closeModal, isPreview]);
 
   useEffect(() => {
     if (isOpen) {

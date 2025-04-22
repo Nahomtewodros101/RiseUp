@@ -177,6 +177,11 @@ export default function Navbar() {
     { href: "/jobs", label: "Jobs" },
   ];
 
+  function handleNotificationSubmit(data: Notification): Promise<void> {
+    throw new Error("Function not implemented.");
+    
+  }
+
   return (
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-200 ${
@@ -433,6 +438,7 @@ export default function Navbar() {
       <NotificationModal
         isOpen={isNotificationModalOpen}
         closeModal={() => setIsNotificationModalOpen(false)}
+        onSubmit={handleNotificationSubmit}
       />
 
       {/* Notification Preview Dialog */}

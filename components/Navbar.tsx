@@ -107,8 +107,8 @@ export default function Navbar() {
           credentials: "include",
         });
         if (response.ok) {
-          const data = await response.json();
-          const formattedNotifications = data.map((notif: any) => ({
+          const data: Notification[] = await response.json(); 
+          const formattedNotifications = data.map((notif: Notification) => ({
             ...notif,
             createdAt: new Date(notif.createdAt),
             scheduledDate: notif.scheduledDate

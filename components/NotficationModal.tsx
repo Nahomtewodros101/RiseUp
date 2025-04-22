@@ -80,6 +80,7 @@ export default function NotificationModal({
         )
       ) {
         closeModal();
+        console.log("Clicked outside the modal", isPreview);
       }
     };
 
@@ -114,7 +115,7 @@ export default function NotificationModal({
       });
       if (response.ok) {
         const data = await response.json();
-        const formattedNotifications = data.map((notif: any) => ({
+        const formattedNotifications = data.map((notif: Notification) => ({
           ...notif,
           createdAt: new Date(notif.createdAt),
           scheduledDate: notif.scheduledDate
@@ -179,18 +180,6 @@ export default function NotificationModal({
     } catch (error) {
       console.error("Error saving notification:", error);
     }
-  };
-
-  const handleEdit = (notification: Notification) => {
-    setEditingId(notification.id);
-    setMessage(notification.message);
-    setNotificationType(notification.type);
-    setIsScheduled(notification.scheduled);
-    setScheduledDate(notification.scheduledDate);
-    setTargetAudience(notification.targetAudience);
-    setIsPriority(notification.isPriority);
-    // Switch to Compose tab
-    setIsPreview(false);
   };
 
   const handleDelete = async (id: string) => {

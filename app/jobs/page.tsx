@@ -52,8 +52,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 
-
-
 interface ServiceCardProps {
   icon: ReactNode;
   title: string;
@@ -602,7 +600,7 @@ function ClientServices() {
           </div>
           <div className="flex justify-center">
             <Image
-              src="/logo.webp"
+              src="/Logo.webp"
               width={500}
               height={400}
               alt="Team collaboration"

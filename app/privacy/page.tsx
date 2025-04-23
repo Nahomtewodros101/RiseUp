@@ -2,196 +2,382 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronDown, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export default function PrivacyPolicyPage() {
   const [isContentReady, setIsContentReady] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsContentReady(true);
-    }, 2100); 
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
 
   if (!isContentReady) {
-    return null; 
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-blue-200">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1.5 }}
+          className="h-16 w-16 border-4 border-t-blue-500 border-white rounded-full"
+        ></motion.div>
+      </div>
+    );
   }
 
+  const sections = [
+    { id: "introduction", title: "Introduction" },
+    { id: "information-we-collect", title: "Information We Collect" },
+    { id: "use-of-your-information", title: "Use of Your Information" },
+    {
+      id: "disclosure-of-your-information",
+      title: "Disclosure of Your Information",
+    },
+    {
+      id: "security-of-your-information",
+      title: "Security of Your Information",
+    },
+    { id: "contact-us", title: "Contact Us" },
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 py-12 md:py-24">
-        <div className="container px-4 md:px-6">
-          <div className="mb-12">
-            <Link href="/">
-              <Button variant="ghost" className="mb-6">
-                <ArrowLeft className="mr-2 h-4 w-4" />
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-900 to-white text-gray-900 font-inter">
+      {/* Floating Navbar */}
+      <motion.header
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-md"
+      >
+        <Navbar />
+      </motion.header>
+
+      {/* Hero Section */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="pt-32 pb-16 text-center bg-gradient-to-r from-blue-800 to-blue-600 text-white"
+      >
+        <h1 className="text-4xl md:text-5xl font-poppins font-bold tracking-tight leading-tight">
+          Your Privacy, Our Priority
+        </h1>
+        <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-blue-100 leading-relaxed">
+          Learn how Qemem Tech protects your data with transparency and care.
+        </p>
+        <motion.div whileHover={{ scale: 1.05 }} className="mt-8">
+          <Button
+            asChild
+            className="bg-white text-blue-800 hover:bg-blue-100 font-semibold py-3 px-6 rounded-full"
+          >
+            <Link href="#content">Explore Our Policy</Link>
+          </Button>
+        </motion.div>
+      </motion.section>
+
+      <main
+        id="content"
+        className="flex-1 py-12 bg-gradient-to-r from-blue-800 to-blue-600 md:py-24"
+      >
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+          <div className="mb-12 flex items-center justify-between">
+            <Link href="/" className="bg-white rounded-lg">
+              <Button
+                variant="ghost"
+                className="text-blue-600 hover:text-blue-800 flex items-center text-base"
+              >
+                <ArrowLeft className="mr-2 h-5 w-5" />
                 Back to Home
               </Button>
             </Link>
+            <p className="text-sm text-black font-medium">
+              Last updated: April 21, 2025
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Sticky Table of Contents */}
+            <motion.aside
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              className="md:sticky md:top-24 bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-lg max-h-[300px] overflow-y-auto"
+            >
+              <h3 className="text-base font-poppins font-semibold text-blue-800 mb-3">
+                Contents
+              </h3>
+              <ul className="space-y-2">
+                {sections.map((section) => (
+                  <li key={section.id}>
+                    <a
+                      href={`#${section.id}`}
+                      className={cn(
+                        "block text-sm font-medium hover:text-blue-600 transition-colors",
+                        activeSection === section.id
+                          ? "text-blue-600 font-semibold"
+                          : "text-gray-600"
+                      )}
+                      onClick={() => setActiveSection(section.id)}
+                    >
+                      {section.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </motion.aside>
+
+            {/* Main Content */}
             <motion.div
-              className="space-y-2"
+              className="md:col-span-3 prose prose-blue max-w-none bg-white/95 backdrop-blur-md p-8 rounded-2xl shadow-lg"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                Privacy Policy
-              </h1>
-              <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
-                Last updated: January 1, 2023
-              </p>
+              <section id="introduction" className="scroll-mt-24">
+                <h2 className="text-3xl font-poppins font-bold text-blue-800 mb-4 leading-tight">
+                  Introduction
+                </h2>
+                <p className="text-base leading-relaxed text-gray-700">
+                  Qemem Tech ("we", "our", or "us") is committed to protecting
+                  your privacy. This Privacy Policy explains how we collect,
+                  use, disclose, and safeguard your information when you visit
+                  our website or use our services.
+                </p>
+                <p className="text-base leading-relaxed text-gray-700 mt-4">
+                  Please read this Privacy Policy carefully. If you do not agree
+                  with the terms of this Privacy Policy, please do not access
+                  the site or use our services.
+                </p>
+              </section>
+
+              <section
+                id="information-we-collect"
+                className="mt-12 scroll-mt-24"
+              >
+                <h2 className="text-3xl font-poppins font-bold text-blue-800 mb-4 leading-tight">
+                  Information We Collect
+                </h2>
+                <p className="text-base leading-relaxed text-gray-700">
+                  We may collect information about you in a variety of ways,
+                  including:
+                </p>
+
+                <h3 className="text-xl font-poppins font-semibold text-blue-700 mt-6 mb-3">
+                  Personal Data
+                </h3>
+                <p className="text-base leading-relaxed text-gray-700">
+                  Personally identifiable information, such as your name, email
+                  address, telephone number, and other similar contact data that
+                  you voluntarily give to us when you register with the site or
+                  participate in activities like online chat and message boards.
+                </p>
+
+                <h3 className="text-xl font-poppins font-semibold text-blue-700 mt-6 mb-3">
+                  Derivative Data
+                </h3>
+                <p className="text-base leading-relaxed text-gray-700">
+                  Information our servers automatically collect, such as your IP
+                  address, browser type, operating system, access times, and the
+                  pages you viewed before and after accessing the site.
+                </p>
+
+                <h3 className="text-xl font-poppins font-semibold text-blue-700 mt-6 mb-3">
+                  Financial Data
+                </h3>
+                <p className="text-base leading-relaxed text-gray-700">
+                  Financial information, such as payment method details (e.g.,
+                  credit card number, card brand, expiration date) collected
+                  when you purchase, order, return, exchange, or request
+                  information about our services.
+                </p>
+              </section>
+
+              <section
+                id="use-of-your-information"
+                className="mt-12 scroll-mt-24"
+              >
+                <h2 className="text-3xl font-poppins font-bold text-blue-800 mb-4 leading-tight">
+                  Use of Your Information
+                </h2>
+                <p className="text-base leading-relaxed text-gray-700">
+                  We use your information to provide a smooth, efficient, and
+                  customized experience, including:
+                </p>
+                <ul className="list-disc pl-6 space-y-2 text-base leading-relaxed text-gray-700 mt-4">
+                  <li>Create and manage your account.</li>
+                  <li>Process your transactions.</li>
+                  <li>Send email newsletters (if opted in).</li>
+                  <li>Respond to inquiries and customer service requests.</li>
+                  <li>Deliver targeted advertising and promotions.</li>
+                  <li>Administer sweepstakes, promotions, and contests.</li>
+                  <li>Compile anonymous statistical data for internal use.</li>
+                  <li>Improve site efficiency and operation.</li>
+                  <li>Monitor and analyze usage trends.</li>
+                  <li>Notify you of site updates.</li>
+                  <li>Prevent fraud and protect against criminal activity.</li>
+                </ul>
+              </section>
+
+              <section
+                id="disclosure-of-your-information"
+                className="mt-12 scroll-mt-24"
+              >
+                <h2 className="text-3xl font-poppins font-bold text-blue-800 mb-4 leading-tight">
+                  Disclosure of Your Information
+                </h2>
+                <p className="text-base leading-relaxed text-gray-700">
+                  Your information may be shared in the following situations:
+                </p>
+
+                <h3 className="text-xl font-poppins font-semibold text-blue-700 mt-6 mb-3">
+                  By Law or to Protect Rights
+                </h3>
+                <p className="text-base leading-relaxed text-gray-700">
+                  We may share your information to respond to legal processes,
+                  investigate policy violations, or protect the rights,
+                  property, and safety of others as permitted by law.
+                </p>
+
+                <h3 className="text-xl font-poppins font-semibold text-blue-700 mt-6 mb-3">
+                  Third-Party Service Providers
+                </h3>
+                <p className="text-base leading-relaxed text-gray-700">
+                  We may share your information with third parties that perform
+                  services for us, such as payment processing, data analysis,
+                  email delivery, hosting, customer service, and marketing.
+                </p>
+              </section>
+
+              <section
+                id="security-of-your-information"
+                className="mt-12 scroll-mt-24"
+              >
+                <h2 className="text-3xl font-poppins font-bold text-blue-800 mb-4 leading-tight">
+                  Security of Your Information
+                </h2>
+                <p className="text-base leading-relaxed text-gray-700">
+                  We use administrative, technical, and physical security
+                  measures to protect your personal information. However, no
+                  security measures are perfect, and no data transmission method
+                  is guaranteed against interception or misuse.
+                </p>
+              </section>
+
+              <section id="contact-us" className="mt-12 scroll-mt-24">
+                <h2 className="text-3xl font-poppins font-bold text-blue-800 mb-4 leading-tight">
+                  Contact Us
+                </h2>
+                <p className="text-base leading-relaxed text-gray-700">
+                  If you have questions or comments about this Privacy Policy,
+                  please contact us at:
+                </p>
+                <p className="mt-4 text-base leading-relaxed text-gray-700">
+                  Qemem Tech
+                  <br />
+                  Gerji Imperial
+                  <br />
+                  Spokane, WD 94107
+                  <br />
+                  <a
+                    href="mailto:chefche@qememTech.com"
+                    className="text-blue-600 hover:underline"
+                  >
+                    chefche@qememTech.com
+                  </a>
+                  <br />
+                  +251 (300) 123-4567
+                </p>
+                <motion.div whileHover={{ scale: 1.05 }} className="mt-6">
+                  <Button
+                    onClick={() => setIsModalOpen(true)}
+                    className="bg-blue-600 text-white hover:bg-blue-700 py-3 px-6 rounded-full flex items-center font-medium"
+                  >
+                    <Mail className="mr-2 h-5 w-5" />
+                    Send Us a Message
+                  </Button>
+                </motion.div>
+              </section>
             </motion.div>
           </div>
-
-          <motion.div
-            className="prose prose-blue max-w-none dark:prose-invert"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <h2>Introduction</h2>
-            <p>
-              Qemem Devs (&qout;we&qout;, &qout;our&qout;, or &qout;us&qout;) is committed to protecting your
-              privacy. This Privacy Policy explains how we collect, use,
-              disclose, and safeguard your information when you visit our
-              website or use our services.
-            </p>
-            <p>
-              Please read this Privacy Policy carefully. If you do not agree
-              with the terms of this Privacy Policy, please do not access the
-              site or us our services.
-            </p>
-
-            <h2>Information We Collect</h2>
-            <p>
-              We may collect information about you in a variety of ways. The
-              information we may collect includes:
-            </p>
-
-            <h3>Personal Data</h3>
-            <p>
-              Personally identifiable information, such as your name, email
-              address, telephone number, and other similar contact data that you
-              voluntarily give to us when you register with the site or when you
-              choose to participate in various activities related to the site,
-              such as online chat and message boards. You are under no
-              obligation to provide us with personal information of any kind,
-              however your refusal to do so may prevent you from using certain
-              features of the site.
-            </p>
-
-            <h3>Derivative Data</h3>
-            <p>
-              Information our servers automatically collect when you access the
-              site, such as your IP address, browser type, operating system,
-              access times, and the pages you have viewed directly before and
-              after accessing the site.
-            </p>
-
-            <h3>Financial Data</h3>
-            <p>
-              Financial information, such as data related to your payment method
-              (e.g., valid credit card number, card brand, expiration date) that
-              we may collect when you purchase, order, return, exchange, or
-              request information about our services from the site.
-            </p>
-
-            <h2>Use of Your Information</h2>
-            <p>
-              Having accurate information about you permits us to provide you
-              with a smooth, efficient, and customized experience. Specifically,
-              we may use information collected about you via the site to:
-            </p>
-            <ul>
-              <li>Create and manage your account.</li>
-              <li>Process your transactions.</li>
-              <li>
-                Send you email newsletters, if you have opted in to receive
-                them.
-              </li>
-              <li>Respond to your inquiries and customer service requests.</li>
-              <li>
-                Deliver targeted advertising, newsletters, and other information
-                regarding promotions and the site to you.
-              </li>
-              <li>Administer sweepstakes, promotions, and contests.</li>
-              <li>
-                Compile anonymous statistical data and analysis for use
-                internally or with third parties.
-              </li>
-              <li>Increase the efficiency and operation of the site.</li>
-              <li>
-                Monitor and analyze usage and trends to improve your experience
-                with the site.
-              </li>
-              <li>Notify you of updates to the site.</li>
-              <li>
-                Prevent fraudulent transactions, monitor against theft, and
-                protect against criminal activity.
-              </li>
-            </ul>
-
-            <h2>Disclosure of Your Information</h2>
-            <p>
-              We may share information we have collected about you in certain
-              situations. Your information may be disclosed as follows:
-            </p>
-
-            <h3>By Law or to Protect Rights</h3>
-            <p>
-              If we believe the release of information about you is necessary to
-              respond to legal process, to investigate or remedy potential
-              violations of our policies, or to protect the rights, property,
-              and safety of others, we may share your information as permitted
-              or required by any applicable law, rule, or regulation.
-            </p>
-
-            <h3>Third-Party Service Providers</h3>
-            <p>
-              We may share your information with third parties that perform
-              services for us or on our behalf, including payment processing,
-              data analysis, email delivery, hosting services, customer service,
-              and marketing assistance.
-            </p>
-
-            <h2>Security of Your Information</h2>
-            <p>
-              We use administrative, technical, and physical security measures
-              to help protect your personal information. While we have taken
-              reasonable steps to secure the personal information you provide to
-              us, please be aware that despite our efforts, no security measures
-              are perfect or impenetrable, and no method of data transmission
-              can be guaranteed against any interception or other type of
-              misuse.
-            </p>
-
-            <h2>Contact Us</h2>
-            <p>
-              If you have questions or comments about this Privacy Policy,
-              please contact us at:
-            </p>
-            <p>
-              Qemem Devs
-              <br />
-              Gerji Imperial
-              <br />
-              Spokane, WD 94107
-              <br />
-              chefche@qememdevs.com
-              <br />
-              +251 (300) 123-4567
-            </p>
-          </motion.div>
         </div>
       </main>
-      <Footer />
+
+      {/* Contact Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full"
+            >
+              <h3 className="text-2xl font-poppins font-bold text-blue-800 mb-4">
+                Contact Us
+              </h3>
+              <form className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-base"
+                    placeholder="Your Name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-base"
+                    placeholder="Your Email"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Message
+                  </label>
+                  <textarea
+                    className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-base"
+                    rows={4}
+                    placeholder="Your Message"
+                  ></textarea>
+                </div>
+                <div className="flex justify-end space-x-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsModalOpen(false)}
+                    className="text-blue-600 border-blue-600 hover:bg-blue-50 font-medium"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="bg-blue-600 text-white hover:bg-blue-700 font-medium"
+                  >
+                    Send
+                  </Button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

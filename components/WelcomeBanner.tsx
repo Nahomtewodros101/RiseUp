@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X, WavesIcon as Wave, Sparkles } from "lucide-react";
 import confetti from "canvas-confetti";
+import Link from "next/link";
 
 interface UserType {
   id: string;
@@ -47,7 +48,6 @@ export default function WelcomeBanner() {
 
   const handleDismiss = () => {
     setIsVisible(false);
-    // Store in session storage so it doesn't show again during this session
     sessionStorage.setItem("welcomeBannerDismissed", "true");
   };
 
@@ -60,10 +60,10 @@ export default function WelcomeBanner() {
       particleCount: 100,
       spread: 70,
       origin: { y: 0.6 },
+      colors: ["#1E3A8A", "#3B82F6", "#FFFFFF", "#BFDBFE"],
     });
   };
 
-  // Check if banner was already dismissed in this session
   useEffect(() => {
     if (typeof window !== "undefined") {
       const isDismissed =
@@ -74,75 +74,78 @@ export default function WelcomeBanner() {
     }
   }, []);
 
-  // Don't render anything if loading, no user, or banner dismissed
   if (isLoading || !user || !isVisible) return null;
 
   return (
     <AnimatePresence>
       <motion.div
-        className="relative mb-8 overflow-hidden"
+        className="relative mb-8 overflow-hidden mx-auto max-w-4xl"
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, height: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <motion.div
-          className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl p-8 pr-16 text-white shadow-xl transform transition-all"
+          className="bg-gradient-to-r from-blue-800 to-blue-600 rounded-2xl p-6 sm:p-8 text-white shadow-2xl backdrop-blur-md bg-white/10 relative overflow-hidden"
           transition={{ duration: 0.3 }}
           onClick={triggerConfetti}
         >
+          {/* Subtle Pulse Animation */}
+          <motion.div
+            className="absolute inset-0 bg-blue-700/20 rounded-2xl"
+            animate={{ opacity: [0.2, 0.5, 0.2] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-4 right-4 text-white hover:bg-indigo-500/30"
+            className="absolute top-4 right-4 text-white hover:bg-blue-500/30 rounded-full"
             onClick={handleDismiss}
           >
             <X className="h-5 w-5" />
             <span className="sr-only">Dismiss</span>
           </Button>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-6">
             <motion.div
-              animate={{ rotate: [0, 20, 0, 20, 0] }}
-              transition={{ duration: 1.5, delay: 0.5, repeat: 0 }}
+              animate={{ rotate: [0, 20, 0], scale: [1, 1.1, 1] }}
+              transition={{ duration: 1.5, delay: 0.5, repeat: 2 }}
             >
-              <Wave className="h-10 w-10 text-white" />
+              <Wave className="h-12 w-12 text-blue-200" />
             </motion.div>
 
-            <div className="flex justify-center items-center flex-col">
-              <h2 className="text-3xl font-extrabold flex items-center gap-3">
+            <div className="flex-1 text-center sm:text-left">
+              <h2 className="text-2xl sm:text-3xl font-poppins font-bold flex items-center gap-3 justify-center sm:justify-start">
                 Welcome back, {user.name}!
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 2,
-                    repeat: Number.POSITIVE_INFINITY,
-                    ease: "linear",
-                  }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                 >
-                  <Sparkles className="h-6 w-6 text-yellow-400" />
+                  <Sparkles className="h-6 w-6 text-yellow-300" />
                 </motion.div>
               </h2>
-              <p className="text-indigo-200 text-center text-lg mt-2">
-                We&apos;re thrilled to see you again! Click anywhere on this
-                banner for a surprise!
+              <p className="text-blue-100 text-base sm:text-lg mt-2 leading-relaxed">
+                We're thrilled to see you again at Qemem Tech! Click this banner
+                for a surprise or explore your dashboard.
               </p>
+              <motion.div
+                className="mt-4 flex justify-center sm:justify-start gap-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                {user.role === "admin" && (
+                  <Link
+                    href="/console "
+                    className="border-blue-200 cursor-pointer border-2 rounded-md px-4 py-2 text-blue-100 bg-transparent hover:bg-blue-700/30 hover:text-white"
+                  >
+                    Admin Panel
+                  </Link>
+                )}
+              </motion.div>
             </div>
           </div>
-
-          {user.role === "admin" && (
-            <div className="mt-4 bg-indigo-700/40 p-3 rounded-lg text-sm">
-              <span className="font-semibold">Admin Access:</span> You have
-              access to the{" "}
-              <a
-                href="/console"
-                className="underline text-indigo-100 hover:text-indigo-200"
-              >
-                admin console
-              </a>
-              .
-            </div>
-          )}
         </motion.div>
       </motion.div>
     </AnimatePresence>

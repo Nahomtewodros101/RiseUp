@@ -19,11 +19,10 @@ import ProjectCard from "@/components/ProjectCard";
 import WelcomeBanner from "@/components/WelcomeBanner";
 import { motion } from "framer-motion";
 import { Project } from "@/types";
-import BackgroundGrid from "@/components/BacgroundGrid";
 import CountUp from "react-countup";
 import { Card, CardContent } from "../components/ui/card";
 import Image from "next/image";
-
+import WhyChooseUsSection from "../components/WhyChooseUS";
 export default function Home() {
   const [isContentReady, setIsContentReady] = useState(false);
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
@@ -102,11 +101,11 @@ export default function Home() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4, duration: 0.8 }}
                   >
-                   Qmem Tech is a leading software development company, dedicated to
-                    delivering innovative solutions that drive success. Our team of
-                    expert developers and designers work tirelessly to create
-                    custom software solutions that meet the unique needs of our
-                    clients.
+                    Qmem Tech is a leading software development company,
+                    dedicated to delivering innovative solutions that drive
+                    success. Our team of expert developers and designers work
+                    tirelessly to create custom software solutions that meet the
+                    unique needs of our clients.
                   </motion.p>
                 </div>
                 <motion.div
@@ -282,60 +281,7 @@ export default function Home() {
           </div>
         </section>
         {/* Why Choose Us Section */}
-        <section className="relative py-20 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 dark:from-blue-700 dark:via-blue-800 dark:to-blue-900">
-          <BackgroundGrid />
-          <div className="container px-4 md:px-6 relative z-10">
-            <motion.div
-              className="text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl font-bold text-white tracking-tight sm:text-5xl">
-                Why Choose Us?
-              </h2>
-              <p className="max-w-[600px] mx-auto mt-6 text-blue-100 text-lg">
-                We are more than just a service; we are a movement, shaping the
-                future together.
-              </p>
-            </motion.div>
-            <div className="grid gap-8 mt-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {["Expertise", "Innovation", "Reliability", "Support"].map(
-                (item, index) => (
-                  <motion.div
-                    key={index}
-                    className="relative group bg-blue-600/80 dark:bg-blue-700/80 p-8 rounded-xl shadow-2xl overflow-hidden transition-transform duration-500 hover:scale-105"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.6,
-                      delay: index * 0.2,
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 10,
-                    }}
-                    viewport={{ once: true }}
-                  >
-                    <div className="absolute inset-0 rounded-xl border-2 border-transparent group-hover:border-blue-300 dark:group-hover:border-blue-500 transition-all duration-1000 ease-in-out pointer-events-none"></div>
-                    <h3 className="text-2xl font-semibold text-white z-10 relative">
-                      {item}
-                    </h3>
-                    <p className="text-lg text-blue-100 mt-4 z-10 relative">
-                      {item === "Expertise"
-                        ? "Masters of our craft with years of experience."
-                        : item === "Innovation"
-                        ? "Creating trends, not following them."
-                        : item === "Reliability"
-                        ? "Dependable and consistent, always there for you."
-                        : "Guiding you every step to ensure success."}
-                    </p>
-                  </motion.div>
-                )
-              )}
-            </div>
-          </div>
-        </section>
+        <WhyChooseUsSection />
 
         {/* Stats Counter Section */}
         <section className="py-20 bg-transparent dark:bg-blue-800/50">
@@ -401,8 +347,8 @@ export default function Home() {
                   What Our Clients Say
                 </h2>
                 <p className="max-w-[900px] text-white md:text-xl">
-                  Don not just take our word for it. Here is what our clients have
-                  to say about working with us.
+                  Don not just take our word for it. Here is what our clients
+                  have to say about working with us.
                 </p>
               </div>
             </div>
@@ -448,7 +394,7 @@ export default function Home() {
                       ))}
                     </div>
                     <p className="text-gray-500 italic">
-                    &quot;{testimonial.quote}&quot;
+                      &quot;{testimonial.quote}&quot;
                     </p>
                     <div className="flex items-center gap-4">
                       <div className="rounded-full bg-sky-100 w-12 h-12 flex items-center justify-center">
@@ -520,7 +466,6 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.2, duration: 0.6 }}
                   viewport={{ once: true }}
-                  
                 >
                   <Link href={post.link}>
                     <Image

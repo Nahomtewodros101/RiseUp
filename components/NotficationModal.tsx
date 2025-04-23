@@ -168,8 +168,7 @@ export default function NotificationModal({
         );
         resetForm();
         setEditingId(null);
-
-        // Switch to manage tab after successful submission
+        closeModal();
         document
           .querySelector('[value="manage"]')
           ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));

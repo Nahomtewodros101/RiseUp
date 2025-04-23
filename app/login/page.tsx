@@ -12,7 +12,7 @@ export default function LoginPage() {
               QD
             </Link>
           </div>
-          <h1 className="text-2xl font-bold">Qemem Devs</h1>
+          <h1 className="text-2xl font-bold">Qemem Tech</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2">
             Login to your account
           </p>

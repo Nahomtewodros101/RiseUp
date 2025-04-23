@@ -38,13 +38,13 @@ export default function AboutPage() {
               </Button>
             </Link>
             <motion.div
-              className="space-y-2"
+              className="space-y-2 text-blue-600"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                About Qemem Devs
+                About Qemem Tech
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
                 Learn about our mission, values, and the team behind our success
@@ -54,7 +54,7 @@ export default function AboutPage() {
 
           {/* Company Story Section */}
           <motion.div
-            className="grid gap-12 md:grid-cols-2 items-center mb-20"
+            className="grid gap-12 text-blue-600 md:grid-cols-2 items-center mb-20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -63,7 +63,7 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold mb-6">Our Story</h2>
               <div className="space-y-4 text-gray-500 dark:text-gray-400">
                 <p>
-                  Founded in 2022, Qemem Devs began as a small team of
+                  Founded in 2022, Qemem Tech began as a small team of
                   passionate developers with a shared vision: to create digital
                   solutions that make a real difference for businesses and users
                   alike.
@@ -88,7 +88,7 @@ export default function AboutPage() {
             <div className="relative h-[400px] rounded-lg overflow-hidden">
               <Image
                 src="/team.png"
-                alt="Qemem Devs team"
+                alt="Qemem Tech team"
                 fill
                 className="object-cover"
               />
@@ -97,7 +97,7 @@ export default function AboutPage() {
 
           {/* Mission & Values Section */}
           <motion.div
-            className="mb-20"
+            className="mb-20 text-blue-600"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -139,39 +139,6 @@ export default function AboutPage() {
             </div>
           </motion.div>
 
-          {/* Stats Section */}
-          <motion.div
-            className="bg-blue-600 dark:bg-blue-800 text-white rounded-lg p-10 mb-20"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold">Our Impact</h2>
-              <p className="text-blue-100">
-                The numbers that drive our passion
-              </p>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="text-4xl font-bold mb-2">50+</div>
-                <div className="text-blue-100">Projects Completed</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold mb-2">30+</div>
-                <div className="text-blue-100">Happy Clients</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold mb-2">15+</div>
-                <div className="text-blue-100">Team Members</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold mb-2">5+</div>
-                <div className="text-blue-100">Years of Experience</div>
-              </div>
-            </div>
-          </motion.div>
-
           {/* CTA Section */}
           <motion.div
             className="text-center"
@@ -179,7 +146,9 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
           >
-            <h2 className="text-3xl font-bold mb-4">Ready to Work With Us?</h2>
+            <h2 className="text-3xl text-blue-600 font-bold mb-4">
+              Ready to Work With Us?
+            </h2>
             <p className="max-w-[600px] mx-auto mb-8 text-gray-500 dark:text-gray-400">
               Let us discuss how we can help bring your ideas to life with our
               expertise in web development, mobile apps, and digital solutions.

@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ChevronDown, Mail } from "lucide-react";
+import { ArrowLeft,  Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -145,7 +144,7 @@ export default function PrivacyPolicyPage() {
                   Introduction
                 </h2>
                 <p className="text-base leading-relaxed text-gray-700">
-                  Qemem Tech ("we", "our", or "us") is committed to protecting
+                  Qemem Tech we are committed to protecting
                   your privacy. This Privacy Policy explains how we collect,
                   use, disclose, and safeguard your information when you visit
                   our website or use our services.

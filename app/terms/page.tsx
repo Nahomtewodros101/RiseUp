@@ -83,7 +83,7 @@ export default function TermsOfServicePage() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isContentReady]);
+  }, [isContentReady, sections]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -179,9 +179,9 @@ export default function TermsOfServicePage() {
               <AnimatePresence>
                 {showTableOfContents && (
                   <motion.div
-                    initial={{  x: -20 }}
-                    animate={{  x: 0 }}
-                    exit={{  x: -20 }}
+                    initial={{ x: -20 }}
+                    animate={{ x: 0 }}
+                    exit={{ x: -20 }}
                     className="bg-card rounded-xl border shadow-sm p-4"
                   >
                     <div className="flex items-center justify-between mb-4">

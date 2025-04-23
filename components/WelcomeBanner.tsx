@@ -126,8 +126,8 @@ export default function WelcomeBanner() {
                 </motion.div>
               </h2>
               <p className="text-blue-100 text-base sm:text-lg mt-2 leading-relaxed">
-                We're thrilled to see you again at Qemem Tech! Click this banner
-                for a surprise or explore your dashboard.
+                We are thrilled to see you again at Qemem Tech! Click this
+                banner for a surprise or explore your dashboard.
               </p>
               <motion.div
                 className="mt-4 flex justify-center sm:justify-start gap-4"

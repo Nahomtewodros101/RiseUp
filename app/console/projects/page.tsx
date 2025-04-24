@@ -82,11 +82,10 @@ export default function ProjectsPage() {
   const [projectTypeFilter, setProjectTypeFilter] = useState("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"table" | "grid">("grid"); // Changed to "grid"
+  const [viewMode, setViewMode] = useState<"table" | "grid">("grid"); 
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch projects
     const fetchProjects = async () => {
       setIsLoading(true);
       try {
@@ -108,7 +107,6 @@ export default function ProjectsPage() {
     fetchProjects();
   }, []);
 
-  // Filter projects based on search query and project type
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
       project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -120,7 +118,6 @@ export default function ProjectsPage() {
     return matchesSearch && matchesType;
   });
 
-  // Handle project deletion
   const handleDeleteProject = async (projectId: string) => {
     try {
       const response = await fetch(`/api/projects/${projectId}`, {
@@ -131,7 +128,6 @@ export default function ProjectsPage() {
         throw new Error("Failed to delete project");
       }
 
-      // Update the state to remove the deleted project
       setProjects((prevProjects) =>
         prevProjects.filter((project) => project.id !== projectId)
       );
@@ -142,7 +138,6 @@ export default function ProjectsPage() {
     }
   };
 
-  // Get badge color based on project type
   const getProjectTypeBadge = (type: string) => {
     switch (type) {
       case "website":
@@ -183,7 +178,7 @@ export default function ProjectsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Projects</h2>
+        <h2 className="text-3xl font-bold text-black tracking-tight">Projects</h2>
         <div className="flex gap-2">
           <TooltipProvider>
             <Tooltip>
@@ -226,7 +221,7 @@ export default function ProjectsPage() {
       </div>
 
       {/* Filters */}
-      <Card>
+      <Card className="bg-blue-50">
         <CardContent className="p-4">
           <div className="flex flex-col gap-4 md:flex-row md:items-center">
             <div className="relative flex-1">

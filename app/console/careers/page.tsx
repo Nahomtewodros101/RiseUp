@@ -164,11 +164,13 @@ export default function CareersPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Careers</h2>
+    <div className="flex-col space-y-10 mt-10 shadow-xl  shadow-gray-200 rounded-lg p-10  items-center mx-auto max-w-7xl justify-between">
+      <div className="flex items-center mx-auto max-w-7xl justify-between">
+        <h2 className="text-3xl text-black font-bold tracking-tight">
+          Careers
+        </h2>
         <Button asChild>
-          <Link href="/console/careers/new">
+          <Link className="bg-blue-600" href="/console/careers/new">
             <Plus className="mr-2 h-4 w-4" />
             Add Career
           </Link>
@@ -177,7 +179,7 @@ export default function CareersPage() {
 
       {/* Filters */}
       <Card>
-        <CardContent className="p-4">
+        <CardContent className="p-4 bg-blue-50">
           <div className="flex flex-col gap-4 md:flex-row md:items-center">
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -219,7 +221,7 @@ export default function CareersPage() {
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
             </div>
           ) : filteredCareers.length === 0 ? (
-            <div className="flex flex-col items-center justify-center p-8 text-center">
+            <div className="flex flex-col  items-center justify-center p-8 text-center">
               <p className="text-muted-foreground">No careers found</p>
               <Button asChild className="mt-4">
                 <Link href="/console/careers/new">
@@ -231,7 +233,7 @@ export default function CareersPage() {
           ) : (
             <Table>
               <TableHeader>
-                <TableRow>
+                <TableRow className="bg-blue-50">
                   <TableHead>Title</TableHead>
                   <TableHead>Department</TableHead>
                   <TableHead>Location</TableHead>
@@ -240,10 +242,10 @@ export default function CareersPage() {
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody >
                 {filteredCareers.map((career) => (
                   <TableRow key={career.id}>
-                    <TableCell className="font-medium">
+                    <TableCell className="font-medium ">
                       {career.title}
                     </TableCell>
                     <TableCell>{career.department}</TableCell>

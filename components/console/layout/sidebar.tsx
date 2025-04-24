@@ -17,6 +17,7 @@ import {
   Menu,
   Briefcase,
   Shield,
+  Users2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -56,7 +57,7 @@ export default function Sidebar({
       icon: FolderKanban,
     },
     {
-      title: "Team",
+      title: "Teams",
       href: "/console/team",
       icon: Users,
     },
@@ -72,9 +73,9 @@ export default function Sidebar({
       icon: Briefcase,
     },
     {
-      title: "User Management",
+      title: "Users",
       href: "/console/admin/users",
-      icon: Shield,
+      icon: Users2 ,
     },
   ];
 
@@ -108,7 +109,7 @@ export default function Sidebar({
             )}
           >
             <div className="flex items-center justify-center rounded-lg bg-blue-600 text-white p-1 w-8 h-8">
-              <span className="font-bold text-sm">QD</span>
+              <span className="font-bold text-sm">QT</span>
             </div>
             {!isCollapsed && <span className="font-bold text-xl">Admin</span>}
           </div>

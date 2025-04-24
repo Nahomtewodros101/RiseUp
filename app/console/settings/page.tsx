@@ -45,7 +45,6 @@ export default function SettingsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  // Define the UserType interface
   interface UserType {
     name: string;
     email: string;
@@ -53,7 +52,7 @@ export default function SettingsPage() {
   }
 
   const [user, setUser] = useState<UserType | null>(null);
-  const [isLoading, setIsLoading] = useState(false); // Define isLoading state
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -112,22 +111,26 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold tracking-tight">Settings</h2>
-        <p className="text-muted-foreground mt-2">
-          Manage your account settings
-        </p>
+    <div className="container mx-auto px-4  md:px-6 py-12 md:py-24">
+      <div className=" flex flex-col ">
+        <h2 className="text-3xl text-black font-bold tracking-tight">
+          Settings
+        </h2>
+        <p className="text-blue-200 mt-2">Manage your account settings</p>
       </div>
 
       <Tabs defaultValue="account">
         <TabsList>
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
+          <TabsTrigger className="text-black" value="account">
+            Account
+          </TabsTrigger>
+          <TabsTrigger className="text-black" value="security">
+            Security
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="account" className="mt-6">
-          <Card>
+        <TabsContent value="account" className="mt-6 max-w-5xl bg-blue-50">
+          <Card className="bg-blue-50">
             <CardHeader>
               <CardTitle>Account Information</CardTitle>
               <CardDescription>

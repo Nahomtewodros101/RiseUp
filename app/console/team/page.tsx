@@ -114,7 +114,6 @@ export default function TeamPage() {
     fetchTeamMembers();
   }, []);
 
-  // Filter team members based on search query and status filter
   const filteredTeamMembers = teamMembers.filter((member) => {
     const matchesSearch =
       member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -128,7 +127,6 @@ export default function TeamPage() {
     return matchesSearch && matchesStatus;
   });
 
-  // Toggle team member active status
   const toggleTeamMemberStatus = async (id: string, currentStatus: boolean) => {
     try {
       const response = await fetch(`/api/team/${id}`, {
@@ -144,7 +142,6 @@ export default function TeamPage() {
         throw new Error("Failed to update team member status");
       }
 
-      // Update local state
       setTeamMembers(
         teamMembers.map((member) =>
           member.id === id ? { ...member, isActive: !currentStatus } : member
@@ -158,7 +155,6 @@ export default function TeamPage() {
     }
   };
 
-  // Handle input change for new member form
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -166,14 +162,11 @@ export default function TeamPage() {
     setNewMember((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle select change for new member form
 
-  // Handle switch change for new member form
   const handleSwitchChange = (checked: boolean, name: string) => {
     setNewMember((prev) => ({ ...prev, [name]: checked }));
   };
 
-  // Add new team member
   const handleAddTeamMember = async () => {
     try {
       // Validate form
@@ -192,14 +185,12 @@ export default function TeamPage() {
       });
 
       if (!response.ok) {
-        const errorText = await response.text(); // Get more info on the failure
+        const errorText = await response.text(); 
         throw new Error(`Failed to create team member: ${errorText}`);
       }
 
-      // Refresh the team members list
       await fetchTeamMembers();
 
-      // Reset form and close dialog
       setNewMember({
         name: "",
         role: "",
@@ -221,7 +212,6 @@ export default function TeamPage() {
     }
   };
 
-  // Delete team member
   const handleDeleteTeamMember = async () => {
     if (!memberToDelete) return;
 
@@ -237,12 +227,10 @@ export default function TeamPage() {
         throw new Error("Failed to delete team member");
       }
 
-      // Update local state
       setTeamMembers(
         teamMembers.filter((member) => member.id !== memberToDelete.id)
       );
 
-      // Close dialog and reset state
       setIsDeleteDialogOpen(false);
       setMemberToDelete(null);
 
@@ -253,7 +241,6 @@ export default function TeamPage() {
     }
   };
 
-  // Open delete confirmation dialog
   const openDeleteDialog = (member: TeamMember) => {
     setMemberToDelete(member);
     setIsDeleteDialogOpen(true);
@@ -262,7 +249,7 @@ export default function TeamPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold tracking-tight">Team Members</h2>
+        <h2 className="text-3xl text-black font-bold tracking-tight">Team Members</h2>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -430,7 +417,7 @@ export default function TeamPage() {
       </div>
 
       {/* Filters */}
-      <Card>
+      <Card className="bg-blue-50">
         <CardContent className="p-4">
           <div className="flex flex-col gap-4 md:flex-row md:items-center">
             <div className="relative flex-1">

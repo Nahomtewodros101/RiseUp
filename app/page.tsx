@@ -532,16 +532,18 @@ export default function Home() {
                   image: "/website.jpg",
                 },
                 {
-                  title: "Scaling Apps with Cloud Solutions",
-                  excerpt: "Learn how to optimize performance with cloud tech.",
+                  title: "Owning A web based business",
+                  excerpt:
+                    "How to own a web based business and make the best of it.",
                   link: "/blog",
-                  image: "/cloud.png",
+                  image: "/own.png",
                 },
                 {
-                  title: "Why UX Matters for Business",
-                  excerpt: "Explore the impact of user experience on growth.",
+                  title: "Why choosing the right tech provider is crucial",
+                  excerpt:
+                    "Choosing the right tech provider can make all the difference.",
                   link: "/blog",
-                  image: "/design.png",
+                  image: "/jemaw.png",
                 },
               ].map((post, index) => (
                 <motion.div

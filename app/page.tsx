@@ -395,7 +395,7 @@ export default function Home() {
                       ))}
                     </div>
                     <p className="text-gray-500 italic">
-                      "{testimonial.quote}"
+                      &qout;{testimonial.quote}&qout;
                     </p>
                     <div className="flex items-center gap-4">
                       <div className="rounded-full bg-sky-100 w-12 h-12 flex items-center justify-center">

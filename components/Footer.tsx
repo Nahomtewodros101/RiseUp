@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="flex items-center justify-center rounded-lg bg-blue-600 text-white p-1 w-8 h-8">
-                <span className="font-bold text-sm">QD</span>
+                <span className="font-bold text-sm">QT</span>
               </div>
               <span className="font-bold text-xl">Qemem Tech</span>
             </div>

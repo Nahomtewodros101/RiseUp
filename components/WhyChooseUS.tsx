@@ -15,7 +15,7 @@ export default function WhyChooseUsSection() {
     {
       title: "Expertise",
       description:
-        "Masters of our craft with years of experience at Qemem Tech.",
+        "Masters of our craft with years of experience at Qmem Tech.",
     },
     {
       title: "Innovation",
@@ -44,7 +44,7 @@ export default function WhyChooseUsSection() {
           viewport={{ once: true }}
         >
           <h2 className="text-4xl sm:text-5xl font-poppins font-bold text-white tracking-tight">
-            Why Choose Qemem Tech?
+            Why Choose Qmem Tech?
           </h2>
           <p className="max-w-xl mx-auto mt-6 text-blue-100 text-lg sm:text-xl leading-relaxed font-inter">
             We’re more than a service—we’re a movement, shaping the future with

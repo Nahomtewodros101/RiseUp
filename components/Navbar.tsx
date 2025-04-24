@@ -198,7 +198,7 @@ export default function Navbar() {
           >
             <span className="font-bold text-sm">👨🏾‍💻</span>
           </motion.div>
-          <span className="font-bold text-xl">Rise Up!</span>
+          <span className="font-bold text-xl">Qmem Tech</span>
         </Link>
 
         {/* Desktop Navigation */}

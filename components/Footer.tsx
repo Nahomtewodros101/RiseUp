@@ -11,7 +11,7 @@ export default function Footer() {
               <div className="flex items-center justify-center rounded-lg bg-blue-600 text-white p-1 w-8 h-8">
                 <span className="font-bold text-sm">QD</span>
               </div>
-              <span className="font-bold text-xl">Qemem Devs</span>
+              <span className="font-bold text-xl">Qemem Tech</span>
             </div>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Transforming ideas into digital reality with cutting-edge
@@ -133,7 +133,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="mailto:hello@qememdevs.com"
+                  href="mailto:hello@qememTech.com"
                   className="text-gray-500 hover:text-blue-600 dark:hover:text-blue-400"
                 >
                   Estifanos.neway.d@gmail.com
@@ -152,7 +152,7 @@ export default function Footer() {
         </div>
         <div className="mt-10 border-t pt-6 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            &copy; {new Date().getFullYear()} Qemem Devs. All rights reserved.
+            &copy; {new Date().getFullYear()} Qemem Tech. All rights reserved.
           </p>
           <div className="flex gap-4 mt-4 sm:mt-0">
             <Link

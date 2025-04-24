@@ -194,6 +194,7 @@ export default function Home() {
             )}
           </div>
         </section>
+        {/* Services Section */}
         <section className="bg-transparent dark:bg-blue-900/20 py-20">
           <div className="container px-4 md:px-6">
             <motion.div
@@ -340,7 +341,7 @@ export default function Home() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-black px-3 py-1 text-sm text-white">
+                <div className="inline-block rounded-lg bg-white px-3 py-1 text-sm text-black">
                   Testimonials
                 </div>
                 <h2 className="text-3xl text-white font-bold tracking-tighter md:text-4xl">
@@ -394,7 +395,7 @@ export default function Home() {
                       ))}
                     </div>
                     <p className="text-gray-500 italic">
-                      &quot;{testimonial.quote}&quot;
+                      "{testimonial.quote}"
                     </p>
                     <div className="flex items-center gap-4">
                       <div className="rounded-full bg-sky-100 w-12 h-12 flex items-center justify-center">
@@ -416,6 +417,90 @@ export default function Home() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/*  Our Partners Section */}
+        <section
+          id="partners"
+          className="w-full py-12 md:py-24 lg:py-32 bg-gray-100"
+        >
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-blue-600 px-3 py-1 text-sm text-white">
+                  Our Partners
+                </div>
+                <h2 className="text-3xl text-black font-bold tracking-tighter md:text-4xl">
+                  Trusted by Industry Leaders
+                </h2>
+                <p className="max-w-[900px] text-gray-600 md:text-xl">
+                  We collaborate with top organizations to deliver cutting-edge
+                  solutions.
+                </p>
+              </div>
+            </div>
+            <div className="relative mt-12 overflow-hidden">
+              {/* Gradient overlays for fade effect */}
+              <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-gray-100 to-transparent z-10"></div>
+              <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-gray-100 to-transparent z-10"></div>
+              {/* Infinite scrolling container */}
+              <div className="flex animate-scroll">
+                <div className="flex shrink-0">
+                  {[
+                    { logo: "/cbe.png", name: "Commercial bank of ethiopia" },
+                    { logo: "/luxx.png", name: "LuxxOds" },
+                    { logo: "/lead.webp", name: "Lead Gen Ethiopia" },
+                    { logo: "/moon.png", name: "Moon Studios" },
+                    { logo: "/planet.png", name: "One Planet" },
+                    { logo: "/real.png", name: "Nolan Realestate" },
+                  ].map((partner, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col items-center justify-center w-40 mx-6 opacity-80 hover:opacity-100 transition-opacity duration-300"
+                    >
+                      <Image
+                        src={partner.logo}
+                        alt={`${partner.name} logo`}
+                        className="max-h-16 rounded-full w-auto object-contain"
+                        width={160}
+                        height={80}
+                      />
+                      <p className="mt-2 text-sm font-medium text-blue-600">
+                        {partner.name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                {/* Duplicate logos and names for seamless infinite scroll */}
+                <div className="flex shrink-0">
+                  {[
+                    { logo: "/cbe.png", name: "Commercial bank of ethiopia" },
+                    { logo: "/luxx.png", name: "LuxxOds" },
+                    { logo: "/lead.webp", name: "Lead Gen Ethiopia" },
+                    { logo: "/moon.png", name: "Moon Studios" },
+                    { logo: "/planet.png", name: "One Planet" },
+                    { logo: "/real.png", name: "Nolan Realestate" },
+                  ].map((partner, index) => (
+                    <div
+                      key={`duplicate-${index}`}
+                      className="flex flex-col items-center justify-center w-40 mx-6 opacity-80 hover:opacity-100 transition-opacity duration-300"
+                    >
+                      <Image
+                        src={partner.logo}
+                        alt={`${partner.name} logo`}
+                        className="max-h-16  rounded-full w-auto object-contain"
+                        width={160}
+                        height={80}
+                      />
+                      <p className="mt-2 text-sm font-medium text-blue-600">
+                        {partner.name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>

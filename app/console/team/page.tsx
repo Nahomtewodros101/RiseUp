@@ -82,7 +82,6 @@ export default function ConsoleTeamPage() {
     skills: [] as string[],
   });
 
-  // Fetch team members
   const fetchTeamMembers = async () => {
     setIsLoading(true);
     try {

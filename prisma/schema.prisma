@@ -46,7 +46,7 @@ model TeamMember {
   bio          String
   image        String?
   isActive     Boolean  @default(true)
-  skills       String[] // Must be a list of strings
+  skills       String[] 
   socialLinks  Json
   order        Int      @default(0)
   createdAt    DateTime @default(now())

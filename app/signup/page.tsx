@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import SignupForm from "@/components/auth/signup-form";
 import { getCurrentUser } from "@/lib/auth";
 import Link from "next/link";

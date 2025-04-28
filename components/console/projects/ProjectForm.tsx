@@ -1,4 +1,3 @@
-// src/components/console/projects/ProjectForm.tsx
 "use client";
 
 import { useState } from "react";
@@ -52,8 +51,8 @@ const projectFormSchema = z.object({
 type ProjectFormValues = z.infer<typeof projectFormSchema> & {
   id?: string;
   createdAt?: Date;
-  // Add other Prisma fields if necessary (e.g., tags or custom fields)
   tags?: string[];
+
 };
 
 interface ProjectFormProps {
@@ -71,7 +70,6 @@ export default function ProjectForm({
   const [newTech, setNewTech] = useState("");
   const [newImage, setNewImage] = useState("");
 
-  // Initialize form with default values or existing project data
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: initialData || {

@@ -40,10 +40,10 @@ export default function ProjectsPage() {
         }`;
         const response = await fetch(url);
         const data = await response.json();
-        setProjects(data); 
+        setProjects(data);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching projects:", error);
+        console.error("Error fetching projects:", error, setSelectedTech);
         setIsLoading(false);
       }
     };
@@ -59,7 +59,6 @@ export default function ProjectsPage() {
     "cloud-services",
     "dev-ops",
   ];
-
 
   if (!isContentReady || isLoading) {
     return null;
@@ -158,7 +157,7 @@ export default function ProjectsPage() {
                 >
                   {/* Close Button */}
                   <X
-                  color="blue"
+                    color="blue"
                     onClick={() => setSelectedProject(null)}
                     className="absolute top-4 right-4 cursor-pointer"
                   />

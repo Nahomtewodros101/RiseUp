@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X, User, LogIn, Bell } from "lucide-react";
+import { Menu, X, User2, LogIn, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,31 +27,14 @@ import { format } from "date-fns";
 import NotificationModal from "@/components/NotficationModal";
 import { cn } from "@/lib/utils";
 import { Info, AlertTriangle, CheckCircle } from "lucide-react";
-
-interface UserType {
-  id: string;
-  name: string;
-  email: string;
-  role: "user" | "admin";
-}
-
-interface Notification {
-  id: string;
-  message: string;
-  type: "info" | "warning" | "success";
-  scheduled: boolean;
-  scheduledDate: Date | null;
-  targetAudience: string[];
-  isPriority: boolean;
-  createdAt: Date;
-  creator: { name: string } | null;
-}
+import { User, Notification } from "@/types";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
@@ -104,26 +87,21 @@ export default function Navbar() {
     const fetchNotifications = async () => {
       try {
         const response = await fetch("/api/notifications", {
+          method: "GET",
           credentials: "include",
         });
         if (response.ok) {
-          const data: Notification[] = await response.json();
-          const formattedNotifications = data.map((notif: Notification) => ({
-            ...notif,
-            createdAt: new Date(notif.createdAt),
-            scheduledDate: notif.scheduledDate
-              ? new Date(notif.scheduledDate)
-              : null,
-          }));
-          setNotifications(formattedNotifications);
-        } else {
-          console.error(
-            "Failed to fetch notifications:",
-            await response.json()
+          const data = await response.json();
+
+          setNotifications(
+            Array.isArray(data.notifications) ? data.notifications : []
           );
+        } else {
+          setNotifications([]);
         }
       } catch (error) {
-        console.error("Error fetching notifications:", error);
+        console.error("Failed to fetch notifications:", error);
+        setNotifications([]);
       }
     };
 
@@ -146,7 +124,7 @@ export default function Navbar() {
     }
   };
 
-  const getNotificationIcon = (type: string) => {
+  const getNotificationIcon = (type: Notification["type"]) => {
     switch (type) {
       case "info":
         return <Info className="h-5 w-5 text-blue-500" />;
@@ -157,7 +135,7 @@ export default function Navbar() {
     }
   };
 
-  const getNotificationColor = (type: string) => {
+  const getNotificationColor = (type: Notification["type"]) => {
     switch (type) {
       case "info":
         return "bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800";
@@ -178,8 +156,10 @@ export default function Navbar() {
   ];
 
   function handleNotificationSubmit(data: Notification): Promise<void> {
-    console.log(data);
-    throw new Error("Function not implemented.");
+    return new Promise((resolve) => {
+      setNotifications((prev) => [...prev, data]);
+      resolve();
+    });
   }
 
   return (
@@ -191,6 +171,7 @@ export default function Navbar() {
       }`}
     >
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+        {/* Logo & home */}
         <Link href="/" className="flex items-center gap-2">
           <motion.div
             className="flex items-center justify-center rounded-lg bg-blue-600 text-white p-1 w-8 h-8"
@@ -198,7 +179,9 @@ export default function Navbar() {
           >
             <span className="font-bold text-sm">👨🏾‍💻</span>
           </motion.div>
-          <span className="font-bold text-xl">Qmem Tech</span>
+          <span className="font-bold text-xl text-blue-800 dark:text-blue-200">
+            Qmem Tech
+          </span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -291,7 +274,19 @@ export default function Navbar() {
                       >
                         <Avatar className="h-8 w-8">
                           <AvatarFallback className="bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400">
-                            {user.name?.charAt(0) || "U"}
+                            {isLoading ? (
+                              <User2 className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                            ) : user?.profileImage ? (
+                              <Image
+                                src={user.profileImage}
+                                alt="Profile picture"
+                                className="rounded-full object-cover"
+                                width={32}
+                                height={32}
+                              />
+                            ) : (
+                              user?.name?.charAt(0) || "U"
+                            )}
                           </AvatarFallback>
                         </Avatar>
                       </Button>
@@ -300,13 +295,16 @@ export default function Navbar() {
                       <DropdownMenuLabel>My Account</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem className="flex items-center">
-                        <User className="mr-2 h-4 w-4" />
+                        <User2 className="mr-2 h-4 w-4" />
                         <span>{user.name}</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem className="text-gray-500">
                         {user.email}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link href="/profile">Profile</Link>
+                      </DropdownMenuItem>
                       {user.role === "admin" && (
                         <>
                           <DropdownMenuItem asChild>
@@ -338,7 +336,11 @@ export default function Navbar() {
                     </Button>
                   </Link>
                   <Link href="/signup">
-                    <Button variant="outline" size="sm">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-blue-600 text-blue-600 hover:bg-blue-100"
+                    >
                       Sign Up
                     </Button>
                   </Link>
@@ -354,7 +356,11 @@ export default function Navbar() {
             className="md:hidden"
             onClick={() => setIsOpen(!isOpen)}
           >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isOpen ? (
+              <X className="h-6 w-6 text-blue-600" />
+            ) : (
+              <Menu className="h-6 w-6 text-blue-600" />
+            )}
             <span className="sr-only">Toggle menu</span>
           </Button>
         </div>
@@ -395,14 +401,14 @@ export default function Navbar() {
                       className={`text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 ${
                         pathname === "/console"
                           ? "text-blue-600 dark:text-blue-400"
-                          : "text-gray- depart: true"
+                          : "text-gray-600 dark:text-gray-300"
                       }`}
                     >
                       Admin Console
                     </Link>
                     <Button
                       variant="outline"
-                      className="w-full text-left justify-start"
+                      className="w-full text-left justify-start border-blue-600 text-blue-600 hover:bg-blue-100"
                       onClick={() => setIsNotificationModalOpen(true)}
                     >
                       <Bell className="mr-2 h-4 w-4" />
@@ -413,7 +419,10 @@ export default function Navbar() {
                 {!user && (
                   <>
                     <Link href="/login">
-                      <Button variant="outline" className="w-full gap-2">
+                      <Button
+                        variant="outline"
+                        className="w-full gap-2 border-blue-600 text-blue-600 hover:bg-blue-100"
+                      >
                         <LogIn className="h-4 w-4" />
                         Login
                       </Button>
@@ -421,7 +430,7 @@ export default function Navbar() {
                     <Link href="/signup">
                       <Button
                         variant="default"
-                        className="w-full bg-blue-600 hover:bg-blue-700"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                       >
                         Sign Up
                       </Button>
@@ -443,35 +452,35 @@ export default function Navbar() {
 
       {/* Notification Preview Dialog */}
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mt-10">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto mt-10 bg-white dark:bg-gray-900">
           <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
+            <DialogTitle className="flex items-center justify-between text-blue-800 dark:text-blue-200">
               <span>Notifications</span>
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            {notifications.length === 0 ? (
-              <p className="text-center text-gray-500">
+            {Array.isArray(notifications) && notifications.length === 0 ? (
+              <p className="text-center text-blue-600 dark:text-blue-400">
                 No notifications found.
               </p>
             ) : (
               notifications.map((notification) => (
                 <div
                   key={notification.id}
-                  className="border rounded-lg overflow-hidden"
+                  className="border border-blue-200 dark:border-blue-700 rounded-lg overflow-hidden"
                 >
-                  <div className="p-4 bg-gray-50 dark:bg-gray-800 border-b flex items-center justify-between">
+                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-700 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Avatar className="h-8 w-8">
-                        <AvatarFallback className="bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
+                        <AvatarFallback className="bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400">
                           {notification.creator?.name?.charAt(0) || "A"}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium">
-                          {notification.creator?.name || "Unknown Admin"}
+                        <p className="font-medium text-blue-800 dark:text-blue-200">
+                          {notification.creator?.name || " Admin"}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-blue-600 dark:text-blue-400">
                           {format(
                             new Date(notification.createdAt),
                             "MMM d, yyyy"
@@ -483,7 +492,7 @@ export default function Navbar() {
                       {notification.isPriority && (
                         <Badge
                           variant="outline"
-                          className="bg-red-50 text-red-600 border-red-200"
+                          className="bg-red-50 text-red-600 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-700"
                         >
                           Priority
                         </Badge>
@@ -492,11 +501,11 @@ export default function Navbar() {
                         variant="outline"
                         className={cn(
                           notification.type === "info" &&
-                            "bg-blue-50 text-blue-600 border-blue-200",
+                            "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-700",
                           notification.type === "warning" &&
-                            "bg-amber-50 text-amber-600 border-amber-200",
+                            "bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-700",
                           notification.type === "success" &&
-                            "bg-green-50 text-green-600 border-green-200"
+                            "bg-green-50 text-green-600 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-700"
                         )}
                       >
                         {notification.type.charAt(0).toUpperCase() +
@@ -515,12 +524,12 @@ export default function Navbar() {
                         {getNotificationIcon(notification.type)}
                       </div>
                       <div>
-                        <p className="whitespace-pre-wrap">
+                        <p className="whitespace-pre-wrap text-blue-800 dark:text-blue-200">
                           {notification.message}
                         </p>
                         {notification.scheduled &&
                           notification.scheduledDate && (
-                            <p className="text-xs text-gray-500 mt-2">
+                            <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">
                               Scheduled for:{" "}
                               {format(
                                 new Date(notification.scheduledDate),
@@ -528,7 +537,7 @@ export default function Navbar() {
                               )}
                             </p>
                           )}
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
                           Audience: {notification.targetAudience.join(", ")}
                         </p>
                       </div>

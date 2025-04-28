@@ -5,20 +5,19 @@ import { Users, FolderKanban, TrendingUp, UserCheck } from "lucide-react";
 import {
   Card,
   CardContent,
-  CardDescription,
+  
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import FetchContacts from "@/components/FetchContacts";
+import { User } from "@/types";
 
 export default function ConsoleDashboard() {
   const [stats, setStats] = useState({
     totalProjects: 0,
     totalTeamMembers: 0,
     activeTeamMembers: 0,
-    websiteViews: 0,
   });
 
   const [userStats, setUserStats] = useState({
@@ -29,65 +28,55 @@ export default function ConsoleDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        // Fetch project data
-        const projectResponse = await fetch("/api/projects");
-        const projectData = await projectResponse.json();
-        setStats((prevStats) => ({
-          ...prevStats,
-          totalProjects: projectData.totalProjects || 0,
-        }));
+  const [users, setUsers] = useState<User[]>([]);
 
-        // Fetch team members data
-        const teamResponse = await fetch("/api/team");
-        const teamData = await teamResponse.json();
-        setStats((prevStats) => ({
-          ...prevStats,
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      try {
+        const [projectRes, teamRes] = await Promise.all([
+          fetch("/api/projects"),
+          fetch("/api/team"),
+        ]);
+
+        const projectData = await projectRes.json();
+        const teamData = await teamRes.json();
+
+        setStats({
+          totalProjects: projectData.totalProjects || 0,
           totalTeamMembers: teamData.totalTeamMembers || 0,
           activeTeamMembers: teamData.activeTeamMembers || 0,
-        }));
-
-        setIsLoading(false);
+        });
       } catch (error) {
         console.error("Failed to fetch dashboard stats:", error);
+      } finally {
         setIsLoading(false);
       }
     };
 
-    // Fetch user count data
-    const fetchUserCount = async () => {
-      setIsLoadingUsers(true);
+    const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/dashboard/user-count");
-        if (!response.ok) {
-          throw new Error("Failed to fetch user count");
-        }
+        const response = await fetch("/api/admin/users");
+        if (!response.ok) throw new Error("Failed to fetch users");
         const data = await response.json();
+        setUsers(data);
+        console.log(users);
         setUserStats({
-          totalUsers: data.totalUsers || 0,
-          activeUsers: data.activeUsers || 0,
+          totalUsers: data.length,
+          activeUsers: data.filter((user: User) => user.isActive).length,
         });
       } catch (error) {
-        console.error("Failed to fetch user count:", error);
-        // Set fallback values if the API fails
-        setUserStats({
-          totalUsers: 0,
-          activeUsers: 0,
-        });
+        console.error(error);
       } finally {
         setIsLoadingUsers(false);
       }
     };
 
-    fetchData();
-    fetchUserCount();
+    fetchDashboardStats();
+    fetchUsers();
   }, []);
 
   return (
-    <div className="space-y-6 ">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button asChild>
@@ -115,7 +104,7 @@ export default function ConsoleDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {isLoading ? "..." : stats.totalProjects || 4}
+              {isLoading ? "..." : stats.totalProjects}
             </div>
             <p className="text-xs text-muted-foreground">
               <TrendingUp className="inline h-3 w-3 text-green-500 mr-1" />
@@ -131,7 +120,7 @@ export default function ConsoleDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {isLoading ? "..." : stats.totalTeamMembers || 6}
+              {isLoading ? "..." : stats.totalTeamMembers}
             </div>
             <p className="text-xs text-muted-foreground">
               <TrendingUp className="inline h-3 w-3 text-green-500 mr-1" />
@@ -140,7 +129,6 @@ export default function ConsoleDashboard() {
           </CardContent>
         </Card>
 
-        {/* User Stats Card */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">
@@ -160,18 +148,9 @@ export default function ConsoleDashboard() {
         </Card>
       </div>
 
-      {/* FetchContact Component */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Contact Information</CardTitle>
-          <CardDescription>Contact info or recent updates</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <FetchContacts />
-        </CardContent>
-      </Card>
+   
 
-      {/* Quick Actions */}
+      {/* System Status */}
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
@@ -179,27 +158,15 @@ export default function ConsoleDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Database</span>
-                <span className="flex items-center text-sm text-green-500">
-                  <span className="mr-1 h-2 w-2 rounded-full bg-green-500"></span>
-                  Operational
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Storage</span>
-                <span className="flex items-center text-sm text-green-500">
-                  <span className="mr-1 h-2 w-2 rounded-full bg-green-500"></span>
-                  Operational
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm">API</span>
-                <span className="flex items-center text-sm text-green-500">
-                  <span className="mr-1 h-2 w-2 rounded-full bg-green-500"></span>
-                  Operational
-                </span>
-              </div>
+              {["Database", "Storage", "API"].map((label) => (
+                <div key={label} className="flex items-center justify-between">
+                  <span className="text-sm">{label}</span>
+                  <span className="flex items-center text-sm text-green-500">
+                    <span className="mr-1 h-2 w-2 rounded-full bg-green-500"></span>
+                    Operational
+                  </span>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>

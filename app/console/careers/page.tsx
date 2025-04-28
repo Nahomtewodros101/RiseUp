@@ -164,9 +164,9 @@ export default function CareersPage() {
   };
 
   return (
-    <div className="flex-col space-y-10 mt-10 shadow-xl  shadow-gray-200 rounded-lg p-10  items-center mx-auto max-w-7xl justify-between">
+    <div className="flex-col space-y-10 mt-10 shadow-xl dark:bg-gray-800 rounded-lg p-10  items-center mx-auto max-w-7xl justify-between">
       <div className="flex items-center mx-auto max-w-7xl justify-between">
-        <h2 className="text-3xl text-black font-bold tracking-tight">
+        <h2 className="text-3xl text-black dark:text-white font-bold tracking-tight">
           Careers
         </h2>
         <Button asChild>
@@ -179,7 +179,7 @@ export default function CareersPage() {
 
       {/* Filters */}
       <Card>
-        <CardContent className="p-4 bg-blue-50">
+        <CardContent className="p-4 dark:bg-gray-800 border border-gray-600 rounded-lg bg-blue-50">
           <div className="flex flex-col gap-4 md:flex-row md:items-center">
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -233,7 +233,7 @@ export default function CareersPage() {
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="bg-blue-50">
+                <TableRow className=" dark:bg-gray-800 bg-blue-50">
                   <TableHead>Title</TableHead>
                   <TableHead>Department</TableHead>
                   <TableHead>Location</TableHead>

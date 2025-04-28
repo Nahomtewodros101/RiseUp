@@ -1,9 +1,7 @@
 "use client";
 
 import { DialogTrigger } from "@/components/ui/dialog";
-
 import type React from "react";
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -57,9 +55,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { motion, AnimatePresence } from "framer-motion";
 import type { TeamMember } from "@/types";
 
-export default function TeamPage() {
+export default function ConsoleTeamPage() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -79,6 +79,7 @@ export default function TeamPage() {
       linkedin: "",
       github: "",
     },
+    skills: [] as string[],
   });
 
   // Fetch team members
@@ -98,9 +99,7 @@ export default function TeamPage() {
       }
 
       const data = await response.json();
-
-      // Sort team members by order field
-
+      console.log("Fetched team members:", data); 
       setTeamMembers(data);
     } catch (error) {
       console.error("Failed to fetch team members:", error);
@@ -117,7 +116,10 @@ export default function TeamPage() {
   const filteredTeamMembers = teamMembers.filter((member) => {
     const matchesSearch =
       member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.role.toLowerCase().includes(searchQuery.toLowerCase());
+      member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (member.skills || []).some((skill) =>
+        skill.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
     const matchesStatus =
       statusFilter === "all" ||
@@ -159,9 +161,29 @@ export default function TeamPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setNewMember((prev) => ({ ...prev, [name]: value }));
+    if (name.startsWith("socialLinks.")) {
+      const key = name.split(".")[1];
+      setNewMember((prev) => ({
+        ...prev,
+        socialLinks: { ...prev.socialLinks, [key]: value },
+      }));
+    } else if (name === "skills") {
+      setNewMember((prev) => ({
+        ...prev,
+        skills: value
+          .split(",")
+          .map((skill) => skill.trim())
+          .filter((skill) => skill),
+      }));
+    } else if (name === "order") {
+      setNewMember((prev) => ({
+        ...prev,
+        order: Number.parseInt(value) || 0,
+      }));
+    } else {
+      setNewMember((prev) => ({ ...prev, [name]: value }));
+    }
   };
-
 
   const handleSwitchChange = (checked: boolean, name: string) => {
     setNewMember((prev) => ({ ...prev, [name]: checked }));
@@ -185,7 +207,7 @@ export default function TeamPage() {
       });
 
       if (!response.ok) {
-        const errorText = await response.text(); 
+        const errorText = await response.text();
         throw new Error(`Failed to create team member: ${errorText}`);
       }
 
@@ -203,6 +225,7 @@ export default function TeamPage() {
           linkedin: "",
           github: "",
         },
+        skills: [],
       });
       setIsAddDialogOpen(false);
 
@@ -249,7 +272,9 @@ export default function TeamPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl text-black font-bold tracking-tight">Team Members</h2>
+        <h2 className="text-3xl text-black dark:text-white font-bold tracking-tight">
+          Team Members
+        </h2>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -307,6 +332,19 @@ export default function TeamPage() {
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="skills" className="text-right">
+                  Expertise
+                </Label>
+                <Input
+                  id="skills"
+                  name="skills"
+                  value={newMember.skills.join(", ")}
+                  onChange={handleInputChange}
+                  placeholder="e.g., JavaScript, React, Node.js"
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="image" className="text-right">
                   Image URL
                 </Label>
@@ -328,18 +366,7 @@ export default function TeamPage() {
                   name="order"
                   type="number"
                   value={newMember.order.toString()}
-                  onChange={(e) =>
-                    handleInputChange({
-                      ...e,
-                      target: {
-                        ...e.target,
-                        name: "order",
-                        value: e.target.value
-                          ? Number.parseInt(e.target.value).toString()
-                          : "0",
-                      },
-                    })
-                  }
+                  onChange={handleInputChange}
                   placeholder="0"
                   className="col-span-3"
                 />
@@ -417,7 +444,7 @@ export default function TeamPage() {
       </div>
 
       {/* Filters */}
-      <Card className="bg-blue-50">
+      <Card className=" dark:bg-gray-800 bg-blue-50">
         <CardContent className="p-4">
           <div className="flex flex-col gap-4 md:flex-row md:items-center">
             <div className="relative flex-1">
@@ -460,7 +487,7 @@ export default function TeamPage() {
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredTeamMembers.map((member) => (
+          {filteredTeamMembers.map((member, index) => (
             <Card
               key={member.id}
               className={`overflow-hidden ${
@@ -554,6 +581,35 @@ export default function TeamPage() {
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">
                   {member.bio}
                 </p>
+                {(member.skills?.length ?? 0) > 0 ? (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <AnimatePresence>
+                      {member.skills!.map((skill, skillIndex) => (
+                        <motion.div
+                          key={skill}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.8 }}
+                          transition={{
+                            duration: 0.2,
+                            delay: skillIndex * 0.05,
+                          }}
+                        >
+                          <Badge
+                            variant="secondary"
+                            className="bg-blue-600 text-white font-bold uppercase text-xs py-1 px-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 hover:rotate-2"
+                          >
+                            {skill}
+                          </Badge>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                    No skills listed
+                  </p>
+                )}
               </CardContent>
             </Card>
           ))}
@@ -569,8 +625,8 @@ export default function TeamPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the team member &quot;
-              {memberToDelete?.name}&quot;. This action cannot be undone.
+              This will permanently delete the team member "
+              {memberToDelete?.name}". This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -1,18 +1,30 @@
-// User types
+// types.ts
 export type UserRole = "user" | "admin";
 
 export interface User {
   id: string;
   email: string;
   name: string;
-  password: string;
   role: UserRole;
-  createdAt: Date;
-  updatedAt: Date;
-  blogs?: Blog[];
+  createdAt: string;
+  updatedAt: string;
+  lastLogin?: string;
+  profileImage?: string;
+  isActive: boolean | true;
 }
 
-// Project types
+export interface Notification {
+  id: string;
+  message: string;
+  type: "info" | "warning" | "success";
+  scheduled: boolean;
+  scheduledDate?: string;
+  targetAudience: string[];
+  isPriority: boolean;
+  creator: User; 
+  createdAt: string;
+}
+
 export type ProjectType = "website" | "app" | "ui-design";
 
 export interface Project {
@@ -27,9 +39,10 @@ export interface Project {
   testimonial?: string;
   featured: boolean;
   tags: string[];
+  type: string;
+  isFeatured: boolean | false;
 }
 
-// Team member types
 export interface SocialLinks {
   twitter?: string;
   linkedin?: string;
@@ -43,12 +56,12 @@ export interface TeamMember {
   bio: string;
   image: string;
   socialLinks: SocialLinks;
+  skills: string[];
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
 
-// Blog types
 export interface Blog {
   id: string;
   title: string;

@@ -1,3 +1,4 @@
+// src/components/console/team/TeamMemberForm.tsx
 "use client";
 
 import { useState } from "react";
@@ -5,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,37 +22,49 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Updated schema to include socialLinks
+// Schema aligned with Prisma's TeamMember model
 const teamMemberFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   role: z.string().min(1, "Role is required"),
   bio: z.string().min(1, "Bio is required"),
-  image: z.string().min(1, "Image URL is required"),
-  isActive: z.boolean().default(true).optional(),
+  image: z.string().nullable().optional(),
   socialLinks: z
     .object({
-      twitter: z.string().url().optional(),
-      linkedin: z.string().url().optional(),
-      github: z.string().url().optional(),
+      twitter: z.string().nullable().optional(),
+      linkedin: z.string().nullable().optional(),
+      github: z.string().nullable().optional(),
     })
     .optional(),
+  skills: z.array(z.string()).optional(),
+  isActive: z.boolean(),
+  order: z.number().int(),
 });
 
-type TeamMemberFormValues = z.infer<typeof teamMemberFormSchema>;
+type TeamMemberFormValues = z.infer<typeof teamMemberFormSchema> & {
+  id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
 
 interface TeamMemberFormProps {
-  initialData?: TeamMemberFormValues & { id?: string };
+  initialData?: TeamMemberFormValues;
   isEditing?: boolean;
 }
 
-export default function TeamMemberForm({
+// Explicitly type the component to avoid type inference issues
+import { FC } from "react";
+
+const TeamMemberForm: FC<TeamMemberFormProps> = ({
   initialData,
   isEditing = false,
-}: TeamMemberFormProps) {
+}) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [currentSkill, setCurrentSkill] = useState<string>("");
 
   const form = useForm<TeamMemberFormValues>({
     resolver: zodResolver(teamMemberFormSchema),
@@ -60,12 +73,17 @@ export default function TeamMemberForm({
       role: "",
       bio: "",
       image: "",
-      isActive: true,
       socialLinks: {
         twitter: "",
         linkedin: "",
         github: "",
       },
+      skills: [],
+      isActive: true,
+      order: 0,
+      id: undefined,
+      createdAt: undefined,
+      updatedAt: undefined,
     },
   });
 
@@ -98,6 +116,31 @@ export default function TeamMemberForm({
       );
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleAddSkill = () => {
+    if (currentSkill.trim()) {
+      const newSkills = [
+        ...(form.getValues("skills") || []),
+        currentSkill.trim(),
+      ];
+      form.setValue("skills", newSkills, { shouldValidate: true });
+      setCurrentSkill("");
+    }
+  };
+
+  const handleRemoveSkill = (skillToRemove: string) => {
+    const newSkills = (form.getValues("skills") || []).filter(
+      (skill) => skill !== skillToRemove
+    );
+    form.setValue("skills", newSkills, { shouldValidate: true });
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddSkill();
     }
   };
 
@@ -171,6 +214,97 @@ export default function TeamMemberForm({
 
                 <FormField
                   control={form.control}
+                  name="skills"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Expertise</FormLabel>
+                      <FormControl>
+                        <div className="space-y-2">
+                          <div className="flex gap-2">
+                            <Input
+                              placeholder="e.g., JavaScript"
+                              value={currentSkill}
+                              onChange={(e) => setCurrentSkill(e.target.value)}
+                              onKeyPress={handleKeyPress}
+                              disabled={isSubmitting}
+                            />
+                            <Button
+                              type="button"
+                              onClick={handleAddSkill}
+                              disabled={isSubmitting || !currentSkill.trim()}
+                            >
+                              Add
+                            </Button>
+                          </div>
+                          <AnimatePresence>
+                            {field.value?.map((skill, index) => (
+                              <motion.div
+                                key={skill}
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{
+                                  duration: 0.2,
+                                  delay: index * 0.05,
+                                }}
+                              >
+                                <Badge
+                                  variant="secondary"
+                                  className="inline-flex items-center gap-1 bg-gradient-to-r from-blue-500 to-blue-500 text-white font-bold uppercase text-xs py-1 px-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 hover:rotate-2"
+                                >
+                                  {skill}
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-4 w-4 p-0 text-white hover:text-red-300"
+                                    onClick={() => handleRemoveSkill(skill)}
+                                    disabled={isSubmitting}
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </Button>
+                                </Badge>
+                              </motion.div>
+                            ))}
+                          </AnimatePresence>
+                        </div>
+                      </FormControl>
+                      <FormDescription>
+                        Add one skill at a time. Each skill will be displayed as
+                        a vibrant badge.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="order"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Display Order</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="0"
+                          value={field.value}
+                          onChange={(e) =>
+                            field.onChange(Number.parseInt(e.target.value) || 0)
+                          }
+                          disabled={isSubmitting}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Order in which team member appears
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
                   name="isActive"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
@@ -209,11 +343,12 @@ export default function TeamMemberForm({
                         <Input
                           placeholder="https://example.com/image.jpg"
                           {...field}
+                          value={field.value ?? ""}
                           disabled={isSubmitting}
                         />
                       </FormControl>
                       <FormDescription>
-                        URL for the team member&apos;s profile image
+                        URL for the team member's profile image (optional)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -234,6 +369,7 @@ export default function TeamMemberForm({
                         <Input
                           placeholder="https://twitter.com/username"
                           {...field}
+                          value={field.value ?? ""}
                           disabled={isSubmitting}
                         />
                       </FormControl>
@@ -252,6 +388,7 @@ export default function TeamMemberForm({
                         <Input
                           placeholder="https://linkedin.com/in/username"
                           {...field}
+                          value={field.value ?? ""}
                           disabled={isSubmitting}
                         />
                       </FormControl>
@@ -270,6 +407,7 @@ export default function TeamMemberForm({
                         <Input
                           placeholder="https://github.com/username"
                           {...field}
+                          value={field.value ?? ""}
                           disabled={isSubmitting}
                         />
                       </FormControl>
@@ -305,4 +443,6 @@ export default function TeamMemberForm({
       </form>
     </Form>
   );
-}
+};
+
+export default TeamMemberForm;

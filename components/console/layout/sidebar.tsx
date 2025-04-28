@@ -17,6 +17,9 @@ import {
   Menu,
   Briefcase,
   Users2,
+  Bell,
+  Mail,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -43,7 +46,8 @@ export default function Sidebar({
     });
     window.location.href = "/login";
   };
-
+  const [hasNotifications, setHasNotifications] = useState(true);
+  const openModal = () => setHasNotifications(!hasNotifications);
   const navItems = [
     {
       title: "Dashboard",
@@ -74,7 +78,7 @@ export default function Sidebar({
     {
       title: "Users",
       href: "/console/admin/users",
-      icon: Users2 ,
+      icon: Users2,
     },
   ];
 
@@ -123,7 +127,7 @@ export default function Sidebar({
           )}
         </div>
 
-        <nav className="flex-1 p-2 space-y-1">
+        <nav className="flex-1 p-2 ">
           {navItems.map((item) => {
             const isActive =
               pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -131,7 +135,7 @@ export default function Sidebar({
               <Link key={item.href} href={item.href}>
                 <div
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors",
+                    "flex items-center gap-1 px-3   rounded-lg transition-colors",
                     isActive
                       ? "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
                       : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -151,6 +155,14 @@ export default function Sidebar({
                     />
                   )}
                 </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="relative"
+                  onClick={openModal}
+                >
+                  <span className="sr-only">Notifications</span>
+                </Button>
               </Link>
             );
           })}

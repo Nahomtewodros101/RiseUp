@@ -4,9 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Github, Linkedin, Twitter, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import type { TeamMember } from "@/types";
 
 export default function TeamPage() {
@@ -34,12 +36,10 @@ export default function TeamPage() {
         }
 
         const data = await response.json();
-
-        // Filter out inactive members
         const activeMembers = data.filter(
           (member: TeamMember) => member.isActive
         );
-
+        console.log("Fetched team members:", activeMembers); // Debug: Log fetched data
         setTeamMembers(activeMembers);
       } catch (err) {
         console.error("Error fetching team members:", err);
@@ -80,7 +80,7 @@ export default function TeamPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+              <h1 className="text-3xl text-blue-600 font-bold tracking-tighter sm:text-5xl">
                 Our Team
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
@@ -93,6 +93,9 @@ export default function TeamPage() {
           {isLoading && (
             <div className="flex justify-center items-center py-20">
               <Loader2 className="h-10 w-10 animate-spin text-blue-600 dark:text-blue-400" />
+              <p className="ml-4 text-gray-500 dark:text-gray-400">
+                Get ready to meet our Qmems
+              </p>
             </div>
           )}
 
@@ -111,33 +114,54 @@ export default function TeamPage() {
 
           {/* Team Grid */}
           {!isLoading && !error && (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {teamMembers.map((member, index) => (
-                <motion.div
-                  key={member.id}
-                  className="group relative overflow-hidden rounded-lg border bg-background p-2"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -5 }}
-                >
-                  <div className="aspect-square overflow-hidden rounded-lg">
+                <Card key={member.id} className="overflow-hidden">
+                  <div className="relative aspect-square">
                     <Image
                       src={member.image || "/placeholder.svg"}
                       alt={member.name}
-                      width={400}
-                      height={400}
-                      className="object-cover transition-transform group-hover:scale-105"
+                      fill
+                      className="object-cover"
                     />
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-bold text-xl">{member.name}</h3>
-                    <p className="text-blue-600 dark:text-blue-400 font-medium">
+                  <CardContent className="p-4">
+                    <h3 className="font-bold text-lg">{member.name}</h3>
+                    <p className="text-blue-600 dark:text-blue-400">
                       {member.role}
                     </p>
-                    <p className="mt-2 text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">
                       {member.bio}
                     </p>
+                    {(member.skills?.length ?? 0) > 0 ? (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        <AnimatePresence>
+                          {member.skills!.map((skill, skillIndex) => (
+                            <motion.div
+                              key={skill}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.8 }}
+                              transition={{
+                                duration: 0.2,
+                                delay: skillIndex * 0.05,
+                              }}
+                            >
+                              <Badge
+                                variant="secondary"
+                                className="bg-gradient-to-r from-blue-500 to-blue-500 text-white font-bold uppercase text-xs py-1 px-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 hover:rotate-2"
+                              >
+                                {skill}
+                              </Badge>
+                            </motion.div>
+                          ))}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                        No skills listed
+                      </p>
+                    )}
                     <div className="mt-4 flex space-x-3">
                       {member.socialLinks.twitter && (
                         <Link
@@ -173,8 +197,8 @@ export default function TeamPage() {
                         </Link>
                       )}
                     </div>
-                  </div>
-                </motion.div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           )}
@@ -205,6 +229,13 @@ export default function TeamPage() {
               <Link href="/careers">View Open Positions</Link>
             </Button>
           </motion.div>
+          <blockquote className="text-xl font-semibold italic text-blue-600 dark:text-blue-400">
+            We are not just a team ... we are a family. Together, we create
+            magic.
+          </blockquote>
+          <p className="mt-4 text-sm font-medium text-end text-blue-300">
+            — Qemem Devs
+          </p>
         </div>
       </main>
       <Footer />

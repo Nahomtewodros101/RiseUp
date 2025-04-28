@@ -17,7 +17,7 @@ export default function BackgroundGrid() {
   const isDark = theme === "dark";
 
   return (
-    <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+    <div className="fixed  inset-0 z-[-1] overflow-hidden pointer-events-none">
       {/* Grid pattern */}
       <svg
         className="absolute inset-0 w-full h-full opacity-[0.15] dark:opacity-[0.07]"
@@ -47,7 +47,7 @@ export default function BackgroundGrid() {
         {[...Array(5)].map((_, i) => (
           <motion.div
             key={`h-line-${i}`}
-            className="absolute h-[1px] w-full left-0 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"
+            className="absolute h-[1px] w-full left-0 bg-blue-300"
             style={{
               top: `${15 + i * 20}%`,
             }}
@@ -68,7 +68,7 @@ export default function BackgroundGrid() {
         {[...Array(5)].map((_, i) => (
           <motion.div
             key={`v-line-${i}`}
-            className="absolute w-[1px] h-full top-0 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent"
+            className="absolute w-[1px] h-full top-0 bg-blue-300"
             style={{
               left: `${20 + i * 15}%`,
             }}

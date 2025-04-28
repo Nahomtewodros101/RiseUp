@@ -9,6 +9,7 @@ type UpdateData = {
   bio?: string;
   image?: string;
   socialLinks?: string;
+  skills?: string[]; 
 };
 
 export async function PATCH(
@@ -52,6 +53,8 @@ export async function PATCH(
     if (body.bio) updateData.bio = body.bio;
     if (body.image) updateData.image = body.image;
     if (body.socialLinks) updateData.socialLinks = body.socialLinks;
+    if (body.skills && Array.isArray(body.skills))
+      updateData.skills = body.skills; // Added skills handling
 
     const updatedTeamMember = await prisma.teamMember.update({
       where: { id },
@@ -72,6 +75,7 @@ export async function PATCH(
     );
   }
 }
+
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

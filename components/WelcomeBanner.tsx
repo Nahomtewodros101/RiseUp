@@ -92,7 +92,7 @@ export default function WelcomeBanner() {
         >
           {/* Subtle Pulse Animation */}
           <motion.div
-            className="absolute inset-0 bg-blue-700/20 rounded-2xl"
+            className=" inset-0 bg-blue-700/20 rounded-2xl"
             animate={{ opacity: [0.2, 0.5, 0.2] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -100,7 +100,7 @@ export default function WelcomeBanner() {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-4 right-4 text-white hover:bg-blue-500/30 rounded-full"
+            className=" absolute top-4 right-4 text-white hover:bg-blue-500/30 rounded-full"
             onClick={handleDismiss}
           >
             <X className="h-5 w-5" />
@@ -135,14 +135,14 @@ export default function WelcomeBanner() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                {user.role === "admin" && (
-                  <Link
-                    href="/console "
-                    className="border-blue-200 cursor-pointer border-2 rounded-md px-4 py-2 text-blue-100 bg-transparent hover:bg-blue-700/30 hover:text-white"
-                  >
-                    Admin Panel
-                  </Link>
-                )}
+                <Link href="/console">
+                  <Button variant="ghost" size="lg">
+                    Go to Dashboard
+                  </Button>
+                </Link>
+                <Button variant="ghost" size="lg" onClick={handleDismiss}>
+                  Maybe Later
+                </Button>
               </motion.div>
             </div>
           </div>

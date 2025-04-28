@@ -28,11 +28,11 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+  PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Search, Trash2, Users } from "lucide-react";
@@ -96,7 +96,6 @@ function Page() {
       );
     }
 
-    // Apply role filter
     if (roleFilter) {
       result = result.filter((user) => user.role === roleFilter);
     }
@@ -158,35 +157,38 @@ function Page() {
   function getRoleBadgeColor(role: string) {
     switch (role.toLowerCase()) {
       case "admin":
-        return "bg-sky-100 text-sky-800 hover:bg-sky-200";
+        return "bg-sky-100 text-sky-800 hover:bg-sky-200 dark:bg-sky-900 dark:text-sky-200 dark:hover:bg-sky-800";
       case "user":
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
+        return "bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600";
       default:
-        return "bg-slate-100 text-slate-800 hover:bg-slate-200";
+        return "bg-slate-100 text-slate-800 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600";
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <Card className="container mx-auto shadow-sm">
-        <CardHeader className="bg-gradient-to-r from-sky-50 to-white border-b">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      <Card className="container mx-auto shadow-sm bg-white dark:bg-gray-800 dark:border-gray-700">
+        <CardHeader className="bg-gradient-to-r from-sky-50 to-white dark:from-gray-800 dark:to-gray-700 border-b dark:border-gray-600">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-2xl font-bold flex items-center gap-2">
-                <Users className="h-6 w-6 text-blue-600" />
+              <CardTitle className="text-2xl font-bold flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 User Management
               </CardTitle>
-              <CardDescription className="mt-1">
+              <CardDescription className="mt-1 text-gray-600 dark:text-gray-300">
                 View and manage user accounts and permissions
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="px-3 py-1">
+              <Badge
+                variant="outline"
+                className="px-3 py-1 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+              >
                 Total: {users.length}
               </Badge>
               <Badge
                 variant="outline"
-                className="bg-sky-50 text-sky-700 px-3 py-1"
+                className="bg-sky-50 text-sky-700 px-3 py-1 dark:bg-sky-900 dark:text-sky-200 dark:border-sky-600"
               >
                 Admins: {users.filter((user) => user.role === "admin").length}
               </Badge>
@@ -197,12 +199,12 @@ function Page() {
           {/* Filters */}
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-300" />
               <Input
                 placeholder="Search by name or email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
               />
             </div>
             <Select
@@ -211,10 +213,10 @@ function Page() {
                 setRoleFilter(value === "all" ? null : value)
               }
             >
-              <SelectTrigger className="w-full md:w-[180px]">
+              <SelectTrigger className="w-full md:w-[180px] bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
                 <SelectValue placeholder="Filter by role" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
                 <SelectItem value="all">All Roles</SelectItem>
                 <SelectItem value="admin">Admin</SelectItem>
                 <SelectItem value="user">User</SelectItem>
@@ -227,31 +229,44 @@ function Page() {
             <div className="space-y-4">
               {[...Array(5)].map((_, i) => (
                 <div key={i} className="flex items-center space-x-4">
-                  <Skeleton className="h-12 w-12 rounded-full" />
+                  <Skeleton className="h-12 w-12 rounded-full bg-gray-200 dark:bg-gray-600" />
                   <div className="space-y-2">
-                    <Skeleton className="h-4 w-[250px]" />
-                    <Skeleton className="h-4 w-[200px]" />
+                    <Skeleton className="h-4 w-[250px] bg-gray-200 dark:bg-gray-600" />
+                    <Skeleton className="h-4 w-[200px] bg-gray-200 dark:bg-gray-600" />
                   </div>
                 </div>
               ))}
             </div>
           ) : filteredUsers.length > 0 ? (
             <>
-              <div className="rounded-md border overflow-hidden">
+              <div className="rounded-md border overflow-hidden dark:border-gray-600">
                 <Table>
-                  <TableHeader className="bg-sky-50">
+                  <TableHeader className="bg-sky-50 dark:bg-gray-700">
                     <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead className="text-gray-900 dark:text-gray-200">
+                        Name
+                      </TableHead>
+                      <TableHead className="text-gray-900 dark:text-gray-200">
+                        Email
+                      </TableHead>
+                      <TableHead className="text-gray-900 dark:text-gray-200">
+                        Role
+                      </TableHead>
+                      <TableHead className="text-right text-gray-900 dark:text-gray-200">
+                        Actions
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {currentUsers.map((user) => (
-                      <TableRow key={user.id}>
-                        <TableCell>{user.name}</TableCell>
-                        <TableCell className="text-gray-600">
+                      <TableRow
+                        key={user.id}
+                        className="hover:bg-gray-50 dark:hover:bg-gray-600"
+                      >
+                        <TableCell className="text-gray-900 dark:text-gray-200">
+                          {user.name}
+                        </TableCell>
+                        <TableCell className="text-gray-600 dark:text-gray-300">
                           {user.email}
                         </TableCell>
                         <TableCell>
@@ -268,10 +283,10 @@ function Page() {
                               }
                               disabled={processingAction === user.id}
                             >
-                              <SelectTrigger className="w-[110px] h-8">
+                              <SelectTrigger className="w-[110px] h-8 bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
                                 <SelectValue />
                               </SelectTrigger>
-                              <SelectContent>
+                              <SelectContent className="bg-white dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
                                 <SelectItem value="user">User</SelectItem>
                                 <SelectItem value="admin">Admin</SelectItem>
                               </SelectContent>
@@ -308,14 +323,13 @@ function Page() {
                           className={
                             currentPage === 1
                               ? "pointer-events-none opacity-50"
-                              : "cursor-pointer"
+                              : "cursor-pointer text-gray-900 dark:text-gray-200"
                           }
                         />
                       </PaginationItem>
 
                       {[...Array(totalPages)].map((_, i) => {
                         const pageNumber = i + 1;
-                        // Show first page, current page, last page, and one page before and after current
                         if (
                           pageNumber === 1 ||
                           pageNumber === totalPages ||
@@ -328,6 +342,7 @@ function Page() {
                               <PaginationLink
                                 onClick={() => setCurrentPage(pageNumber)}
                                 isActive={pageNumber === currentPage}
+                                className="text-gray-900 dark:text-gray-200"
                               >
                                 {pageNumber}
                               </PaginationLink>
@@ -335,11 +350,10 @@ function Page() {
                           );
                         }
 
-                        // Show ellipsis for gaps
                         if (pageNumber === 2 || pageNumber === totalPages - 1) {
                           return (
                             <PaginationItem key={pageNumber}>
-                              <PaginationEllipsis />
+                              <PaginationEllipsis className="text-gray-900 dark:text-gray-200" />
                             </PaginationItem>
                           );
                         }
@@ -357,7 +371,7 @@ function Page() {
                           className={
                             currentPage === totalPages
                               ? "pointer-events-none opacity-50"
-                              : "cursor-pointer"
+                              : "cursor-pointer text-gray-900 dark:text-gray-200"
                           }
                         />
                       </PaginationItem>
@@ -367,12 +381,12 @@ function Page() {
               )}
             </>
           ) : (
-            <div className="text-center py-12 bg-gray-50 rounded-lg border border-dashed">
-              <AlertCircle className="mx-auto h-12 w-12 text-gray-400" />
-              <h3 className="mt-4 text-lg font-medium text-gray-900">
+            <div className="text-center py-12 bg-gray-50 dark:bg-gray-700 rounded-lg border border-dashed dark:border-gray-600">
+              <AlertCircle className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-300" />
+              <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-gray-200">
                 No users found
               </h3>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-300">
                 {searchQuery || roleFilter
                   ? "Try adjusting your search or filter to find what you're looking for."
                   : "There are no users in the system yet."}
@@ -380,7 +394,7 @@ function Page() {
               {(searchQuery || roleFilter) && (
                 <Button
                   variant="outline"
-                  className="mt-4"
+                  className="mt-4 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
                   onClick={() => {
                     setSearchQuery("");
                     setRoleFilter(null);
@@ -396,19 +410,19 @@ function Page() {
 
       {/* Delete Confirmation Modal */}
       <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px] bg-white dark:bg-gray-800 dark:border-gray-700">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-red-600">
+            <DialogTitle className="flex items-center gap-2 text-red-600 dark:text-red-400">
               <AlertCircle className="h-5 w-5" />
               Confirm Deletion
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-gray-600 dark:text-gray-300">
               This action cannot be undone. This will permanently delete the
               user account and remove all associated data.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-300">
               Are you sure you want to delete this user?
             </p>
           </div>
@@ -417,6 +431,7 @@ function Page() {
               variant="outline"
               onClick={() => setShowDeleteModal(false)}
               disabled={processingAction !== null}
+              className="dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
             >
               Cancel
             </Button>

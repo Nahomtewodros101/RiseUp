@@ -2,13 +2,13 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
-
-const BackgroundGrid = () => (
-  <div className="absolute inset-0 opacity-20 pointer-events-none">
-    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEwIDB2NDBNMjAgMHY0ME0zMCAwdjQwTTEwIDBoMzBMMTAgME0xMCAxMGgzME0xMCAyMGgzME0xMCAzMGgzMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjAuNSIvPjwvc3ZnPg==')] animate-pulse"></div>
-  </div>
-);
+import {
+  Handshake,
+  Lightbulb,
+  ShieldCheck,
+  Sparkles,
+  Trophy,
+} from "lucide-react";
 
 export default function WhyChooseUsSection() {
   const features = [
@@ -16,25 +16,28 @@ export default function WhyChooseUsSection() {
       title: "Expertise",
       description:
         "Masters of our craft with years of experience at Qmem Tech.",
+      icon: Trophy,
     },
     {
       title: "Innovation",
       description:
         "Creating trends, not following them, with cutting-edge solutions.",
+      icon: Lightbulb,
     },
     {
       title: "Reliability",
       description: "Dependable and consistent, always there for you.",
+      icon: ShieldCheck,
     },
     {
       title: "Support",
       description: "Guiding you every step to ensure your success.",
+      icon: Handshake,
     },
   ];
 
   return (
-    <section className="relative py-20 bg-gradient-to-r from-blue-800 to-blue-600 overflow-hidden">
-      <BackgroundGrid />
+    <section className="relative py-20 bg-transparent rounded-lg overflow-hidden">
       <div className="container px-4 md:px-6 relative z-10 max-w-7xl mx-auto">
         <motion.div
           className="text-center"
@@ -43,19 +46,20 @@ export default function WhyChooseUsSection() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl sm:text-5xl font-poppins font-bold text-white tracking-tight">
+          <h2 className="text-4xl sm:text-5xl font-poppins font-bold text-blue-600 tracking-tight">
             Why Choose Qmem Tech?
           </h2>
-          <p className="max-w-xl mx-auto mt-6 text-blue-100 text-lg sm:text-xl leading-relaxed font-inter">
-            We’re more than a service—we’re a movement, shaping the future with
-            innovation and trust.
+          <p className="max-w-xl mx-auto mt-6 text-gray-600 text-lg sm:text-xl leading-relaxed font-inter">
+            We’re more than a service we are a movement,
+            <br />
+            shaping the future with innovation and trust.
           </p>
         </motion.div>
         <div className="grid gap-6 sm:gap-8 mt-12 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((item, index) => (
             <motion.div
               key={index}
-              className="relative group bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+              className="relative group bg-white dark:bg-blue-900 border-gray-300 border backdrop-blur-md p-6 rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{
@@ -76,12 +80,15 @@ export default function WhyChooseUsSection() {
                 animate={{ scale: [1, 1.2, 1], rotate: [0, 360, 0] }}
                 transition={{ duration: 1, repeat: 0 }}
               >
-                <Sparkles className="h-5 w-5" />
+                <Sparkles className="h-5 w-5" color="blue" />
               </motion.div>
-              <h3 className="text-xl sm:text-2xl font-poppins font-semibold text-white relative z-10">
+              <div className="flex items-center justify-start mb-4">
+                <item.icon className="h-8 w-8 text-blue-600 dark:text-white " />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-poppins font-semibold text-blue-600 dark:text-white relative z-10">
                 {item.title}
               </h3>
-              <p className="text-base text-blue-100 mt-3 relative z-10 font-inter leading-relaxed">
+              <p className="text-base text-gray-600 dark:text-gray-300 mt-3 relative z-10 font-inter leading-relaxed">
                 {item.description}
               </p>
             </motion.div>

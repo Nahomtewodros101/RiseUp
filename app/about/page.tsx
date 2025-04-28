@@ -13,7 +13,6 @@ export default function AboutPage() {
   const [isContentReady, setIsContentReady] = useState(false);
 
   useEffect(() => {
-    // Set content as ready after the loading screen has had time to show
     const timer = setTimeout(() => {
       setIsContentReady(true);
     }, 2100);
@@ -30,6 +29,7 @@ export default function AboutPage() {
       <Navbar />
       <main className="flex-1 py-12 md:py-24">
         <div className="container px-4 md:px-6">
+          {/* Header part */}
           <div className="mb-12">
             <Link href="/">
               <Button variant="ghost" className="mb-6">
@@ -43,7 +43,7 @@ export default function AboutPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+              <h1 className="text-3xl font-bold text-blue-600 tracking-tighter sm:text-5xl">
                 About Qemem Tech
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
@@ -146,24 +146,25 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.8 }}
           >
-            <h2 className="text-3xl text-blue-600 font-bold mb-4">
-              Ready to Work With Us?
-            </h2>
-            <p className="max-w-[600px] mx-auto mb-8 text-gray-500 dark:text-gray-400">
-              Let us discuss how we can help bring your ideas to life with our
-              expertise in web development, mobile apps, and digital solutions.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                asChild
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700"
-              >
-                <Link href="/contact">Contact Us</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href="/projects">View Our Work</Link>
-              </Button>
+            <div className="flex flex-col items-center max-w-2xl container justify-center">
+              <h1 className="text-blue-600 animate-pulse  font-bold text-xl   my-3">
+                Crafted with careful planing and extraordinary sorcery
+                <br />
+                Our products speak for themselves when it comes to quality
+              </h1>
+
+              <div className="flex flex-row sm:flex-col gap-4 justify-center">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-700 "
+                >
+                  <Link href="/contact">Reach out </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg">
+                  <Link href="/projects">See for yourself</Link>
+                </Button>
+              </div>
             </div>
           </motion.div>
         </div>

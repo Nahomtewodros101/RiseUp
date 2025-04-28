@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Bell, User } from "lucide-react";
+import { Bell, User2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -15,26 +15,38 @@ import {
 } from "@/components/ui/dropdown-menu";
 import ThemeToggle from "@/components/ThemeToggle";
 import NotificationModal from "@/components/NotficationModal";
-import { motion } from "framer-motion";
-import type { UserJwtPayload } from "@/lib/auth";
+import type { Notification, User } from "@/types";
+import Image from "next/image";
+import { toast } from "sonner";
 
 export default function Header() {
   const pathname = usePathname();
-  const [user, setUser] = useState<UserJwtPayload | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [hasNotifications, setHasNotifications] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("/api/auth/me");
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data.user);
-          setHasNotifications(data.hasNotifications);
+        setIsLoading(true);
+        const response = await fetch("/api/auth/me", {
+          cache: "no-store",
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const data = await response.json();
+        console.log("Fetched user data:", data);
+        setUser(data.user || null);
       } catch (error) {
         console.error("Failed to fetch user:", error);
+        toast.error("Failed to load user data");
+        setUser(null);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -56,18 +68,9 @@ export default function Header() {
     window.location.href = "/login";
   };
 
-  const openModal = () => setIsModalOpen(true);
-
   const closeModal = () => setIsModalOpen(false);
 
-  const handleNotificationSubmit = async (data: {
-    message: string;
-    type: "info" | "warning" | "success";
-    scheduled: boolean;
-    scheduledDate: Date | null;
-    targetAudience: string[];
-    isPriority: boolean;
-  }) => {
+  const handleNotificationSubmit = async (data: Notification) => {
     try {
       const response = await fetch("/api/notifications", {
         method: "POST",
@@ -106,32 +109,45 @@ export default function Header() {
 
       <div className="flex items-center gap-4">
         <ThemeToggle />
-
         <Button
           variant="ghost"
           size="icon"
-          className="relative"
-          onClick={openModal}
+          onClick={() => setIsModalOpen(true)}
+          title="Post Notification"
         >
           <Bell className="h-5 w-5" />
-          {hasNotifications && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"
-              layoutId="notification-dot"
-            ></motion.div>
-          )}
-          <span className="sr-only">Notifications</span>
+          <span className="sr-only">Post Notification</span>
         </Button>
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
-                  {user?.name?.charAt(0) || "U"}
-                </AvatarFallback>
+                {user?.profileImage ? (
+                  <Image
+                    src={user.profileImage}
+                    alt="Profile picture"
+                    width={32}
+                    height={32}
+                    className="rounded-full object-cover"
+                    onLoad={() =>
+                      console.log(
+                        "Profile image loaded successfully",
+                        user.profileImage
+                      )
+                    }
+                    onError={() =>
+                      console.error("Failed to load profile image")
+                    }
+                  />
+                ) : (
+                  <AvatarFallback className="bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
+                    {isLoading ? (
+                      <User2 className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                    ) : (
+                      <User2 className="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                    )}
+                  </AvatarFallback>
+                )}
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
@@ -139,7 +155,7 @@ export default function Header() {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="flex items-center">
-              <User className="mr-2 h-4 w-4" />
+              <User2 className="mr-2 h-4 w-4" />
               <span>{user?.name || "User"}</span>
             </DropdownMenuItem>
             <DropdownMenuItem className="text-gray-500">
@@ -153,7 +169,6 @@ export default function Header() {
         </DropdownMenu>
       </div>
 
-      {/* Enhanced Notification Modal */}
       <NotificationModal
         isOpen={isModalOpen}
         closeModal={closeModal}

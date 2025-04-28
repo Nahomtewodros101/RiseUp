@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function HeroIllustration() {
   return (
-    <div className="relative w-full max-w-[500px] h-[400px]">
+    <div className="hidden md:block relative w-full max-w-[500px] h-[400px]">
       {/* Main circle */}
       <motion.div
         className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-blue-100 dark:bg-blue-900/30"

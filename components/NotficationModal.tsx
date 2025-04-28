@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -11,9 +12,10 @@ import {
   Bell,
   ChevronDown,
   Trash2,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Popover,
   PopoverContent,
@@ -26,32 +28,27 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-type NotificationType = "info" | "warning" | "success";
-interface Notification {
-  id: string;
-  message: string;
-  type: NotificationType;
-  scheduled: boolean;
-  scheduledDate: Date | null;
-  targetAudience: string[];
-  isPriority: boolean;
-  createdAt: Date;
-  creator: { name: string } | null;
-}
+import { toast } from "sonner";
+import { Notification } from "@/types";
+
 interface NotificationModalProps {
   isOpen: boolean;
   closeModal: () => void;
   onSubmit: (data: Notification) => Promise<void>;
 }
+
 export default function NotificationModal({
   isOpen,
   closeModal,
+  onSubmit,
 }: NotificationModalProps) {
   const [message, setMessage] = useState("");
   const [notificationType, setNotificationType] =
-    useState<NotificationType>("info");
+    useState<Notification["type"]>("info");
   const [isScheduled, setIsScheduled] = useState(false);
-  const [scheduledDate, setScheduledDate] = useState<Date | null>(null);
+  const [scheduledDate, setScheduledDate] = useState<string | undefined>(
+    undefined
+  );
   const [targetAudience, setTargetAudience] = useState<string[]>(["all"]);
   const [isPriority, setIsPriority] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
@@ -62,7 +59,11 @@ export default function NotificationModal({
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<string | null>(
     null
   );
+  const [creator, setCreator] = useState<{ id: string; name: string } | null>(
+    null
+  );
   const modalRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -73,22 +74,22 @@ export default function NotificationModal({
         )
       ) {
         closeModal();
-        console.log("Clicked outside the modal", isPreview);
       }
     };
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
+      fetchUser();
+      fetchNotifications();
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, closeModal, isPreview]);
+  }, [isOpen, closeModal]);
+
   useEffect(() => {
-    if (isOpen) {
-      fetchNotifications();
-    } else {
+    if (!isOpen) {
       setTimeout(() => {
         resetForm();
         setNotifications([]);
@@ -98,6 +99,24 @@ export default function NotificationModal({
       }, 300);
     }
   }, [isOpen]);
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch("/api/auth/me", {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const { user } = await response.json();
+        setCreator({ id: user.id, name: user.name });
+      } else {
+        setCreator(null);
+      }
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
+      setCreator(null);
+    }
+  };
+
   const fetchNotifications = async () => {
     setIsLoading(true);
     try {
@@ -106,35 +125,42 @@ export default function NotificationModal({
       });
       if (response.ok) {
         const data = await response.json();
-        const formattedNotifications = data.map((notif: Notification) => ({
-          ...notif,
-          createdAt: new Date(notif.createdAt),
-          scheduledDate: notif.scheduledDate
-            ? new Date(notif.scheduledDate)
-            : null,
-        }));
+        const formattedNotifications = data.notifications.map(
+          (notif: Notification) => ({
+            ...notif,
+            createdAt: new Date(notif.createdAt).toISOString(),
+            scheduledDate: notif.scheduledDate
+              ? new Date(notif.scheduledDate).toISOString()
+              : undefined,
+          })
+        );
         setNotifications(formattedNotifications);
       } else {
-        console.error("Failed to fetch notifications:", await response.json());
+        toast.error("Failed to fetch notifications");
       }
     } catch (error) {
       console.error("Error fetching notifications:", error);
+      toast.error("Error fetching notifications");
     } finally {
       setIsLoading(false);
     }
   };
+
   const handleSubmit = async () => {
-    if (!message.trim()) return;
+    if (!message.trim() || !creator) {
+      toast.error("Message and creator are required");
+      return;
+    }
 
     setIsLoading(true);
-
     const data = {
       message,
       type: notificationType,
       scheduled: isScheduled,
-      scheduledDate: scheduledDate ? scheduledDate.toISOString() : null,
+      scheduledDate: isScheduled && scheduledDate ? scheduledDate : undefined,
       targetAudience,
       isPriority,
+      creator: { id: creator.id, name: creator.name },
     };
 
     try {
@@ -151,20 +177,29 @@ export default function NotificationModal({
 
       if (response.ok) {
         const updatedNotification = await response.json();
-        const formattedNotification = {
+        const formattedNotification: Notification = {
           ...updatedNotification,
-          createdAt: new Date(updatedNotification.createdAt),
+          createdAt: new Date(updatedNotification.createdAt).toISOString(),
           scheduledDate: updatedNotification.scheduledDate
-            ? new Date(updatedNotification.scheduledDate)
-            : null,
+            ? new Date(updatedNotification.scheduledDate).toISOString()
+            : undefined,
+          creator: {
+            id: updatedNotification.creator?.id || creator.id,
+            name: updatedNotification.creator?.name || creator.name,
+          },
         };
-
         setNotifications((prev) =>
           editingId
             ? prev.map((notif) =>
                 notif.id === editingId ? formattedNotification : notif
               )
             : [formattedNotification, ...prev]
+        );
+        await onSubmit(formattedNotification);
+        toast.success(
+          editingId
+            ? "Notification updated successfully"
+            : "Notification created successfully"
         );
         resetForm();
         setEditingId(null);
@@ -173,23 +208,42 @@ export default function NotificationModal({
           .querySelector('[value="manage"]')
           ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
       } else {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("Failed to save notification:", errorData);
-        alert(
-          `Failed to save notification: ${errorData.message || "Unknown error"}`
-        );
+        const errorData = await response.json();
+        toast.error(`Failed to save notification: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error saving notification:", error);
-      alert(
-        `Error saving notification: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
+      toast.error(
+        error instanceof Error ? error.message : "Error saving notification"
       );
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleDeleteAll = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/notifications", {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        setNotifications([]);
+        toast.success("All notifications deleted successfully");
+      } else {
+        const errorData = await response.json();
+        toast.error(`Failed to delete all notifications: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error("Error deleting all notifications:", error);
+      toast.error("Error deleting all notifications");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleDelete = async (id: string) => {
     setDeletingId(id);
     try {
@@ -199,25 +253,44 @@ export default function NotificationModal({
       });
       if (response.ok) {
         setNotifications((prev) => prev.filter((notif) => notif.id !== id));
+        toast.success("Notification deleted successfully");
       } else {
-        console.error("Failed to delete notification:", await response.json());
+        const errorData = await response.json();
+        toast.error(`Failed to delete notification: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Error deleting notification:", error);
+      toast.error("Error deleting notification");
     } finally {
       setDeletingId(null);
       setDeleteConfirmOpen(null);
     }
   };
+
+  const handleEdit = (notification: Notification) => {
+    setEditingId(notification.id);
+    setMessage(notification.message);
+    setNotificationType(notification.type);
+    setIsScheduled(notification.scheduled);
+    setScheduledDate(notification.scheduledDate);
+    setTargetAudience(notification.targetAudience);
+    setIsPriority(notification.isPriority);
+    setIsPreview(false);
+    document
+      .querySelector('[value="compose"]')
+      ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  };
+
   const resetForm = () => {
     setMessage("");
     setNotificationType("info");
     setIsScheduled(false);
-    setScheduledDate(null);
+    setScheduledDate(undefined);
     setTargetAudience(["all"]);
     setIsPriority(false);
     setIsPreview(false);
   };
+
   const toggleAudience = (audience: string) => {
     if (audience === "all") {
       setTargetAudience(["all"]);
@@ -230,27 +303,31 @@ export default function NotificationModal({
 
     setTargetAudience(newAudience.length ? newAudience : ["all"]);
   };
-  const getNotificationIcon = (type: NotificationType) => {
+
+  const getNotificationIcon = (type: Notification["type"]) => {
     switch (type) {
       case "info":
-        return <Info className="h-5 w-5 text-blue-500" />;
+        return <Info className="h-5 w-5 text-blue0" />;
       case "warning":
         return <AlertTriangle className="h-5 w-5 text-amber-500" />;
       case "success":
         return <CheckCircle className="h-5 w-5 text-green-500" />;
     }
   };
-  const getNotificationColor = (type: NotificationType) => {
+
+  const getNotificationColor = (type: Notification["type"]) => {
     switch (type) {
       case "info":
-        return "bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800";
+        return "bg-blue border-blue0 dark:bg-blue0/20 dark:border-blue0";
       case "warning":
         return "bg-amber-50 border-amber-200 dark:bg-amber-900/20 dark:border-amber-800";
       case "success":
         return "bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800";
     }
   };
+
   if (!isOpen) return null;
+
   return (
     <AnimatePresence>
       <motion.div
@@ -267,34 +344,43 @@ export default function NotificationModal({
           className="bg-white dark:bg-gray-900 rounded-xl shadow-xl max-w-2xl w-full mx-4 overflow-hidden"
           ref={modalRef}
         >
-          <div className="flex items-center justify-between border-b p-4">
-            <h2 className="text-xl font-semibold flex items-center gap-2">
-              <Bell className="h-5 w-5 text-blue-600" />
+          <div className="flex items-center justify-between border-b border-blue0 dark:border-blue0 p-4">
+            <h2 className="text-xl font-semibold flex items-center gap-2 text-blue0 dark:text-blue0">
+              <Bell className="h-5 w-5 text-blue0 dark:text-blue0" />
               Notification Manager
             </h2>
             <Button
               variant="ghost"
               size="icon"
               onClick={closeModal}
-              className="rounded-full"
+              className="rounded-full text-blue0 dark:text-blue0 hover:bg-blue0 dark:hover:bg-blue0/20"
             >
               <X className="h-5 w-5" />
             </Button>
           </div>
 
           <Tabs defaultValue="compose" className="w-full">
-            <div className="px-4 border-b">
-              <TabsList className="grid grid-cols-3">
+            <div className="px-4 border-b border-blue0 dark:border-blue0">
+              <TabsList className="grid grid-cols-3 bg-blue dark:bg-blue0/20">
                 <TabsTrigger
                   value="compose"
                   onClick={() => setIsPreview(false)}
+                  className="data-[state=active]:bg-white data-[state=active]:text-blue0 dark:data-[state=active]:bg-gray-900 dark:data-[state=active]:text-blue0"
                 >
                   Compose
                 </TabsTrigger>
-                <TabsTrigger value="preview" onClick={() => setIsPreview(true)}>
+                <TabsTrigger
+                  value="preview"
+                  onClick={() => setIsPreview(true)}
+                  className="data-[state=active]:bg-white data-[state=active]:text-blue0 dark:data-[state=active]:bg-gray-900 dark:data-[state=active]:text-blue0"
+                >
                   Preview
                 </TabsTrigger>
-                <TabsTrigger value="manage" onClick={() => setIsPreview(false)}>
+                <TabsTrigger
+                  value="manage"
+                  onClick={() => setIsPreview(false)}
+                  className="data-[state=active]:bg-white data-[state=active]:text-blue0 dark:data-[state=active]:bg-gray-900 dark:data-[state=active]:text-blue0"
+                >
                   Manage
                 </TabsTrigger>
               </TabsList>
@@ -302,10 +388,10 @@ export default function NotificationModal({
 
             <TabsContent value="compose" className="p-4 space-y-4">
               <div className="space-y-2">
-                <Label>Message</Label>
+                <Label className="text-blue0 dark:text-blue0">Message</Label>
                 <Textarea
                   placeholder="Enter your notification message here..."
-                  className="min-h-[120px] resize-none"
+                  className="min-h-[120px] resize-none border-blue0 dark:border-blue0 focus:ring-blue0 text-blue0 dark:text-blue0"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                 />
@@ -313,7 +399,9 @@ export default function NotificationModal({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Notification Type</Label>
+                  <Label className="text-blue0 dark:text-blue0">
+                    Notification Type
+                  </Label>
                   <div className="flex gap-2">
                     <Button
                       type="button"
@@ -321,10 +409,10 @@ export default function NotificationModal({
                         notificationType === "info" ? "default" : "outline"
                       }
                       className={cn(
-                        "flex-1",
+                        "flex-1 border-blue0 dark:border-blue0",
                         notificationType === "info"
-                          ? "bg-blue-600 hover:bg-blue-700"
-                          : ""
+                          ? "bg-blue0 hover:bg-blue0 text-white"
+                          : "text-blue0 dark:text-blue0 hover:bg-blue0 dark:hover:bg-blue0/20"
                       )}
                       onClick={() => setNotificationType("info")}
                     >
@@ -337,10 +425,10 @@ export default function NotificationModal({
                         notificationType === "warning" ? "default" : "outline"
                       }
                       className={cn(
-                        "flex-1",
+                        "flex-1 border-blue0 dark:border-blue0",
                         notificationType === "warning"
-                          ? "bg-amber-500 hover:bg-amber-600"
-                          : ""
+                          ? "bg-amber-500 hover:bg-amber-600 text-white"
+                          : "text-blue0 dark:text-blue0 hover:bg-blue0 dark:hover:bg-blue0/20"
                       )}
                       onClick={() => setNotificationType("warning")}
                     >
@@ -353,10 +441,10 @@ export default function NotificationModal({
                         notificationType === "success" ? "default" : "outline"
                       }
                       className={cn(
-                        "flex-1",
+                        "flex-1 border-blue0 dark:border-blue0",
                         notificationType === "success"
-                          ? "bg-green-500 hover:bg-green-600"
-                          : ""
+                          ? "bg-green-500 hover:bg-green-600 text-white"
+                          : "text-blue0 dark:text-blue0 hover:bg-blue0 dark:hover:bg-blue0/20"
                       )}
                       onClick={() => setNotificationType("success")}
                     >
@@ -367,12 +455,14 @@ export default function NotificationModal({
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Target Audience</Label>
+                  <Label className="text-blue0 dark:text-blue0">
+                    Target Audience
+                  </Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className="w-full justify-between"
+                        className="w-full justify-between border-blue0 dark:border-blue0 text-blue0 dark:text-blue0 hover:bg-blue0 dark:hover:bg-blue0/20"
                       >
                         <div className="flex items-center gap-2">
                           <Users className="h-4 w-4" />
@@ -388,21 +478,23 @@ export default function NotificationModal({
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent
-                      className="w-[200px] p-0 popover-content"
+                      className="w-[200px] p-0 popover-content bg-white dark:bg-gray-900"
                       align="start"
                     >
                       <div className="p-2">
                         <div
-                          className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md cursor-pointer"
+                          className="flex items-center justify-between p-2 hover:bg-blue0 dark:hover:bg-blue0/20 rounded-md cursor-pointer"
                           onClick={() => toggleAudience("all")}
                         >
-                          <span>All Users</span>
+                          <span className="text-blue0 dark:text-blue0">
+                            All Users
+                          </span>
                           <div
                             className={cn(
                               "w-4 h-4 rounded-full border",
                               targetAudience.includes("all")
-                                ? "bg-blue-600 border-blue-600"
-                                : "border-gray-300 dark:border-gray-600"
+                                ? "bg-blue0 border-blue0"
+                                : "border-blue0 dark:border-blue0"
                             )}
                           >
                             {targetAudience.includes("all") && (
@@ -410,26 +502,25 @@ export default function NotificationModal({
                             )}
                           </div>
                         </div>
-                        {["Admins", "Clients"].map((audience) => (
+                        {["admins", "users"].map((audience) => (
                           <div
                             key={audience}
-                            className="flex items-center justify-between p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md cursor-pointer"
-                            onClick={() =>
-                              toggleAudience(audience.toLowerCase())
-                            }
+                            className="flex items-center justify-between p-2 hover:bg-blue0 dark:hover:bg-blue0/20 rounded-md cursor-pointer"
+                            onClick={() => toggleAudience(audience)}
                           >
-                            <span>{audience}</span>
+                            <span className="text-blue0 dark:text-blue0">
+                              {audience.charAt(0).toUpperCase() +
+                                audience.slice(1)}
+                            </span>
                             <div
                               className={cn(
                                 "w-4 h-4 rounded-full border",
-                                targetAudience.includes(audience.toLowerCase())
-                                  ? "bg-blue-600 border-blue-600"
-                                  : "border-gray-300 dark:border-gray-600"
+                                targetAudience.includes(audience)
+                                  ? "bg-blue0 border-blue0"
+                                  : "border-blue0 dark:border-blue0"
                               )}
                             >
-                              {targetAudience.includes(
-                                audience.toLowerCase()
-                              ) && (
+                              {targetAudience.includes(audience) && (
                                 <CheckCircle className="h-4 w-4 text-white" />
                               )}
                             </div>
@@ -444,22 +535,48 @@ export default function NotificationModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="scheduled">Schedule for later</Label>
+                    <Label
+                      htmlFor="scheduled"
+                      className="text-blue0 dark:text-blue0"
+                    >
+                      Schedule for later
+                    </Label>
                     <Switch
                       id="scheduled"
                       checked={isScheduled}
                       onCheckedChange={setIsScheduled}
+                      className="data-[state=checked]:bg-blue0"
                     />
                   </div>
+                  {isScheduled && (
+                    <input
+                      type="datetime-local"
+                      value={
+                        scheduledDate
+                          ? new Date(scheduledDate).toISOString().slice(0, 16)
+                          : ""
+                      }
+                      onChange={(e) =>
+                        setScheduledDate(new Date(e.target.value).toISOString())
+                      }
+                      className="w-full border border-blue0 dark:border-blue0 rounded-md p-2 bg-white dark:bg-gray-800 text-blue0 dark:text-blue0 focus:ring-blue0"
+                    />
+                  )}
                 </div>
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="priority">Mark as priority</Label>
+                    <Label
+                      htmlFor="priority"
+                      className="text-blue0 dark:text-blue0"
+                    >
+                      Mark as priority
+                    </Label>
                     <Switch
                       id="priority"
                       checked={isPriority}
                       onCheckedChange={setIsPriority}
+                      className="data-[state=checked]:bg-blue0"
                     />
                   </div>
                 </div>
@@ -467,19 +584,21 @@ export default function NotificationModal({
             </TabsContent>
 
             <TabsContent value="preview" className="p-4">
-              <div className="border rounded-lg overflow-hidden">
-                <div className="p-4 bg-gray-50 dark:bg-gray-800 border-b flex items-center justify-between">
+              <div className="border border-blue0 dark:border-blue0 rounded-lg overflow-hidden">
+                <div className="p-4 bg-blue dark:bg-blue0/20 border-b border-blue0 dark:border-blue0 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
-                        A
+                      <AvatarFallback className="bg-blue0 text-blue0 dark:bg-blue0 dark:text-blue0">
+                        {creator?.name?.charAt(0) || "A"}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-medium">Admin</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="font-medium text-blue0 dark:text-blue0">
+                        {creator?.name || "Admin"}
+                      </p>
+                      <p className="text-xs text-blue0 dark:text-blue0">
                         {isScheduled && scheduledDate
-                          ? format(scheduledDate, "MMM d, yyyy")
+                          ? format(new Date(scheduledDate), "MMM d, yyyy")
                           : format(new Date(), "MMM d, yyyy")}
                       </p>
                     </div>
@@ -488,7 +607,7 @@ export default function NotificationModal({
                     {isPriority && (
                       <Badge
                         variant="outline"
-                        className="bg-red-50 text-red-600 border-red-200"
+                        className="bg-red-50 text-red-600 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-700"
                       >
                         Priority
                       </Badge>
@@ -497,11 +616,11 @@ export default function NotificationModal({
                       variant="outline"
                       className={cn(
                         notificationType === "info" &&
-                          "bg-blue-50 text-blue-600 border-blue-200",
+                          "bg-blue text-blue0 border-blue0 dark:bg-blue0/20 dark:text-blue0 dark:border-blue0",
                         notificationType === "warning" &&
-                          "bg-amber-50 text-amber-600 border-amber-200",
+                          "bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-700",
                         notificationType === "success" &&
-                          "bg-green-50 text-green-600 border-green-200"
+                          "bg-green-50 text-green-600 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-700"
                       )}
                     >
                       {notificationType.charAt(0).toUpperCase() +
@@ -518,12 +637,17 @@ export default function NotificationModal({
                     </div>
                     <div>
                       {message ? (
-                        <p className="whitespace-pre-wrap">{message}</p>
+                        <p className="whitespace-pre-wrap text-blue0 dark:text-blue0">
+                          {message}
+                        </p>
                       ) : (
-                        <p className="text-gray-400 italic">
+                        <p className="text-blue0 dark:text-blue0 italic">
                           Your notification preview will appear here...
                         </p>
                       )}
+                      <p className="text-xs text-blue0 dark:text-blue0 mt-2">
+                        Audience: {targetAudience.join(", ") || "All"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -532,38 +656,92 @@ export default function NotificationModal({
 
             <TabsContent value="manage" className="p-4">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Manage Notifications</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-blue0 dark:text-blue0">
+                    Manage Notifications
+                  </h3>
+                  {notifications.length > 0 && (
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          disabled={isLoading}
+                          className="flex items-center gap-2"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          Delete All
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[300px] p-4 popover-content bg-white dark:bg-gray-900">
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-2">
+                            <AlertCircle className="h-5 w-5 text-amber-500" />
+                            <h4 className="font-semibold text-blue0 dark:text-blue0">
+                              Confirm Delete All
+                            </h4>
+                          </div>
+                          <p className="text-sm text-blue0 dark:text-blue0">
+                            Are you sure you want to delete all notifications?
+                            This action cannot be undone.
+                          </p>
+                          <div className="flex justify-end gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="border-blue0 text-blue0 hover:bg-blue0 dark:border-blue0 dark:text-blue0 dark:hover:bg-blue0/20"
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={handleDeleteAll}
+                              disabled={isLoading}
+                            >
+                              {isLoading ? "Deleting..." : "Delete All"}
+                            </Button>
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                </div>
                 {isLoading ? (
-                  <p className="text-gray-500">Loading notifications...</p>
+                  <p className="text-blue0 dark:text-blue0">
+                    Loading notifications...
+                  </p>
                 ) : notifications.length === 0 ? (
-                  <p className="text-gray-500">No notifications found.</p>
+                  <p className="text-blue0 dark:text-blue0">
+                    No notifications found.
+                  </p>
                 ) : (
                   <div className="space-y-4">
                     {notifications.map((notification) => (
                       <div
                         key={notification.id}
-                        className="border rounded-lg overflow-hidden"
+                        className="border border-blue0 dark:border-blue0 rounded-lg overflow-hidden"
                       >
-                        <div className="p-4 bg-gray-50 dark:bg-gray-800 border-b flex items-center justify-between">
+                        <div className="p-4 bg-blue dark:bg-blue0/20 border-b border-blue0 dark:border-blue0 flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Avatar className="h-8 w-8">
-                              <AvatarFallback className="bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
+                              <AvatarFallback className="bg-blue0 text-blue0 dark:bg-blue0 dark:text-blue0">
                                 {notification.creator?.name?.charAt(0) || "A"}
                               </AvatarFallback>
                             </Avatar>
                             <div>
-                              <p className="font-medium">
-                                {notification.creator?.name || "Unknown Admin"}
+                              <p className="font-medium text-blue0 dark:text-blue0">
+                                {notification.creator?.name || "Admin"}
                               </p>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs text-blue0 dark:text-blue0">
                                 {notification.scheduled &&
                                 notification.scheduledDate
                                   ? format(
-                                      notification.scheduledDate,
+                                      new Date(notification.scheduledDate),
                                       "MMM d, yyyy"
                                     )
                                   : format(
-                                      notification.createdAt,
+                                      new Date(notification.createdAt),
                                       "MMM d, yyyy"
                                     )}
                               </p>
@@ -573,7 +751,7 @@ export default function NotificationModal({
                             {notification.isPriority && (
                               <Badge
                                 variant="outline"
-                                className="bg-red-50 text-red-600 border-red-200"
+                                className="bg-red-50 text-red-600 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-700"
                               >
                                 Priority
                               </Badge>
@@ -582,11 +760,11 @@ export default function NotificationModal({
                               variant="outline"
                               className={cn(
                                 notification.type === "info" &&
-                                  "bg-blue-50 text-blue-600 border-blue-200",
+                                  "bg-blue text-blue0 border-blue0 dark:bg-blue0/20 dark:text-blue0 dark:border-blue0",
                                 notification.type === "warning" &&
-                                  "bg-amber-50 text-amber-600 border-amber-200",
+                                  "bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-700",
                                 notification.type === "success" &&
-                                  "bg-green-50 text-green-600 border-green-200"
+                                  "bg-green-50 text-green-600 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-700"
                               )}
                             >
                               {notification.type.charAt(0).toUpperCase() +
@@ -605,10 +783,10 @@ export default function NotificationModal({
                               {getNotificationIcon(notification.type)}
                             </div>
                             <div>
-                              <p className="whitespace-pre-wrap">
+                              <p className="whitespace-pre-wrap text-blue0 dark:text-blue0">
                                 {notification.message}
                               </p>
-                              <p className="text-sm text-gray-500 mt-2">
+                              <p className="text-xs text-blue0 dark:text-blue0 mt-2">
                                 Audience:{" "}
                                 {notification.targetAudience.join(", ") ||
                                   "All"}
@@ -616,7 +794,15 @@ export default function NotificationModal({
                             </div>
                           </div>
                         </div>
-                        <div className="p-4 bg-gray-50 dark:bg-gray-900 border-t flex justify-end gap-2">
+                        <div className="p-4 bg-blue dark:bg-blue0/20 border-t border-blue0 dark:border-blue0 flex justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEdit(notification)}
+                            className="border-blue0 text-blue0 hover:bg-blue0 dark:border-blue0 dark:text-blue0 dark:hover:bg-blue0/20"
+                          >
+                            Edit
+                          </Button>
                           <Popover
                             open={deleteConfirmOpen === notification.id}
                             onOpenChange={(open) =>
@@ -637,15 +823,15 @@ export default function NotificationModal({
                                   : "Delete"}
                               </Button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-[300px] p-4 popover-content">
+                            <PopoverContent className="w-[300px] p-4 popover-content bg-white dark:bg-gray-900">
                               <div className="space-y-4">
                                 <div className="flex items-center gap-2">
                                   <AlertTriangle className="h-5 w-5 text-amber-500" />
-                                  <h4 className="font-semibold">
+                                  <h4 className="font-semibold text-blue0 dark:text-blue0">
                                     Confirm Deletion
                                   </h4>
                                 </div>
-                                <p className="text-sm text-gray-600 dark:text-gray-300">
+                                <p className="text-sm text-blue0 dark:text-blue0">
                                   Are you sure you want to delete this
                                   notification? This action cannot be undone.
                                 </p>
@@ -654,6 +840,7 @@ export default function NotificationModal({
                                     variant="outline"
                                     size="sm"
                                     onClick={() => setDeleteConfirmOpen(null)}
+                                    className="border-blue0 text-blue0 hover:bg-blue0 dark:border-blue0 dark:text-blue0 dark:hover:bg-blue0/20"
                                   >
                                     Cancel
                                   </Button>
@@ -680,14 +867,18 @@ export default function NotificationModal({
             </TabsContent>
           </Tabs>
 
-          <div className="flex justify-end gap-2 p-4 border-t bg-gray-50 dark:bg-gray-900">
-            <Button variant="outline" onClick={closeModal}>
+          <div className="flex justify-end gap-2 p-4 border-t border-blue0 dark:border-blue0 bg-blue dark:bg-blue0/20">
+            <Button
+              variant="outline"
+              onClick={closeModal}
+              className="border-blue0 text-blue0 hover:bg-blue0 dark:border-blue0 dark:text-blue0 dark:hover:bg-blue0/20"
+            >
               Cancel
             </Button>
             <Button
               onClick={handleSubmit}
-              disabled={!message.trim() || isLoading}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              disabled={!message.trim() || isLoading || !creator}
+              className="bg-blue0 hover:bg-blue0 text-white disabled:bg-blue0 dark:disabled:bg-blue0"
             >
               {isLoading ? (
                 <>

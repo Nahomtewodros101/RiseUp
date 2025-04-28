@@ -19,11 +19,50 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params;
-  const notification = await prisma.notification.delete({ where: { id } });
-  return NextResponse.json(notification);
+  const { id } = await params;
+
+  console.log("Received DELETE request for id:", id, "URL:", request.url);
+
+  try {
+    if (!id || typeof id !== "string") {
+      return NextResponse.json(
+        { error: "Invalid notification ID" },
+        { status: 400 }
+      );
+    }
+
+    const notification = await prisma.notification.findUnique({
+      where: { id },
+    });
+
+    if (!notification) {
+      return NextResponse.json(
+        { error: "Notification not found" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.notification.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({
+      message: "Notification deleted successfully",
+    });
+  } catch (error) {
+    console.error("Failed to delete notification:", error);
+    return NextResponse.json(
+      {
+        error: "Failed to delete notification",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 export async function PATCH(

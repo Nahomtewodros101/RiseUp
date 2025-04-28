@@ -1,3 +1,4 @@
+// src/components/console/projects/ProjectForm.tsx
 "use client";
 
 import { useState } from "react";
@@ -50,6 +51,9 @@ const projectFormSchema = z.object({
 
 type ProjectFormValues = z.infer<typeof projectFormSchema> & {
   id?: string;
+  createdAt?: Date;
+  // Add other Prisma fields if necessary (e.g., tags or custom fields)
+  tags?: string[];
 };
 
 interface ProjectFormProps {
@@ -80,6 +84,9 @@ export default function ProjectForm({
       projectType: "website",
       testimonial: "",
       featured: false,
+      id: undefined,
+      createdAt: undefined,
+      tags: [],
     },
   });
 
@@ -230,9 +237,9 @@ export default function ProjectForm({
                           <SelectItem value="app">App</SelectItem>
                           <SelectItem value="ui-ux">UI/UX</SelectItem>
                           <SelectItem value="cloud-services">
-                            Cloud services
+                            Cloud Services
                           </SelectItem>
-                          <SelectItem value="dev-ops">Dev Ops</SelectItem>
+                          <SelectItem value="dev-ops">DevOps</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

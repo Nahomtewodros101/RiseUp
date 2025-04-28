@@ -4,7 +4,7 @@ import prisma from "@/lib/db";
 import { authMiddleware } from "@/lib/auth";
 
 const teamMemberSchema = z.object({
-  id: z.string().optional(), 
+  id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   role: z.string().min(1, "Role is required"),
   bio: z.string().min(1, "Bio is required"),
@@ -14,30 +14,53 @@ const teamMemberSchema = z.object({
     linkedin: z.string().optional(),
     github: z.string().optional(),
   }),
+  skills: z.array(z.string()).optional(), 
   isActive: z.boolean().default(true),
   order: z.number().int().default(0),
 });
 
 export async function GET() {
   try {
-    const teamMembers = await prisma.teamMember.findMany({});
-
-    return NextResponse.json(teamMembers);
+    const teamMembers = await prisma.teamMember.findMany({
+      orderBy: { order: "asc" },
+      select: {
+        id: true,
+        name: true,
+        role: true,
+        bio: true,
+        image: true,
+        isActive: true,
+        skills: true, // Explicitly include skills
+        socialLinks: true,
+        order: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+    console.log("API /team response:", teamMembers); // Debug: Log the response
+    return NextResponse.json(teamMembers, {
+      headers: {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    });
   } catch (error) {
-    console.error("Failed to fetch team members:", error);
+    console.error("Error fetching team members:", error);
     return NextResponse.json(
       { error: "Failed to fetch team members" },
       { status: 500 }
     );
   }
 }
+
 export async function POST(req: NextRequest) {
   const authError = await authMiddleware(req, ["admin"]);
   if (authError) return authError;
 
   try {
     const body = await req.json();
-    console.log("Received body:", body); 
+    console.log("Received body:", body);
 
     const validatedData = teamMemberSchema.safeParse(body);
 

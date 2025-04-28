@@ -3,7 +3,6 @@ import { z } from "zod";
 import prisma from "@/lib/db";
 import { authMiddleware } from "@/lib/auth";
 
-// Project schema for validation
 const projectSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
@@ -13,17 +12,71 @@ const projectSchema = z.object({
   images: z.array(z.string()),
   projectType: z.enum(["website", "app", "ui-design"]),
   testimonial: z.string().optional(),
-  featured: z.boolean().default(false),
+  isFeatured: z.boolean().default(false),
 });
 
-// GET all projects
-export async function GET() {
+import { Project } from "@/types";
+const normalizeProjectType = (
+  type: string
+): "Website" | "App" | "UI/UX" | "Other" => {
+  switch (type.toLowerCase()) {
+    case "website":
+      return "Website";
+    case "app":
+      return "App";
+    case "ui-design":
+      return "UI/UX";
+    default:
+      return "Other";
+  }
+};
+
+// GET all projects or filtered projects
+export async function GET(req: NextRequest) {
   try {
-    const projects = await prisma.project.findMany({
-      orderBy: { createdAt: "desc" },
+    const { searchParams } = new URL(req.url);
+    const projectType = searchParams.get("projectType");
+    const techStack = searchParams.getAll("techStack");
+    const featured = searchParams.get("featured") === "true";
+
+    const Projects = await prisma.project.findMany({
+      where: {
+        ...(featured ? { featured: true } : {}), // Filter by featured if true
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        thumbnail: true,
+        techStack: true,
+        link: true,
+        projectType: true,
+        featured: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
-    return NextResponse.json(projects);
+    // Filter projects
+    let filteredProjects = Projects;
+
+    // Filter by projectType
+    if (projectType && projectType !== "All") {
+      filteredProjects = filteredProjects.filter(
+        (project) => project.projectType === projectType
+      );
+    }
+
+    // Filter by techStack
+    if (techStack.length > 0) {
+      filteredProjects = filteredProjects.filter((project) =>
+        techStack.every((tech) => project.techStack.includes(tech))
+      );
+    }
+
+    return NextResponse.json(filteredProjects);
   } catch (error) {
     console.error("Failed to fetch projects:", error);
     return NextResponse.json(
@@ -33,14 +86,11 @@ export async function GET() {
   }
 }
 
-// POST new project
 export async function POST(req: NextRequest) {
-  // Check authentication
   const authError = await authMiddleware(req, ["admin"]);
   if (authError) return authError;
 
   try {
-    // Parse and validate request body
     const body = await req.json();
     const validatedData = projectSchema.safeParse(body);
 
@@ -51,7 +101,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Create new project
     const project = await prisma.project.create({
       data: validatedData.data,
     });
@@ -66,14 +115,11 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PUT update project
 export async function PUT(req: NextRequest) {
-  // Check authentication
   const authError = await authMiddleware(req, ["admin"]);
   if (authError) return authError;
 
   try {
-    // Parse and validate request body
     const body = await req.json();
     const validatedData = projectSchema.safeParse(body);
 
@@ -84,7 +130,6 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    // Update project
     const project = await prisma.project.update({
       where: { id: body.id },
       data: validatedData.data,
@@ -94,9 +139,8 @@ export async function PUT(req: NextRequest) {
   } catch (error) {
     console.error("Failed to update project:", error);
     return NextResponse.json(
-      { error: " hmm Failed to update project" },
+      { error: "Failed to update project" },
       { status: 500 }
     );
   }
 }
-

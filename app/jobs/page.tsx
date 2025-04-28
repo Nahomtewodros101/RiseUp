@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -51,7 +50,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
-
 interface ServiceCardProps {
   icon: ReactNode;
   title: string;
@@ -86,7 +84,6 @@ interface UserType {
   role: "user" | "admin";
 }
 
-// Job Application Button Component
 function JobApplicationButton({ selectedJob }: { selectedJob: Job | null }) {
   const [user, setUser] = useState<UserType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -177,7 +174,6 @@ export default function JobsPage() {
 
     let result = [...jobs];
 
-    // Apply search filter
     if (searchQuery) {
       result = result.filter(
         (job) =>
@@ -186,12 +182,10 @@ export default function JobsPage() {
       );
     }
 
-    // Apply department filter
     if (departmentFilter !== "all") {
       result = result.filter((job) => job.department === departmentFilter);
     }
 
-    // Apply location filter
     if (locationFilter !== "all") {
       result = result.filter((job) => job.location.includes(locationFilter));
     }
@@ -199,7 +193,6 @@ export default function JobsPage() {
     setFilteredJobs(result);
   }, [searchQuery, departmentFilter, locationFilter, jobs, activeTab]);
 
-  // Get unique departments and locations for filters
   const departments = Array.from(new Set(jobs.map((job) => job.department)));
   const locations = Array.from(
     new Set(
@@ -232,13 +225,17 @@ export default function JobsPage() {
             </h1>
             <p className="max-w-[700px] text-black/40 font-semibold md:text-xl text-center animate-pulse leading-relaxed">
               <br />
-              Whether you are looking to <span>join our team</span> or{" "}
+              Whether you are looking to <span>join our team</span> or
               <span>hire our experts</span> <br />
               <span className="text-blue-600">
                 <Link href="/">Qmem Tech</Link>
-              </span>{" "}
-              is here to help you achieve your goals.
+              </span>
+              <br />
+              Will gladly help you achieve your goals.
             </p>
+            <Button onClick={() => window.history.back()}>
+              Not feeling like it?
+            </Button>
           </div>
         </div>
       </section>
@@ -386,6 +383,14 @@ export default function JobsPage() {
                   </CardContent>
                 </Card>
               )}
+              <blockquote className="mt-6 border-l-2 pl-6 italic text-blue-600 animate-pulse">
+                Your time is limited, so do not waste it working for someone who
+                do not want you to evolve into the best version of yourself.{" "}
+                <br />
+                <footer className="mt-2 text-sm not-italic text-right">
+                  — qmem
+                </footer>
+              </blockquote>
             </div>
           </TabsContent>
         </Tabs>
@@ -506,7 +511,6 @@ export default function JobsPage() {
   );
 }
 
-// Job Card Component
 function JobCard({ job, onClick }: { job: Job; onClick: () => void }) {
   const postedDate = new Date(job.createdAt);
   const formattedDate = format(postedDate, "MMM d, yyyy");
@@ -562,7 +566,6 @@ function JobCard({ job, onClick }: { job: Job; onClick: () => void }) {
   );
 }
 
-// ===== Client Services Component =====
 function ClientServices() {
   return (
     <div className="space-y-16">
@@ -689,15 +692,15 @@ function ClientServices() {
             </div>
           ))}
         </div>
-        <h1 className="mt-16 text-4xl font-extrabold text-center text-transparent bg-clip-text bg-blue-600 animate-pulse drop-shadow-lg">
+        <blockquote className="mt-6 border-l-2 text-lg pl-6 italic text-blue-600 animate-pulse">
           Your software is only as brilliant as the genius behind it.
-        </h1>
+          <footer className="mt-2 text-lg not-italic text-right">— qmem</footer>
+        </blockquote>
       </section>
     </div>
   );
 }
 
-// ===== Service Card Component =====
 function ServiceCard({ icon, title, description }: ServiceCardProps) {
   return (
     <Card className="border-black hover:border-blue-600 hover:shadow-md transition-all">
@@ -710,7 +713,6 @@ function ServiceCard({ icon, title, description }: ServiceCardProps) {
   );
 }
 
-// ===== Join Team Component =====
 function JoinTeam() {
   return (
     <div className="space-y-16">
@@ -822,7 +824,6 @@ function JoinTeam() {
   );
 }
 
-// ===== Benefit Card Component =====
 function BenefitCard({ icon, title, description }: BenefitCardProps) {
   return (
     <div className="flex items-start gap-3">

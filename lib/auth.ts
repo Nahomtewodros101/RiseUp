@@ -1,9 +1,8 @@
+// app/utils/auth.ts
 import { type NextRequest, NextResponse } from "next/server";
 import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 import { z } from "zod";
-import {
-  getAuthCookie,
-} from "@/app/utils/authCookies";
+import { cookies } from "next/headers";
 
 // User types
 export type UserRole = "user" | "admin";
@@ -13,14 +12,13 @@ export interface UserJwtPayload {
   email: string;
   role: UserRole;
   name: string;
+  profileImage?: string;
 }
 
-// Environment variables validation
 const envSchema = z.object({
   JWT_SECRET: z.string().min(1),
 });
 
-// Validate environment variables
 function getEnv() {
   const env = envSchema.safeParse({
     JWT_SECRET: process.env.JWT_SECRET,
@@ -35,6 +33,11 @@ function getEnv() {
   return env.data;
 }
 
+export async function getAuthCookie(): Promise<string | undefined> {
+  const cookieStore = await cookies();
+  return cookieStore.get("auth-token")?.value;
+}
+
 // Sign JWT token
 export async function signJwtToken(payload: UserJwtPayload): Promise<string> {
   const { JWT_SECRET } = getEnv();
@@ -42,7 +45,7 @@ export async function signJwtToken(payload: UserJwtPayload): Promise<string> {
   const token = await new SignJWT(payload as unknown as JWTPayload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("7d") 
+    .setExpirationTime("7d")
     .sign(new TextEncoder().encode(JWT_SECRET));
 
   return token;
@@ -97,19 +100,16 @@ export async function getCurrentUser(): Promise<UserJwtPayload | null> {
   }
 }
 
-// Check if user is authenticated
 export async function isAuthenticated(): Promise<boolean> {
   const user = await getCurrentUser();
   return user !== null;
 }
 
-// Check if user is admin
 export async function isAdmin(): Promise<boolean> {
   const user = await getCurrentUser();
   return user !== null && user.role === "admin";
 }
 
-// Auth middleware for API routes
 export async function authMiddleware(
   req: NextRequest,
   allowedRoles: UserRole[] = ["user", "admin"]
@@ -136,5 +136,5 @@ export async function authMiddleware(
     );
   }
 
-  return null; // No error, proceed
+  return null;
 }

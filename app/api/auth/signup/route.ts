@@ -8,11 +8,12 @@ const signupSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
+  profileImage: z.string().optional(), 
 });
 
 export async function POST(req: NextRequest) {
   try {
-    // Parse and validate request body
+    
     const body = await req.json();
     const validatedData = signupSchema.safeParse(body);
 
@@ -46,11 +47,11 @@ export async function POST(req: NextRequest) {
         name,
         email,
         password: hashedPassword,
-        role: "user", // Default role is user
+        role: "user", 
+        profileImage: body.profileImage || null,
       },
     });
 
-    // Return user data (excluding password)
     return NextResponse.json(
       {
         user: {
@@ -58,6 +59,7 @@ export async function POST(req: NextRequest) {
           email: user.email,
           name: user.name,
           role: user.role,
+          profileImage: user.profileImage,
         },
       },
       { status: 201 }

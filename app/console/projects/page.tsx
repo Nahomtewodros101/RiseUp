@@ -82,7 +82,7 @@ export default function ProjectsPage() {
   const [projectTypeFilter, setProjectTypeFilter] = useState("all");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"table" | "grid">("grid"); 
+  const [viewMode, setViewMode] = useState<"table" | "grid">("grid");
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export default function ProjectsPage() {
         const data = await response.json();
         setProjects(data);
         setIsLoading(false);
-        console.log("Fetched projects:", setSelectedProject); 
+        console.log("Fetched projects:", setSelectedProject);
       } catch (error) {
         console.error("Error fetching projects:", error);
         setIsLoading(false);
@@ -172,13 +172,14 @@ export default function ProjectsPage() {
     }
   };
 
-  // Open project preview
-
+  // O
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold text-black tracking-tight">Projects</h2>
+        <h2 className="text-3xl font-bold text-black tracking-tight">
+          Projects
+        </h2>
         <div className="flex gap-2">
           <TooltipProvider>
             <Tooltip>
@@ -221,7 +222,7 @@ export default function ProjectsPage() {
       </div>
 
       {/* Filters */}
-      <Card className="bg-blue-50">
+      <Card className="bg-blue-50dark:bg-blue-900/50 border border-blue-200 dark:border-blue-800 shadow-sm">
         <CardContent className="p-4">
           <div className="flex flex-col gap-4 md:flex-row md:items-center">
             <div className="relative flex-1">
@@ -246,7 +247,7 @@ export default function ProjectsPage() {
                   <SelectItem value="all">All Types</SelectItem>
                   <SelectItem value="website">Website</SelectItem>
                   <SelectItem value="app">App</SelectItem>
-                  <SelectItem value="ui-design">UI Design</SelectItem>
+                  <SelectItem value="ui/ux">UI Design</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -398,9 +399,9 @@ export default function ProjectsPage() {
                     project.thumbnail || "/placeholder.svg?height=192&width=384"
                   }
                   alt={project.title}
-                  fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  fill
                 />
                 {project.featured && (
                   <div className="absolute top-2 right-2">

@@ -9,6 +9,7 @@ import {
   Database,
   Globe,
   Layers,
+  SubscriptIcon,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,11 +24,13 @@ import CountUp from "react-countup";
 import { Card, CardContent } from "../components/ui/card";
 import Image from "next/image";
 import WhyChooseUsSection from "../components/WhyChooseUS";
+
 export default function Home() {
   const [isContentReady, setIsContentReady] = useState(false);
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const chelicho = "$";
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -67,14 +70,14 @@ export default function Home() {
       <Navbar />
       <main className="flex-1">
         {/* Welcome Banner */}
-        <div className="container px-4 md:px-6 pt-8">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 pt-8">
           <WelcomeBanner />
         </div>
 
         {/* Enhanced Hero Section with Parallax */}
         <section className="relative overflow-hidden py-20 md:py-32 bg-transparent">
           <div className="absolute inset-0 bg-[url('/subtle-pattern.png')] bg-cover bg-center animate-parallax opacity-20" />
-          <div className="container px-4 md:px-6 relative z-10">
+          <div className="max-w-7xl mx-auto px-4 md:px-6 relative z-10">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-28 xl:grid-cols-[1fr_600px]">
               <motion.div
                 className="flex flex-col justify-center space-y-4"
@@ -148,8 +151,8 @@ export default function Home() {
         </section>
 
         {/* Featured Projects Section */}
-        <section className="py-20 bg-transparent dark:bg-blue-900/20">
-          <div className="flex-col justify-center items-center w-full px-4 md:px-6">
+        <section className="py-20 px-20 bg-transparent dark:bg-blue-900/20">
+          <div className="max-w-7xl mx-auto px-4 md:px-6">
             <motion.div
               className="text-center"
               initial={{ opacity: 0, y: 20 }}
@@ -160,7 +163,7 @@ export default function Home() {
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-blue-700 dark:text-blue-300">
                 Featured Projects
               </h2>
-              <p className="max-w-[600px] mx-auto mt-4 text-gray-600 dark:text-gray-300">
+              <p className="max-w-[600px] mx-auto mt-4 text-xl text-gray-600 dark:text-gray-300">
                 Check out some of our latest and greatest work.
               </p>
             </motion.div>
@@ -174,29 +177,29 @@ export default function Home() {
                 <p>Sorry! No projects to show currently.</p>
               </div>
             ) : (
-              <div className="w-full flex justify-center items-center px-4 md:px-6">
-                <div className="mt-12">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                    {featuredProjects.map((project) => (
-                      <motion.div
-                        key={project.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2, duration: 0.5 }}
-                        viewport={{ once: true }}
-                      >
-                        <ProjectCard {...project} />
-                      </motion.div>
-                    ))}
-                  </div>
+              <div className="mt-12 ">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-6">
+                  {featuredProjects.map((project) => (
+                    <motion.div
+                      key={project.id}
+                      className="w-full  max-w-[300px] mx-auto"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2, duration: 0.5 }}
+                      viewport={{ once: true }}
+                    >
+                      <ProjectCard {...project} />
+                    </motion.div>
+                  ))}
                 </div>
               </div>
             )}
           </div>
         </section>
+
         {/* Services Section */}
         <section className="bg-transparent dark:bg-blue-900/20 py-20">
-          <div className="container px-4 md:px-6">
+          <div className="max-w-7xl mx-auto px-4 md:px-6">
             <motion.div
               className="flex flex-col items-center justify-center space-y-4 text-center"
               initial={{ opacity: 0, y: 20 }}
@@ -281,12 +284,15 @@ export default function Home() {
             </div>
           </div>
         </section>
+
         {/* Why Choose Us Section */}
-        <WhyChooseUsSection />
+        <section className="max-w-7xl mx-auto px-4 md:px-6 py-20">
+          <WhyChooseUsSection />
+        </section>
 
         {/* Stats Counter Section */}
         <section className="py-20 bg-transparent dark:bg-blue-800/50">
-          <div className="container px-4 md:px-6">
+          <div className="max-w-7xl mx-auto px-4 md:px-6">
             <motion.div
               className="text-center mb-12"
               initial={{ opacity: 0, y: 20 }}
@@ -294,19 +300,20 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-blue-800 dark:text-blue-300">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-blue-600 dark:text-blue-300">
                 Our Impact in Numbers
               </h2>
-              <p className="max-w-[600px] mx-auto mt-4 text-gray-600 dark:text-blue-200">
-                We’re proud of the milestones we’ve achieved with our clients.
+              <p className="max-w-[600px] mx-auto mt-4 text-xl text-gray-600 dark:text-blue-200">
+                We are proud of the milestones we have achieved with our
+                clients.
               </p>
             </motion.div>
             <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
               {[
-                { label: "Projects Completed", value: 30, suffix: "+" },
-                { label: "Happy Clients", value: 20, suffix: "+" },
-                { label: "Years of Experience", value: 6, suffix: "+" },
-                { label: "Team Members", value: 6, suffix: "+" },
+                { label: "Projects Completed", value: 95, suffix: "+" },
+                { label: "Happy Clients", value: 400, suffix: "+" },
+                { label: "Years of Experience", value: 10, suffix: "+" },
+                { label: "Market Place Revenue", value: 50000, suffix: "$" },
               ].map((stat, index) => (
                 <motion.div
                   key={index}
@@ -320,7 +327,7 @@ export default function Home() {
                   }}
                   viewport={{ once: true }}
                 >
-                  <p className="text-4xl font-bold text-blue-800 dark:text-blue-300">
+                  <p className="text-4xl font-bold text-blue-600 dark:text-blue-300">
                     <CountUp start={0} end={stat.value} duration={2.5} />
                     {stat.suffix}
                   </p>
@@ -336,18 +343,18 @@ export default function Home() {
         {/* Testimonials Section */}
         <section
           id="testimonials"
-          className="w-full py-12 md:py-24 lg:py-32 bg-blue-600"
+          className="w-full py-12 md:py-24 lg:py-32 bg-transparent dark:bg-blue-900/20"
         >
-          <div className="container px-4 md:px-6">
+          <div className="max-w-7xl mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-white px-3 py-1 text-sm text-black">
+                <div className="inline-block rounded-lg bg-blue-600 px-3 py-1 text-sm text-white">
                   Testimonials
                 </div>
-                <h2 className="text-3xl text-white font-bold tracking-tighter md:text-4xl">
+                <h2 className="text-3xl text-blue-600 font-bold tracking-tighter md:text-4xl">
                   What Our Clients Say
                 </h2>
-                <p className="max-w-[900px] text-white md:text-xl">
+                <p className="max-w-[900px] text-gray-600 md:text-xl">
                   Don not just take our word for it. Here is what our clients
                   have to say about working with us.
                 </p>
@@ -357,21 +364,21 @@ export default function Home() {
               {[
                 {
                   name: "Sarah Johnson",
-                  role: "CEO, TechStart",
+                  role: "CEO, Lead Gen Ethiopia",
                   quote:
                     "Working with Qmem Tech transformed our business. Their team delivered a solution that exceeded our expectations and helped us scale rapidly.",
                   image: "/person-1.jpg",
                 },
                 {
                   name: "Michael Chen",
-                  role: "CTO, GrowthLabs",
+                  role: "CTO, Moon Studios",
                   quote:
                     "The team at Qmem Tech is exceptional. They understood our complex requirements and delivered a robust platform that our users love.",
                   image: "/person-2.jpg",
                 },
                 {
                   name: "Emily Rodriguez",
-                  role: "Founder, DataDrive",
+                  role: "Founder, One Planet",
                   quote:
                     "Qmem Tech data analytics solution gave us insights we never had before. It's been a game-changer for our decision-making process.",
                   image: "/person-3.jpg",
@@ -395,7 +402,7 @@ export default function Home() {
                       ))}
                     </div>
                     <p className="text-gray-500 italic">
-                      &qout;{testimonial.quote}&qout;
+                      "{testimonial.quote}"
                     </p>
                     <div className="flex items-center gap-4">
                       <div className="rounded-full bg-sky-100 w-12 h-12 flex items-center justify-center">
@@ -421,18 +428,18 @@ export default function Home() {
           </div>
         </section>
 
-        {/*  Our Partners Section */}
+        {/* Our Partners Section */}
         <section
           id="partners"
-          className="w-full py-12 md:py-24 lg:py-32 bg-gray-100"
+          className="w-full py-12 md:py-24 lg:py-32 bg-transparent dark:bg-blue-900/20"
         >
-          <div className="container px-4 md:px-6">
+          <div className="max-w-7xl mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-blue-600 px-3 py-1 text-sm text-white">
                   Our Partners
                 </div>
-                <h2 className="text-3xl text-black font-bold tracking-tighter md:text-4xl">
+                <h2 className="text-3xl text-blue-600 font-bold tracking-tighter md:text-4xl">
                   Trusted by Industry Leaders
                 </h2>
                 <p className="max-w-[900px] text-gray-600 md:text-xl">
@@ -443,18 +450,19 @@ export default function Home() {
             </div>
             <div className="relative mt-12 overflow-hidden">
               {/* Gradient overlays for fade effect */}
-              <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-gray-100 to-transparent z-10"></div>
-              <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-gray-100 to-transparent z-10"></div>
+              <div className="absolute inset-y-0 right-0 w-16 bg-transparent z-10"></div>
               {/* Infinite scrolling container */}
               <div className="flex animate-scroll">
                 <div className="flex shrink-0">
                   {[
-                    { logo: "/cbe.png", name: "Commercial bank of ethiopia" },
+                    { logo: "/cbe.png", name: "Commercial bank" },
                     { logo: "/luxx.png", name: "LuxxOds" },
                     { logo: "/lead.webp", name: "Lead Gen Ethiopia" },
                     { logo: "/moon.png", name: "Moon Studios" },
                     { logo: "/planet.png", name: "One Planet" },
                     { logo: "/real.png", name: "Nolan Realestate" },
+                    { logo: "/upwrk.png", name: "Upwork Business Clients" },
+                    { logo: "/fvr.png", name: "Fiver Business Clients" },
                   ].map((partner, index) => (
                     <div
                       key={index}
@@ -463,7 +471,7 @@ export default function Home() {
                       <Image
                         src={partner.logo}
                         alt={`${partner.name} logo`}
-                        className="max-h-16 rounded-full w-auto object-contain"
+                        className="max-h-16 rounded-md w-auto object-contain"
                         width={160}
                         height={80}
                       />
@@ -490,7 +498,7 @@ export default function Home() {
                       <Image
                         src={partner.logo}
                         alt={`${partner.name} logo`}
-                        className="max-h-16  rounded-full w-auto object-contain"
+                        className="max-h-16 rounded-full w-auto object-contain"
                         width={160}
                         height={80}
                       />
@@ -507,7 +515,7 @@ export default function Home() {
 
         {/* Blog Teaser Section */}
         <section className="py-20 bg-transparent dark:bg-blue-900/30">
-          <div className="container px-4 md:px-6">
+          <div className="max-w-7xl mx-auto px-4 md:px-6">
             <motion.div
               className="text-center mb-12"
               initial={{ opacity: 0, y: 20 }}
@@ -582,8 +590,8 @@ export default function Home() {
         </section>
 
         {/* Enhanced CTA Section with Newsletter */}
-        <section className="bg-gradient-to-r from-blue-500 to-blue-700 dark:from-blue-700 dark:to-blue-900 py-20 text-white">
-          <div className="container px-4 md:px-6">
+        <section className="bg-transparent dark:to-blue-900 py-20 text-blue-600 dark:text-blue-200">
+          <div className="max-w-7xl mx-auto px-4 md:px-6">
             <motion.div
               className="flex flex-col items-center justify-center space-y-6 text-center"
               initial={{ opacity: 0, y: 20 }}
@@ -593,19 +601,15 @@ export default function Home() {
             >
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                  Let’s Build Something Amazing
+                  Let us Build Something Amazing
                 </h2>
-                <p className="max-w-[600px] text-blue-100 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Ready to transform your ideas? Contact us or join our
-                  newsletter for the latest tech insights.
+                <p className="max-w-[600px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Ready to transform your ideas? join our newsletter.
                 </p>
               </div>
               <div className="flex flex-col gap-4 min-[400px]:flex-row items-center">
                 <Link href="/contact">
-                  <Button
-                    size="lg"
-                    className="bg-white text-blue-600 hover:bg-gray-100"
-                  >
+                  <Button className="bg-blue-600 text-white hover:bg-blue-500 font-semibold py-3 px-8 rounded-full">
                     Contact Us
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -620,14 +624,15 @@ export default function Home() {
                   <input
                     type="email"
                     placeholder="Enter your email"
-                    className="px-4 py-2 rounded-lg text-gray-800 dark:text-gray-200 bg-white/80 dark:bg-blue-800/50 border border-blue-300 dark:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="px-4 py-2 rounded-lg text-gray-800 dark:text-gray-200 bg-white/80 dark:bg-blue-800/50 border border-blue-600 dark:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
                     required
                   />
                   <Button
                     type="submit"
-                    className="bg-blue-400 hover:bg-blue-500"
+                    className="bg-blue-600 text-white hover:bg-blue-500 font-semibold py-3 px-8 rounded-full"
                   >
                     Subscribe
+                    <SubscriptIcon className="ml-2 h-4 w-4" />
                   </Button>
                 </form>
               </div>

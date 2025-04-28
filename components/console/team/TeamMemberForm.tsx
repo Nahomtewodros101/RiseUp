@@ -63,7 +63,6 @@ export default function TeamMemberForm({
 
   const form = useForm<TeamMemberFormValues>({
     resolver: zodResolver(teamMemberFormSchema),
-    // Here, we are using type assertion to tell TypeScript that `initialData` is of the correct type.
     defaultValues: (initialData as TeamMemberFormValues) || {
       name: "",
       role: "",
@@ -153,6 +152,7 @@ export default function TeamMemberForm({
           <Card>
             <CardContent className="p-6">
               <div className="space-y-6">
+                {/* Name Field */}
                 <FormField
                   control={form.control}
                   name="name"
@@ -171,6 +171,7 @@ export default function TeamMemberForm({
                   )}
                 />
 
+                {/* Role Field */}
                 <FormField
                   control={form.control}
                   name="role"
@@ -189,6 +190,7 @@ export default function TeamMemberForm({
                   )}
                 />
 
+                {/* Bio Field */}
                 <FormField
                   control={form.control}
                   name="bio"
@@ -208,6 +210,78 @@ export default function TeamMemberForm({
                   )}
                 />
 
+                {/* Image Field */}
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Image URL</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="url"
+                          className="w-full"
+                          placeholder="Image URL"
+                          value={field.value ?? ""}
+                          disabled={isSubmitting}
+                          onChange={(e) => field.onChange(e.target.value)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Social Links */}
+                <FormField
+                  control={form.control}
+                  name="socialLinks"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Social Links</FormLabel>
+                      <FormControl>
+                        <div className="space-y-2">
+                          <Input
+                            placeholder="Twitter URL"
+                            value={field.value?.twitter || ""}
+                            onChange={(e) =>
+                              field.onChange({
+                                ...field.value,
+                                twitter: e.target.value,
+                              })
+                            }
+                            disabled={isSubmitting}
+                          />
+                          <Input
+                            placeholder="LinkedIn URL"
+                            value={field.value?.linkedin || ""}
+                            onChange={(e) =>
+                              field.onChange({
+                                ...field.value,
+                                linkedin: e.target.value,
+                              })
+                            }
+                            disabled={isSubmitting}
+                          />
+                          <Input
+                            placeholder="GitHub URL"
+                            value={field.value?.github || ""}
+                            onChange={(e) =>
+                              field.onChange({
+                                ...field.value,
+                                github: e.target.value,
+                              })
+                            }
+                            disabled={isSubmitting}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Skills Field */}
                 <FormField
                   control={form.control}
                   name="skills"
@@ -255,9 +329,8 @@ export default function TeamMemberForm({
                                     size="sm"
                                     className="h-4 w-4 p-0 text-white hover:text-red-300"
                                     onClick={() => handleRemoveSkill(skill)}
-                                    disabled={isSubmitting}
                                   >
-                                    <X className="h-3 w-3" />
+                                    <X className="h-4 w-4" />
                                   </Button>
                                 </Badge>
                               </motion.div>
@@ -265,60 +338,7 @@ export default function TeamMemberForm({
                           </AnimatePresence>
                         </div>
                       </FormControl>
-                      <FormDescription>
-                        Add one skill at a time. Each skill will be displayed as
-                        a vibrant badge.
-                      </FormDescription>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="order"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Display Order</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="0"
-                          value={field.value}
-                          onChange={(e) =>
-                            field.onChange(Number.parseInt(e.target.value) || 0)
-                          }
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Order in which team member appears
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="isActive"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                      <div className="space-y-0.5">
-                        <FormLabel className="text-base">
-                          Active Status
-                        </FormLabel>
-                        <FormDescription>
-                          Show this team member on the website
-                        </FormDescription>
-                      </div>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
                     </FormItem>
                   )}
                 />
@@ -327,8 +347,15 @@ export default function TeamMemberForm({
           </Card>
         </div>
 
+        {/* Submit Button */}
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? <Loader2 className="animate-spin" /> : "Save"}
+          {isSubmitting ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : isEditing ? (
+            "Update Team Member"
+          ) : (
+            "Add Team Member"
+          )}
         </Button>
       </form>
     </Form>

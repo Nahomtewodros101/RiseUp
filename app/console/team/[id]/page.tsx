@@ -345,7 +345,7 @@ export default function TeamMemberForm({
                         />
                       </FormControl>
                       <FormDescription>
-                        URL for the team member's profile image (optional)
+                        URL for the team members profile image (optional)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

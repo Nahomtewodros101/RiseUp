@@ -81,6 +81,7 @@ export default function NotificationModal({
       document.addEventListener("mousedown", handleClickOutside);
       fetchUser();
       fetchNotifications();
+      console.log("Fetching notifications...", isPreview);
     }
 
     return () => {

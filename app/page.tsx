@@ -30,7 +30,6 @@ export default function Home() {
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const chelicho = "$";
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -402,7 +401,7 @@ export default function Home() {
                       ))}
                     </div>
                     <p className="text-gray-500 italic">
-                      "{testimonial.quote}"
+                      {testimonial.quote}
                     </p>
                     <div className="flex items-center gap-4">
                       <div className="rounded-full bg-sky-100 w-12 h-12 flex items-center justify-center">

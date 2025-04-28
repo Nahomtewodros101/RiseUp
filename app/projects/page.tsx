@@ -40,7 +40,7 @@ export default function ProjectsPage() {
         }`;
         const response = await fetch(url);
         const data = await response.json();
-        setProjects(data); // Directly set the fetched data without normalization
+        setProjects(data); 
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching projects:", error);
@@ -60,11 +60,6 @@ export default function ProjectsPage() {
     "dev-ops",
   ];
 
-  const toggleTech = (tech: string) => {
-    setSelectedTech((prev) =>
-      prev.includes(tech) ? prev.filter((t) => t !== tech) : [...prev, tech]
-    );
-  };
 
   if (!isContentReady || isLoading) {
     return null;

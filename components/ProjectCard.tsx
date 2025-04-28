@@ -56,7 +56,7 @@ export default function ProjectCard({
 
         {testimonial && (
           <div className="mt-3 text-sm text-gray-700 dark:text-gray-300 italic">
-            <blockquote>"{testimonial}"</blockquote>
+            <blockquote>{testimonial}</blockquote>
           </div>
         )}
 

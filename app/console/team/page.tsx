@@ -487,7 +487,7 @@ export default function ConsoleTeamPage() {
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredTeamMembers.map((member, index) => (
+          {filteredTeamMembers.map((member) => (
             <Card
               key={member.id}
               className={`overflow-hidden ${
@@ -625,8 +625,8 @@ export default function ConsoleTeamPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the team member "
-              {memberToDelete?.name}". This action cannot be undone.
+              This will permanently delete the team member 
+              {memberToDelete?.name}. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

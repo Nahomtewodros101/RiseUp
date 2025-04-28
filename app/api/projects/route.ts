@@ -15,23 +15,8 @@ const projectSchema = z.object({
   isFeatured: z.boolean().default(false),
 });
 
-import { Project } from "@/types";
-const normalizeProjectType = (
-  type: string
-): "Website" | "App" | "UI/UX" | "Other" => {
-  switch (type.toLowerCase()) {
-    case "website":
-      return "Website";
-    case "app":
-      return "App";
-    case "ui-design":
-      return "UI/UX";
-    default:
-      return "Other";
-  }
-};
 
-// GET all projects or filtered projects
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -41,7 +26,7 @@ export async function GET(req: NextRequest) {
 
     const Projects = await prisma.project.findMany({
       where: {
-        ...(featured ? { featured: true } : {}), // Filter by featured if true
+        ...(featured ? { featured: true } : {}), 
       },
       select: {
         id: true,

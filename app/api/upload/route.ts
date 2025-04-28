@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import prisma from "@/lib/db";
 import { getCurrentUser, isAdmin } from "@/lib/auth";
 
-export const dynamic = "force-dynamic"; 
+export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   // Check if the user is an admin
   const isAdminUser = await isAdmin();
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
     return new Response(
       JSON.stringify({
         message: "Profile picture updated successfully",
-        profileImage: base64Image, 
+        profileImage: base64Image,
       }),
       {
         status: 200,
@@ -86,9 +86,10 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-// get Profile Image
+
 export async function GET(req: NextRequest) {
   const user = await getCurrentUser();
+  console.log("User not authenticated:", req.headers.get("user-agent"));
   if (!user || !user.id) {
     return new Response(JSON.stringify({ message: "User not authenticated" }), {
       status: 401,

@@ -115,7 +115,7 @@ export default function TeamPage() {
           {/* Team Grid */}
           {!isLoading && !error && (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {teamMembers.map((member, index) => (
+              {teamMembers.map((member) => (
                 <Card key={member.id} className="overflow-hidden">
                   <div className="relative aspect-square">
                     <Image

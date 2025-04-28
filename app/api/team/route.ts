@@ -30,14 +30,14 @@ export async function GET() {
         bio: true,
         image: true,
         isActive: true,
-        skills: true, // Explicitly include skills
+        skills: true, 
         socialLinks: true,
         order: true,
         createdAt: true,
         updatedAt: true,
       },
     });
-    console.log("API /team response:", teamMembers); // Debug: Log the response
+    console.log("API /team response:", teamMembers); 
     return NextResponse.json(teamMembers, {
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate",

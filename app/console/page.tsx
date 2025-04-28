@@ -41,21 +41,6 @@ export default function ConsoleDashboard() {
       }
     };
 
-    const fetchTeamMembers = async () => {
-      try {
-        const response = await fetch("/api/team");
-        if (!response.ok) throw new Error("Failed to fetch team members");
-        const data = await response.json();
-        setStats((prevStats) => ({
-          ...prevStats,
-          totalTeamMembers: data.length,
-          activeTeamMembers: data.filter((member: User) => member.isActive)
-            .length,
-        }));
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
     const fetchUsers = async () => {
       try {

@@ -1,4 +1,3 @@
-// src/components/console/team/TeamMemberForm.tsx
 "use client";
 
 import { useState } from "react";
@@ -25,12 +24,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Schema aligned with Prisma's TeamMember model
 const teamMemberFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   role: z.string().min(1, "Role is required"),
   bio: z.string().min(1, "Bio is required"),
-  image: z.string().nullable().optional(), // Allow string, null, or undefined
+  image: z.string().nullable().optional(), 
   socialLinks: z
     .object({
       twitter: z.string().nullable().optional(),
@@ -46,7 +44,7 @@ const teamMemberFormSchema = z.object({
 type TeamMemberFormValues = z.infer<typeof teamMemberFormSchema> & {
   id?: string;
   createdAt?: Date;
-  updatedAt?: Date; // Added to match Prisma field
+  updatedAt?: Date; 
 };
 
 interface TeamMemberFormProps {
@@ -69,7 +67,7 @@ export default function TeamMemberForm({
       name: "",
       role: "",
       bio: "",
-      image: "", // Default to empty string for form input
+      image: "", 
       socialLinks: {
         twitter: "",
         linkedin: "",

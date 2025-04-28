@@ -1,4 +1,3 @@
-// src/components/console/team/TeamMemberForm.tsx
 "use client";
 
 import { useState } from "react";
@@ -25,7 +24,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Schema aligned with Prisma's TeamMember model
 const teamMemberFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   role: z.string().min(1, "Role is required"),
@@ -54,13 +52,10 @@ interface TeamMemberFormProps {
   isEditing?: boolean;
 }
 
-// Explicitly type the component to avoid type inference issues
-import { FC } from "react";
-
-const TeamMemberForm: FC<TeamMemberFormProps> = ({
+export default function TeamMemberForm({
   initialData,
   isEditing = false,
-}) => {
+}: TeamMemberFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +63,8 @@ const TeamMemberForm: FC<TeamMemberFormProps> = ({
 
   const form = useForm<TeamMemberFormValues>({
     resolver: zodResolver(teamMemberFormSchema),
-    defaultValues: initialData || {
+    // Here, we are using type assertion to tell TypeScript that `initialData` is of the correct type.
+    defaultValues: (initialData as TeamMemberFormValues) || {
       name: "",
       role: "",
       bio: "",
@@ -329,120 +325,12 @@ const TeamMemberForm: FC<TeamMemberFormProps> = ({
               </div>
             </CardContent>
           </Card>
-
-          <div className="space-y-6">
-            <Card>
-              <CardContent className="p-6">
-                <FormField
-                  control={form.control}
-                  name="image"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Profile Image URL</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://example.com/image.jpg"
-                          {...field}
-                          value={field.value ?? ""}
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        URL for the team members profile image (optional)
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <FormField
-                  control={form.control}
-                  name="socialLinks.twitter"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Twitter</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://twitter.com/username"
-                          {...field}
-                          value={field.value ?? ""}
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="socialLinks.linkedin"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>LinkedIn</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://linkedin.com/in/username"
-                          {...field}
-                          value={field.value ?? ""}
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="socialLinks.github"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>GitHub</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="https://github.com/username"
-                          {...field}
-                          value={field.value ?? ""}
-                          disabled={isSubmitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
-          </div>
         </div>
 
-        <div className="flex justify-end gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push("/console/team")}
-            disabled={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {isEditing ? "Updating..." : "Creating..."}
-              </>
-            ) : (
-              <>{isEditing ? "Update Team Member" : "Create Team Member"}</>
-            )}
-          </Button>
-        </div>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? <Loader2 className="animate-spin" /> : "Save"}
+        </Button>
       </form>
     </Form>
   );
-};
-
-export default TeamMemberForm;
+}

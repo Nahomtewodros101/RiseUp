@@ -124,7 +124,7 @@ export default function ConsoleDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {isLoading ? "..." : "6"}
+              {isLoading ? "..." : ""}
             </div>
             <p className="text-xs text-muted-foreground">
               <TrendingUp className="inline h-3 w-3 text-green-500 mr-1" />

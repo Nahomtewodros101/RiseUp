@@ -168,7 +168,7 @@ function Page() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <Card className="container mx-auto shadow-sm bg-white dark:bg-gray-800 dark:border-gray-700">
-        <CardHeader className="bg-gradient-to-r from-sky-50 to-white dark:from-gray-800 dark:to-gray-700 border-b dark:border-gray-600">
+        <CardHeader className="bg-blue-50 dark:from-gray-800 dark:to-gray-700 border-b dark:border-gray-600">
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-2xl font-bold flex items-center gap-2 text-gray-900 dark:text-gray-100">

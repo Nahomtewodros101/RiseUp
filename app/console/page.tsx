@@ -2,13 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Users, FolderKanban, TrendingUp, UserCheck } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { User } from "@/types";
@@ -31,25 +25,35 @@ export default function ConsoleDashboard() {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    const fetchDashboardStats = async () => {
+    const fetchProjects = async () => {
       try {
-        const [projectRes, teamRes] = await Promise.all([
-          fetch("/api/projects"),
-          fetch("/api/team"),
-        ]);
-
-        const projectData = await projectRes.json();
-        const teamData = await teamRes.json();
-
-        setStats({
-          totalProjects: projectData.totalProjects || 0,
-          totalTeamMembers: teamData.totalTeamMembers || 0,
-          activeTeamMembers: teamData.activeTeamMembers || 0,
-        });
+        const response = await fetch("/api/projects");
+        if (!response.ok) throw new Error("Failed to fetch projects");
+        const data = await response.json();
+        setStats((prevStats) => ({
+          ...prevStats,
+          totalProjects: data.length,
+        }));
       } catch (error) {
-        console.error("Failed to fetch dashboard stats:", error);
+        console.error(error);
       } finally {
         setIsLoading(false);
+      }
+    };
+
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await fetch("/api/team");
+        if (!response.ok) throw new Error("Failed to fetch team members");
+        const data = await response.json();
+        setStats((prevStats) => ({
+          ...prevStats,
+          totalTeamMembers: data.length,
+          activeTeamMembers: data.filter((member: User) => member.isActive)
+            .length,
+        }));
+      } catch (error) {
+        console.error(error);
       }
     };
 
@@ -71,7 +75,7 @@ export default function ConsoleDashboard() {
       }
     };
 
-    fetchDashboardStats();
+    fetchProjects();
     fetchUsers();
   }, []);
 
@@ -120,7 +124,7 @@ export default function ConsoleDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {isLoading ? "..." : stats.totalTeamMembers}
+              {isLoading ? "..." : "6"}
             </div>
             <p className="text-xs text-muted-foreground">
               <TrendingUp className="inline h-3 w-3 text-green-500 mr-1" />
@@ -147,8 +151,6 @@ export default function ConsoleDashboard() {
           </CardContent>
         </Card>
       </div>
-
-   
 
       {/* System Status */}
       <div className="grid gap-4 md:grid-cols-2">

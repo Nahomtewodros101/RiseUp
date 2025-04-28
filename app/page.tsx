@@ -400,9 +400,7 @@ export default function Home() {
                         </svg>
                       ))}
                     </div>
-                    <p className="text-gray-500 italic">
-                      {testimonial.quote}
-                    </p>
+                    <p className="text-gray-500 italic">{testimonial.quote}</p>
                     <div className="flex items-center gap-4">
                       <div className="rounded-full bg-sky-100 w-12 h-12 flex items-center justify-center">
                         <Image
@@ -599,20 +597,20 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                <h2 className="text-3xl  font-bold tracking-tighter sm:text-4xl md:text-5xl">
                   Let us Build Something Amazing
                 </h2>
-                <p className="max-w-[600px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Ready to transform your ideas? join our newsletter.
-                </p>
-              </div>
-              <div className="flex flex-col gap-4 min-[400px]:flex-row items-center">
-                <Link href="/contact">
+                <Link href="/contact" className="inline-block">
                   <Button className="bg-blue-600 text-white hover:bg-blue-500 font-semibold py-3 px-8 rounded-full">
                     Contact Us
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
+                <p className="max-w-[600px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  Ready to transform your ideas? join our newsletter.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4 min-[400px]:flex-row items-center">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();

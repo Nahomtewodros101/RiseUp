@@ -597,7 +597,7 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <div className="space-y-2">
-                <h2 className="text-3xl  font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                <h2 className="text-3xl  font-bold text-black dark:text-white tracking-tighter sm:text-4xl md:text-5xl">
                   Let us Build Something Amazing
                 </h2>
                 <Link href="/contact" className="inline-block">

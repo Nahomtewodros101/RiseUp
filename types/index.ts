@@ -38,7 +38,6 @@ export interface Project {
   projectType: ProjectType;
   testimonial?: string;
   featured: boolean;
-  tags: string[];
   type: string;
   isFeatured: boolean | false;
 }

@@ -52,7 +52,6 @@ type ProjectFormValues = z.infer<typeof projectFormSchema> & {
   id?: string;
   createdAt?: Date;
   tags?: string[];
-
 };
 
 interface ProjectFormProps {
@@ -84,7 +83,6 @@ export default function ProjectForm({
       featured: false,
       id: undefined,
       createdAt: undefined,
-      tags: [],
     },
   });
 
@@ -233,11 +231,6 @@ export default function ProjectForm({
                         <SelectContent>
                           <SelectItem value="website">Website</SelectItem>
                           <SelectItem value="app">App</SelectItem>
-                          <SelectItem value="ui-ux">UI/UX</SelectItem>
-                          <SelectItem value="cloud-services">
-                            Cloud Services
-                          </SelectItem>
-                          <SelectItem value="dev-ops">DevOps</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -266,6 +259,7 @@ export default function ProjectForm({
                   )}
                 />
 
+               
                 <FormField
                   control={form.control}
                   name="featured"

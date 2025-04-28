@@ -177,7 +177,7 @@ export default function ProjectsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold text-black tracking-tight">
+        <h2 className="text-3xl font-bold text-black dark:text-white tracking-tight">
           Projects
         </h2>
         <div className="flex gap-2">

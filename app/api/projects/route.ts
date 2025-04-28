@@ -44,17 +44,14 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    // Filter projects
     let filteredProjects = Projects;
 
-    // Filter by projectType
     if (projectType && projectType !== "All") {
       filteredProjects = filteredProjects.filter(
         (project) => project.projectType === projectType
       );
     }
 
-    // Filter by techStack
     if (techStack.length > 0) {
       filteredProjects = filteredProjects.filter((project) =>
         techStack.every((tech) => project.techStack.includes(tech))

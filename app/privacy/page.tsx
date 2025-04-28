@@ -23,7 +23,7 @@ export default function PrivacyPolicyPage() {
 
   if (!isContentReady) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-blue-200">
+      <div className="min-h-screen flex items-center justify-center bg-blue-600">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 1.5 }}
@@ -49,7 +49,7 @@ export default function PrivacyPolicyPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-900 to-white text-gray-900 font-inter">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 to-white text-gray-900 font-inter">
       {/* Floating Navbar */}
       <motion.header
         initial={{ y: -100 }}
@@ -84,7 +84,7 @@ export default function PrivacyPolicyPage() {
 
       <main
         id="content"
-        className="flex-1 py-12 bg-gradient-to-r from-blue-800 to-blue-600 md:py-24"
+        className="flex-1 py-12 bg-blue-600 backdrop-blur-lg  md:py-24"
       >
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
           <div className="mb-12 flex items-center justify-between">
@@ -168,7 +168,7 @@ export default function PrivacyPolicyPage() {
                   including:
                 </p>
 
-                <h3 className="text-xl font-poppins font-semibold text-blue-700 mt-6 mb-3">
+                <h3 className="text-xl font-poppins font-semibold text-blue-800 mt-6 mb-3">
                   Personal Data
                 </h3>
                 <p className="text-base leading-relaxed text-gray-700">
@@ -178,7 +178,7 @@ export default function PrivacyPolicyPage() {
                   participate in activities like online chat and message boards.
                 </p>
 
-                <h3 className="text-xl font-poppins font-semibold text-blue-700 mt-6 mb-3">
+                <h3 className="text-xl font-poppins font-semibold text-blue-800 mt-6 mb-3">
                   Derivative Data
                 </h3>
                 <p className="text-base leading-relaxed text-gray-700">
@@ -187,7 +187,7 @@ export default function PrivacyPolicyPage() {
                   pages you viewed before and after accessing the site.
                 </p>
 
-                <h3 className="text-xl font-poppins font-semibold text-blue-700 mt-6 mb-3">
+                <h3 className="text-xl font-poppins font-semibold text-blue-800 mt-6 mb-3">
                   Financial Data
                 </h3>
                 <p className="text-base leading-relaxed text-gray-700">
@@ -235,7 +235,7 @@ export default function PrivacyPolicyPage() {
                   Your information may be shared in the following situations:
                 </p>
 
-                <h3 className="text-xl font-poppins font-semibold text-blue-700 mt-6 mb-3">
+                <h3 className="text-xl font-poppins font-semibold text-blue-800 mt-6 mb-3">
                   By Law or to Protect Rights
                 </h3>
                 <p className="text-base leading-relaxed text-gray-700">
@@ -244,7 +244,7 @@ export default function PrivacyPolicyPage() {
                   property, and safety of others as permitted by law.
                 </p>
 
-                <h3 className="text-xl font-poppins font-semibold text-blue-700 mt-6 mb-3">
+                <h3 className="text-xl font-poppins font-semibold text-blue-800 mt-6 mb-3">
                   Third-Party Service Providers
                 </h3>
                 <p className="text-base leading-relaxed text-gray-700">
@@ -288,10 +288,10 @@ export default function PrivacyPolicyPage() {
                     href="mailto:chefche@qememTech.com"
                     className="text-blue-600 hover:underline"
                   >
-                    chefche@qememTech.com
+                    
                   </a>
                   <br />
-                  +251 (300) 123-4567
+                  +251930902116
                 </p>
                 <motion.div whileHover={{ scale: 1.05 }} className="mt-6">
                   <Button

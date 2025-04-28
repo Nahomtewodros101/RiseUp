@@ -28,7 +28,7 @@ const teamMemberFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   role: z.string().min(1, "Role is required"),
   bio: z.string().min(1, "Bio is required"),
-  image: z.string().nullable().optional(), 
+  image: z.string().nullable().optional(),
   socialLinks: z
     .object({
       twitter: z.string().nullable().optional(),
@@ -44,7 +44,18 @@ const teamMemberFormSchema = z.object({
 type TeamMemberFormValues = z.infer<typeof teamMemberFormSchema> & {
   id?: string;
   createdAt?: Date;
-  updatedAt?: Date; 
+  updatedAt?: Date;
+  role?: string;
+  socialLinks?: {
+    twitter?: string | null;
+    linkedin?: string | null;
+    github?: string | null;
+  };
+  skills?: string[];
+  isActive?: boolean;
+  order?: number;
+  profileImage?: string | null;
+  bio?: string | null;
 };
 
 interface TeamMemberFormProps {
@@ -67,7 +78,7 @@ export default function TeamMemberForm({
       name: "",
       role: "",
       bio: "",
-      image: "", 
+      image: "",
       socialLinks: {
         twitter: "",
         linkedin: "",

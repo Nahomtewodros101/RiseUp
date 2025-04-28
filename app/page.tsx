@@ -150,7 +150,7 @@ export default function Home() {
         </section>
 
         {/* Featured Projects Section */}
-        <section className="py-20 px-20 bg-transparent dark:bg-blue-900/20">
+        <section className="py-20 px-20 bg-transparent dark:bg-transparent">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <motion.div
               className="text-center"

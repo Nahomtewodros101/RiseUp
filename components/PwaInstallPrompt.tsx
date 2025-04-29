@@ -2,21 +2,26 @@
 
 import { useState, useEffect } from "react";
 
+// Define the BeforeInstallPromptEvent interface
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+}
+
 const PwaInstallPrompt: React.FC = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Check if the user has already dismissed the prompt
     const isDismissed = localStorage.getItem("pwaInstallDismissed");
     if (isDismissed) return;
 
-    // Listen for the beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
       // Prevent the default mini-infobar from appearing
       e.preventDefault();
-      // Store the event for later use
-      setDeferredPrompt(e);
+      // Store the event with proper typing
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
       // Show the install prompt
       setIsVisible(true);
     };
@@ -40,9 +45,9 @@ const PwaInstallPrompt: React.FC = () => {
     if (!deferredPrompt) return;
 
     // Trigger the install prompt
-    (deferredPrompt as any).prompt();
+    await deferredPrompt.prompt();
     // Wait for the user to respond
-    const { outcome } = await (deferredPrompt as any).userChoice;
+    const { outcome } = await deferredPrompt.userChoice;
     if (outcome === "accepted") {
       console.log("PWA installation accepted");
     } else {

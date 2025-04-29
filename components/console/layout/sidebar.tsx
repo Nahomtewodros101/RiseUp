@@ -17,19 +17,20 @@ import {
   Menu,
   Briefcase,
   Users2,
-  
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
   isMobile: boolean;
+  isMobileSidebarOpen: boolean;
   toggleMobileSidebar: () => void;
 }
 
 export default function Sidebar({
   isMobile,
   toggleMobileSidebar,
+  isMobileSidebarOpen,
 }: SidebarProps) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -96,10 +97,13 @@ export default function Sidebar({
 
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex flex-col bg-white dark:bg-gray-950 border-r shadow-sm transition-all duration-300",
+          "fixed inset-y-0 left-0 z-40 flex flex-col bg-white dark:bg-gray-950 border-r shadow-sm transition-transform duration-300 ease-in-out",
           isCollapsed ? "w-[70px]" : "w-[250px]",
-          isMobile && "transform transition-transform duration-300 ease-in-out",
-          isMobile && (isCollapsed ? "-translate-x-full" : "translate-x-0")
+          isMobile
+            ? isMobileSidebarOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
+            : "translate-x-0"
         )}
       >
         <div className="flex items-center justify-between p-4 border-b">

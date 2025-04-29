@@ -87,7 +87,7 @@ export default function NotificationModal({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, closeModal]);
+  }, [isOpen, closeModal , isPreview]);
 
   useEffect(() => {
     if (!isOpen) {

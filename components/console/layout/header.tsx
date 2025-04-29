@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { Bell, User2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -20,7 +19,6 @@ import Image from "next/image";
 import { toast } from "sonner";
 
 export default function Header() {
-  const pathname = usePathname();
   const [user, setUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,14 +50,6 @@ export default function Header() {
 
     fetchUser();
   }, []);
-
-  const getPageTitle = () => {
-    if (pathname === "/console") return "Dashboard";
-    if (pathname.startsWith("/console/projects")) return "Projects";
-    if (pathname.startsWith("/console/team")) return "Team";
-    if (pathname.startsWith("/console/settings")) return "Settings";
-    return "Console";
-  };
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", {
@@ -105,8 +95,6 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-white/80 dark:bg-gray-950/80 backdrop-blur-md px-4 md:px-6">
-      <h1 className="text-xl font-bold">{getPageTitle()}</h1>
-
       <div className="flex items-center gap-4">
         <ThemeToggle />
         <Button

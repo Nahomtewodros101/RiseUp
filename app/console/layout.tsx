@@ -1,8 +1,7 @@
+
 "use client";
 
-import type React from "react";
-
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/console/layout/sidebar";
 import Header from "@/components/console/layout/header";
@@ -27,7 +26,12 @@ export default function ConsoleLayout({
 
   return (
     <div className="min-h-screen flex bg-gray-50 dark:bg-gray-900">
-      <Sidebar isMobile={isMobile} toggleMobileSidebar={toggleMobileSidebar} />
+     <Sidebar
+  isMobile={isMobile}
+  isMobileSidebarOpen={isMobileSidebarOpen}
+  toggleMobileSidebar={toggleMobileSidebar}
+/>
+
 
       <div className="flex-1 flex flex-col ml-0 lg:ml-[250px]">
         <Header />

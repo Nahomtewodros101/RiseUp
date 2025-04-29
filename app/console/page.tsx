@@ -41,7 +41,6 @@ export default function ConsoleDashboard() {
       }
     };
 
-
     const fetchUsers = async () => {
       try {
         const response = await fetch("/api/admin/users");
@@ -62,7 +61,7 @@ export default function ConsoleDashboard() {
 
     fetchProjects();
     fetchUsers();
-  }, []);
+  }, [users]);
 
   return (
     <div className="space-y-6">
@@ -108,9 +107,7 @@ export default function ConsoleDashboard() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {isLoading ? "..." : ""}
-            </div>
+            <div className="text-2xl font-bold">{isLoading ? "..." : ""}</div>
             <p className="text-xs text-muted-foreground">
               <TrendingUp className="inline h-3 w-3 text-green-500 mr-1" />
               +1 from last month

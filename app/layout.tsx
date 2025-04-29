@@ -4,7 +4,8 @@ import "@/app/globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import LoadingScreen from "@/components/LoadingScreen";
 import BackgroundGrid from "@/components/BacgroundGrid";
-import CookieConsent from "../components/CookieConsent";
+import CookieConsent from "@/components/CookieConsent";
+import PwaInstallPrompt from "@/components/PwaInstallPrompt";
 
 export const metadata: Metadata = {
   title: "Tech Agency",
@@ -69,6 +70,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
           <BackgroundGrid />
           <LoadingScreen />
           <CookieConsent />
+          <PwaInstallPrompt />
           {children}
         </ThemeProvider>
       </body>

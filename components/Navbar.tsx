@@ -153,6 +153,7 @@ export default function Navbar() {
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
     { href: "/jobs", label: "Jobs" },
+    { href: "/blogs", label: "Blogs" },
   ];
 
   function handleNotificationSubmit(data: Notification): Promise<void> {
@@ -177,7 +178,7 @@ export default function Navbar() {
             className="flex items-center justify-center rounded-lg bg-transparent text-white p-1 "
             whileHover={{ rotate: 5 }}
           >
-            <Image className="rounded-lg" src="/natqmem.jpg" alt="Qmem Logo" width={50} height={50} />
+            <Image className="rounded-lg" src="/natqmem.jpg" alt="Qmem Logo" width={400} height={40} />
           </motion.div>
           <span className="font-bold text-xl text-blue-800 dark:text-blue-200">
             Qmem Cloud

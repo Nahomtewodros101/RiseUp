@@ -6,13 +6,11 @@ import {
   ArrowRight,
   Cable,
   Code,
-  
   Database,
   Globe,
   Layers,
   Phone,
   SubscriptIcon,
-  
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";

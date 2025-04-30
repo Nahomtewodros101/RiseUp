@@ -14,11 +14,11 @@ export default function LoginPage() {
                 src="/Qmemm.png"
                 width={100}  
                 height={100}
-                alt="Qemem Tech"
+                alt="Qemem Cloud"
               />
             </Link>
           </div>
-          <h1 className="text-2xl font-bold">Qemem Tech</h1>
+          <h1 className="text-2xl font-bold">Qemem Cloud</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2">
             Login to your account
           </p>

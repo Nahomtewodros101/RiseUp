@@ -67,7 +67,7 @@ export default function BusinessOutsourcingPage() {
           >
             <div>
               <h2 className="text-3xl font-bold mb-6">
-                Focus on Your Core. We'll Handle the Rest.
+                Focus on Your Core. We will Handle the Rest.
               </h2>
               <div className="space-y-4 text-gray-500 dark:text-gray-400">
                 <p>
@@ -77,7 +77,7 @@ export default function BusinessOutsourcingPage() {
                   got you.
                 </p>
                 <p>
-                  Outsourcing isn't just cost-saving — it’s growth-accelerating.
+                  Outsourcing isn't just cost-saving — it is  growth-accelerating.
                   Let your talent focus on what they do best, while we handle
                   the behind-the-scenes grind with precision and accountability.
                 </p>

@@ -91,7 +91,7 @@ export default function TeamPage() {
                 The Qmem Community
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
-                Meet the talented individuals behind Qemem Devs
+                Meet the talented individuals behind Qemem Cloud Community
               </p>
             </motion.div>
           </div>

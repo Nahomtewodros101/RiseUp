@@ -180,7 +180,7 @@ export default function Navbar() {
             <Image className="rounded-lg" src="/Qmemm.png" alt="Qmem Logo" width={100} height={100} />
           </motion.div>
           <span className="font-bold text-xl text-blue-800 dark:text-blue-200">
-            Qmem Tech
+            Qmem Cloud
           </span>
         </Link>
 

@@ -27,7 +27,7 @@ export default async function SignupPage() {
               />
             </Link>
           </div>
-          <h1 className="text-2xl font-bold">Qemem Tech</h1>
+          <h1 className="text-2xl font-bold">Qemem Cloud</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2">
             Create a new account
           </p>

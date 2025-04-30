@@ -177,7 +177,7 @@ export default function Navbar() {
             className="flex items-center justify-center rounded-lg bg-transparent text-white p-1 "
             whileHover={{ rotate: 5 }}
           >
-            <Image className="rounded-lg" src="/natqmem.jpg" alt="Qmem Logo" width={100} height={100} />
+            <Image className="rounded-lg" src="/natqmem.jpg" alt="Qmem Logo" width={50} height={50} />
           </motion.div>
           <span className="font-bold text-xl text-blue-800 dark:text-blue-200">
             Qmem Cloud

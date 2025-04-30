@@ -67,7 +67,7 @@ const PwaInstallPrompt: React.FC = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 bg-gray-800 text-white p-4 rounded-lg shadow-lg flex justify-between items-center md:max-w-md">
+    <div className="fixed bottom-4 left-4 right-4 z-50 bg-blue-800 text-white p-4 rounded-lg shadow-lg flex justify-between items-center md:max-w-md">
       <div>
         <p className="font-semibold">Install Our App</p>
         <p className="text-sm">
@@ -83,7 +83,7 @@ const PwaInstallPrompt: React.FC = () => {
         </button>
         <button
           onClick={handleDismissClick}
-          className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
         >
           Dismiss
         </button>

@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       scheduledDate,
       targetAudience,
       isPriority,
-      creator, // Expect { id: string, name: string }
+      creator, 
     } = data;
 
     if (!message || !type || !targetAudience || !creator || !creator.id) {
@@ -70,7 +70,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate creator.id matches authenticated user's ID
     if (creator.id !== user.id) {
       console.log("Creator mismatch:", {
         creatorId: creator.id,
@@ -88,7 +87,7 @@ export async function POST(request: NextRequest) {
         type,
         targetAudience,
         isPriority,
-        creator: { connect: { id: user.id } }, // Use authenticated user's ID
+        creator: { connect: { id: user.id } }, 
         scheduled,
         scheduledDate: scheduledDate ? new Date(scheduledDate) : null,
       },

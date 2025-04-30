@@ -16,7 +16,7 @@ model User {
   createdAt            DateTime        @default(now())
   updatedAt            DateTime        @updatedAt
   blogs                Blog[]  
-  notifications Notification[] @relation
+  notifications Notification[] @relation("Creator")
   lastLogin            DateTime?
   profileImage         String?  
   isActive            Boolean         @default(true)  
@@ -123,12 +123,13 @@ model JobApplication {
 }
 
 model Notification {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   message       String
   type          String
   targetAudience String[]
   isPriority    Boolean
-  creator       User     @relation(fields: [id], references: [id])
+  creator       User?    @relation("Creator", fields: [creatorId], references: [id])
+  creatorId     String?  @db.ObjectId
   scheduled     Boolean
   scheduledDate DateTime?
   createdAt     DateTime @default(now())

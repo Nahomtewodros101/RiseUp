@@ -87,7 +87,7 @@ export default function NotificationModal({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, closeModal , isPreview]);
+  }, [isOpen, closeModal, isPreview]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -205,6 +205,7 @@ export default function NotificationModal({
         resetForm();
         setEditingId(null);
         closeModal();
+        window.location.reload();
         document
           .querySelector('[value="manage"]')
           ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));

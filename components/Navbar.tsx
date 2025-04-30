@@ -153,7 +153,7 @@ export default function Navbar() {
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
     { href: "/jobs", label: "Jobs" },
-    { href: "/blogs", label: "Blogs" },
+    { href: "/blog", label: "Blogs" },
   ];
 
   function handleNotificationSubmit(data: Notification): Promise<void> {

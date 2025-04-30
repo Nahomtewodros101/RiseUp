@@ -81,7 +81,7 @@ export default function TeamPage() {
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-3xl text-blue-600 font-bold tracking-tighter sm:text-5xl">
-                Our Team
+                The Qmem Community
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
                 Meet the talented individuals behind Qemem Devs

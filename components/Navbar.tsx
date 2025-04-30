@@ -172,12 +172,12 @@ export default function Navbar() {
     >
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         {/* Logo & home */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center">
           <motion.div
-            className="flex items-center justify-center rounded-lg bg-blue-600 text-white p-1 w-8 h-8"
+            className="flex items-center justify-center rounded-lg bg-transparent text-white p-1 "
             whileHover={{ rotate: 5 }}
           >
-            <span className="font-bold text-sm">👨🏾‍💻</span>
+            <Image className="rounded-lg" src="/Qmemm.png" alt="Qmem Logo" width={100} height={100} />
           </motion.div>
           <span className="font-bold text-xl text-blue-800 dark:text-blue-200">
             Qmem Tech

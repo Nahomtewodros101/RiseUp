@@ -73,11 +73,11 @@ export default function BusinessOutsourcingPage() {
                 <p>
                   At Qemem Solutions, we specialize in outsourced business
                   services designed to unburden your in-house team and boost
-                  performance. From customer support to data operations — we’ve
+                  performance. From customer support to data operations — we have
                   got you.
                 </p>
                 <p>
-                  Outsourcing isn't just cost-saving — it is  growth-accelerating.
+                  Outsourcing is not just cost-saving — it is  growth-accelerating.
                   Let your talent focus on what they do best, while we handle
                   the behind-the-scenes grind with precision and accountability.
                 </p>

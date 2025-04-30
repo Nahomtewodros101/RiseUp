@@ -103,11 +103,12 @@ export default function Home() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4, duration: 0.8 }}
                   >
-                    Qmem Tech is a leading software development company,
-                    dedicated to delivering innovative solutions that drive
-                    success. Our team of expert developers and designers work
-                    tirelessly to create custom software solutions that meet the
-                    unique needs of our clients.
+                    Qmem Tech is a leading software development & business and
+                    product outsourcing <span>Agency</span>, dedicated to
+                    delivering innovative solutions that drive success. Our team
+                    of expert developers and designers work tirelessly to create
+                    custom software solutions that meet the unique needs of our
+                    clients.
                   </motion.p>
                 </div>
                 <motion.div
@@ -455,7 +456,6 @@ export default function Home() {
                     { logo: "/cbe.png", name: "Commercial bank" },
                     { logo: "/luxx.png", name: "LuxxOds" },
                     { logo: "/lead.webp", name: "Lead Gen Ethiopia" },
-                    { logo: "/moon.png", name: "Moon Studios" },
                     { logo: "/planet.png", name: "One Planet" },
                     { logo: "/real.png", name: "Nolan Realestate" },
                     { logo: "/upwrk.png", name: "Upwork Business Clients" },
@@ -468,7 +468,7 @@ export default function Home() {
                       <Image
                         src={partner.logo}
                         alt={`${partner.name} logo`}
-                        className="max-h-16 rounded-md w-auto object-contain"
+                        className="max-h-16 rounded-full w-auto object-contain"
                         width={160}
                         height={80}
                       />
@@ -481,12 +481,13 @@ export default function Home() {
                 {/* Duplicate logos and names for seamless infinite scroll */}
                 <div className="flex shrink-0">
                   {[
-                    { logo: "/cbe.png", name: "Commercial bank of ethiopia" },
-                    { logo: "/luxx.png", name: "LuxxOds" },
-                    { logo: "/lead.webp", name: "Lead Gen Ethiopia" },
-                    { logo: "/moon.png", name: "Moon Studios" },
-                    { logo: "/planet.png", name: "One Planet" },
-                    { logo: "/real.png", name: "Nolan Realestate" },
+                 { logo: "/cbe.png", name: "Commercial bank" },
+                 { logo: "/luxx.png", name: "LuxxOds" },
+                 { logo: "/lead.webp", name: "Lead Gen Ethiopia" },
+                 { logo: "/planet.png", name: "One Planet" },
+                 { logo: "/real.png", name: "Nolan Realestate" },
+                 { logo: "/upwrk.png", name: "Upwork Business Clients" },
+                 { logo: "/fvr.png", name: "Fiver Business Clients" },
                   ].map((partner, index) => (
                     <div
                       key={`duplicate-${index}`}

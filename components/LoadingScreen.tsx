@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 export default function LoadingScreen() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +27,7 @@ export default function LoadingScreen() {
           <div className="relative flex flex-col items-center">
             {/* Logo */}
             <motion.div
-              className="flex items-center justify-center rounded-lg bg-blue-600 text-white p-2 w-16 h-16 mb-6"
+              className="flex items-center justify-center rounded-lg bg-transparent text-black  mb-6"
               initial={{ scale: 0.8 }}
               animate={{ scale: [0.8, 1.2, 1] }}
               transition={{
@@ -36,7 +37,9 @@ export default function LoadingScreen() {
                 repeatType: "reverse",
               }}
             >
-              <span className="font-bold text-xl">👨🏾‍💻</span>
+              <span className="font-bold text-xl">
+                <Image src="/Qmemm.png" alt="Logo" width={100} height={100} />
+              </span>
             </motion.div>
 
             {/* Loading text */}

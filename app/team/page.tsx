@@ -2,7 +2,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Github, Linkedin, Twitter, Loader2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Github,
+  Linkedin,
+  Twitter,
+  Loader2,
+  VerifiedIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -126,7 +133,10 @@ export default function TeamPage() {
                     />
                   </div>
                   <CardContent className="p-4">
-                    <h3 className="font-bold text-lg">{member.name}</h3>
+                    <h3 className="font-bold text-lg">
+                      
+                      <VerifiedIcon color="blue" className=" h-4 w-4 inline-flex" /> {member.name}
+                    </h3>
                     <p className="text-blue-600 dark:text-blue-400">
                       {member.role}
                     </p>

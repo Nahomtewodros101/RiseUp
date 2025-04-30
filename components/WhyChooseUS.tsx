@@ -30,8 +30,8 @@ export default function WhyChooseUsSection() {
       icon: ShieldCheck,
     },
     {
-      title: "Support",
-      description: "Guiding you every step to ensure your success.",
+      title: "Trust",
+      description: "We believe in transparency and open communication.",
       icon: Handshake,
     },
   ];

@@ -4,13 +4,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
+  Cable,
   Code,
-  Cpu,
+  
   Database,
   Globe,
   Layers,
+  Phone,
   SubscriptIcon,
-  Zap,
+  
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -229,7 +231,7 @@ export default function Home() {
                   link: "/services/web-development",
                 },
                 {
-                  icon: Cpu,
+                  icon: Phone,
                   title: "Mobile Apps",
                   description: "Native and cross-platform mobile applications",
                   link: "/services/mobile-apps",
@@ -252,12 +254,13 @@ export default function Home() {
                   description: "Tailored software solutions for your business",
                   link: "/services/custom",
                 },
+
                 {
-                  icon: Zap,
-                  title: "DevOps",
+                  icon: Cable,
+                  title: " Buisness Outsourcing",
                   description:
-                    "Streamlined development and deployment processes",
-                  link: "/services/devops",
+                    "Efficient outsourcing services for your business",
+                  link: "/services/outsource",
                 },
               ].map((service, index) => (
                 <motion.div
@@ -481,13 +484,13 @@ export default function Home() {
                 {/* Duplicate logos and names for seamless infinite scroll */}
                 <div className="flex shrink-0">
                   {[
-                 { logo: "/cbe.png", name: "Commercial bank" },
-                 { logo: "/luxx.png", name: "LuxxOds" },
-                 { logo: "/lead.webp", name: "Lead Gen Ethiopia" },
-                 { logo: "/planet.png", name: "One Planet" },
-                 { logo: "/real.png", name: "Nolan Realestate" },
-                 { logo: "/upwrk.png", name: "Upwork Business Clients" },
-                 { logo: "/fvr.png", name: "Fiver Business Clients" },
+                    { logo: "/cbe.png", name: "Commercial bank" },
+                    { logo: "/luxx.png", name: "LuxxOds" },
+                    { logo: "/lead.webp", name: "Lead Gen Ethiopia" },
+                    { logo: "/planet.png", name: "One Planet" },
+                    { logo: "/real.png", name: "Nolan Realestate" },
+                    { logo: "/upwrk.png", name: "Upwork Business Clients" },
+                    { logo: "/fvr.png", name: "Fiver Business Clients" },
                   ].map((partner, index) => (
                     <div
                       key={`duplicate-${index}`}

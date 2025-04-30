@@ -3,7 +3,6 @@ import { PrismaClient } from "@prisma/client";
 import { authMiddleware, getCurrentUser, isAdmin } from "@/lib/auth";
 
 const prisma = new PrismaClient();
-
 export async function GET(request: NextRequest) {
   try {
     const authResult = await authMiddleware(request);
@@ -60,7 +59,7 @@ export async function POST(request: NextRequest) {
       scheduledDate,
       targetAudience,
       isPriority,
-      creator, 
+      creator,
     } = data;
 
     if (!message || !type || !targetAudience || !creator || !creator.id) {
@@ -87,7 +86,7 @@ export async function POST(request: NextRequest) {
         type,
         targetAudience,
         isPriority,
-        creator: { connect: { id: user.id } }, 
+        creator: { connect: { id: user.id } },
         scheduled,
         scheduledDate: scheduledDate ? new Date(scheduledDate) : null,
       },

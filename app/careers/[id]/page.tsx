@@ -124,7 +124,7 @@ export default function CareerDetailsPage() {
 
   if (loadingJob) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-blue-50">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-blue-600">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -133,10 +133,10 @@ export default function CareerDetailsPage() {
             repeat: Infinity,
             repeatType: "reverse",
           }}
-          className="text-blue-600 text-lg font-semibold"
+          className="text-blue-800 text-lg font-semibold"
         >
           <svg
-            className="animate-spin h-8 w-8 text-blue-600 mb-4"
+            className="animate-spin h-8 w-8 text-blue-800 mb-4"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -198,7 +198,7 @@ export default function CareerDetailsPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-100 via-blue-200 to-white">
+    <div className="flex flex-col min-h-screen bg-white">
       <Navbar />
       <main className="flex-1 py-12 md:py-20">
         <div className="container px-4 md:px-8">

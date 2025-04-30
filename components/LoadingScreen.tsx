@@ -49,7 +49,7 @@ export default function LoadingScreen() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-             Qmem Tech
+             Qmem Cloud
             </motion.h2>
 
             {/* Loading bar */}

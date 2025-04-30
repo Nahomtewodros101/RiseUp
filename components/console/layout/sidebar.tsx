@@ -114,7 +114,7 @@ export default function Sidebar({
             )}
           >
             <div className="flex items-center justify-center rounded-lg bg-blue-600 text-white p-1 w-8 h-8">
-              <span className="font-bold text-sm">QT</span>
+              <span className="font-bold text-sm">QC</span>
             </div>
             {!isCollapsed && <span className="font-bold text-xl">Admin</span>}
           </div>

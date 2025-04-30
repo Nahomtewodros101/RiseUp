@@ -14,28 +14,26 @@ const PwaInstallPrompt: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    console.log("PWA Prompt: useEffect running");
-    const isDismissed = localStorage.getItem("pwaInstallDismissed") === "true";
-    const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
-    console.log("PWA Prompt Debug:", { isDismissed, isStandalone });
-
-    if (isDismissed || isStandalone) {
-      console.log("PWA Prompt: Suppressed due to dismissal or standalone mode");
-      setIsVisible(false);
-      return;
-    }
+    const isDismissed = localStorage.getItem("pwaInstallDismissed");
+    if (isDismissed) return;
 
     const handleBeforeInstallPrompt = (e: Event) => {
-      console.log("PWA Prompt: beforeinstallprompt event fired");
+      // Prevent the default mini-infobar from appearing
       e.preventDefault();
+      // Store the event with proper typing
       setDeferredPrompt(e as BeforeInstallPromptEvent);
+      // Show the install prompt
       setIsVisible(true);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
+    // Check if the app is already installed (e.g., running in PWA mode)
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+      setIsVisible(false);
+    }
+
     return () => {
-      console.log("PWA Prompt: Cleaning up beforeinstallprompt listener");
       window.removeEventListener(
         "beforeinstallprompt",
         handleBeforeInstallPrompt
@@ -44,33 +42,30 @@ const PwaInstallPrompt: React.FC = () => {
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) {
-      console.log("PWA Prompt: No deferred prompt available");
-      return;
-    }
+    if (!deferredPrompt) return;
 
-    console.log("PWA Prompt: Triggering install prompt");
+    // Trigger the install prompt
     await deferredPrompt.prompt();
+    // Wait for the user to respond
     const { outcome } = await deferredPrompt.userChoice;
-    console.log(`PWA Prompt: Installation ${outcome}`);
-    localStorage.setItem("pwaInstallDismissed", "true");
+    if (outcome === "accepted") {
+      console.log("PWA installation accepted");
+    } else {
+      console.log("PWA installation dismissed");
+    }
+    // Clear the prompt and hide the popup
     setDeferredPrompt(null);
     setIsVisible(false);
   };
 
   const handleDismissClick = () => {
-    console.log("PWA Prompt: Dismissed by user");
+    // Save user preference to not show the prompt again
     localStorage.setItem("pwaInstallDismissed", "true");
     setIsVisible(false);
-    setDeferredPrompt(null);
   };
 
-  if (!isVisible) {
-    console.log("PWA Prompt: Not visible, returning null");
-    return null;
-  }
+  if (!isVisible) return null;
 
-  console.log("PWA Prompt: Rendering popup");
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 bg-blue-800 text-white p-4 rounded-lg shadow-lg flex justify-between items-center md:max-w-md">
       <div>

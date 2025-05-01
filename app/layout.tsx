@@ -71,7 +71,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
           <LoadingScreen />
           <CookieConsent />
           <PwaInstallPrompt />
-          
+          {children}
         </ThemeProvider>
       </body>
     </html>

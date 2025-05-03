@@ -47,7 +47,7 @@ export default function BackgroundGrid() {
         {[...Array(5)].map((_, i) => (
           <motion.div
             key={`h-line-${i}`}
-            className="absolute h-[1px] w-full left-0 bg-blue-300"
+            className="absolute h-[1px] w-full left-0 bg-blue-500 dark:bg-blue-500"
             style={{
               top: `${15 + i * 20}%`,
             }}
@@ -68,7 +68,7 @@ export default function BackgroundGrid() {
         {[...Array(5)].map((_, i) => (
           <motion.div
             key={`v-line-${i}`}
-            className="absolute w-[1px] h-full top-0 bg-blue-300"
+            className="absolute w-[1px] h-full top-0 bg-blue-500 dark:bg-blue-800"
             style={{
               left: `${20 + i * 15}%`,
             }}

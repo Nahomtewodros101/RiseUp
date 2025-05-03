@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { X, WavesIcon as Wave, Sparkles } from "lucide-react";
+import { X,  Sparkles } from "lucide-react";
 import confetti from "canvas-confetti";
 import Link from "next/link";
 

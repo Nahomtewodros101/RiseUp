@@ -104,7 +104,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4, duration: 0.8 }}
                   >
-                    Qmem Tech is a leading software development & business and
+                    Qmem Cloud is a leading software development & business and
                     product outsourcing <span>Agency</span>, dedicated to
                     delivering innovative solutions that drive success. Our team
                     of expert developers and designers work tirelessly to create
@@ -208,7 +208,7 @@ export default function Home() {
         </section>
 
         {/* Services Section */}
-        <section className="bg-transparent dark:bg-blue-900/20 py-20">
+        <section className="bg-transparent dark:transparent py-20">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <motion.div
               className="flex flex-col items-center justify-center space-y-4 text-center"
@@ -302,7 +302,7 @@ export default function Home() {
         </section>
 
         {/* Stats Counter Section */}
-        <section className="py-20 bg-transparent dark:bg-blue-800/50">
+        <section className="py-20 bg-transparent dark:bg-transparent">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <motion.div
               className="text-center mb-12"
@@ -354,7 +354,7 @@ export default function Home() {
         {/* Testimonials Section */}
         <section
           id="testimonials"
-          className="w-full py-12 md:py-24 lg:py-32 bg-transparent dark:bg-blue-900/20"
+          className="w-full py-12 md:py-24 lg:py-32 bg-transparent dark:bg-transparent 0"
         >
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -440,7 +440,7 @@ export default function Home() {
         {/* Our Partners Section */}
         <section
           id="partners"
-          className="w-full py-12 md:py-24 lg:py-32 bg-transparent dark:bg-blue-900/20"
+          className="w-full py-12 md:py-24 lg:py-32 bg-transparent dark:bg-transparent "
         >
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -524,12 +524,12 @@ export default function Home() {
 
         {/* Lifecycle Section */}
 
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-transparent dark:bg-transparent">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-transparent dark:bg-trans">
           <LifecycleSection />
         </section>
 
         {/* Blog Teaser Section */}
-        <section className="py-20 bg-transparent dark:bg-blue-900/30">
+        <section className="py-20 bg-transparent dark:bg-transparent">
           <div className="max-w-7xl mx-auto px-4 md:px-6">
             <motion.div
               className="text-center mb-12"

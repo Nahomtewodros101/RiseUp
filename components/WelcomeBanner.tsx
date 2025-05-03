@@ -112,7 +112,7 @@ export default function WelcomeBanner() {
               animate={{ rotate: [0, 20, 0], scale: [1, 1.1, 1] }}
               transition={{ duration: 1.5, delay: 0.5, repeat: 2 }}
             >
-              <Wave className="h-12 w-12 text-blue-200" />
+                  <p>Qemem</p>
             </motion.div>
 
             <div className="flex-1 text-center sm:text-left">

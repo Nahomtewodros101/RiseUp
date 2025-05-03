@@ -175,7 +175,7 @@ export default function Navbar() {
         {/* Logo & home */}
         <Link href="/" className="flex items-center">
           <span className="font-bold text-xl text-blue-800 dark:text-blue-200">
-            <span className="text-gray-800 dark:text-gray-200">Qmem™</span>
+            <span className="text-blue-800 dark:text-gray-200">Qmem™</span>
           </span>
         </Link>
 

@@ -24,6 +24,7 @@ import CountUp from "react-countup";
 import { Card, CardContent } from "../components/ui/card";
 import Image from "next/image";
 import WhyChooseUsSection from "../components/WhyChooseUS";
+import LifecycleSection from "../components/LifecycleSection";
 
 export default function Home() {
   const [isContentReady, setIsContentReady] = useState(false);
@@ -195,6 +196,15 @@ export default function Home() {
               </div>
             )}
           </div>
+          <Link className="flex justify-center" href="/projects">
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-blue-500 text-blue-500 hover:bg-blue-100 mt-10"
+            >
+              View More Qmem Projects
+            </Button>
+          </Link>
         </section>
 
         {/* Services Section */}
@@ -510,6 +520,12 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* Lifecycle Section */}
+
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-transparent dark:bg-transparent">
+          <LifecycleSection />
         </section>
 
         {/* Blog Teaser Section */}

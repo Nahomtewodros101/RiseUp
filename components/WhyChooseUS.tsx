@@ -38,9 +38,9 @@ export default function WhyChooseUsSection() {
 
   return (
     <section className="relative py-20 bg-transparent rounded-lg overflow-hidden">
-      <div className="container px-4 md:px-6 relative z-10 max-w-7xl mx-auto">
+      <div className="container px-4 md:px-6 relative z-10 max-w-7xl  mx-auto">
         <motion.div
-          className="text-center"
+          className="text-center "
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
@@ -50,9 +50,8 @@ export default function WhyChooseUsSection() {
             Why Choose Qmem Tech?
           </h2>
           <p className="max-w-xl mx-auto mt-6 text-gray-600 text-lg sm:text-xl leading-relaxed font-inter">
-            We’re more than a service we are a movement,
-            <br />
-            shaping the future with innovation and trust.
+            We are more than a service we are a movement, shaping the future
+            with innovation and trust.
           </p>
         </motion.div>
         <div className="grid gap-6 sm:gap-8 mt-12 sm:grid-cols-2 lg:grid-cols-4">
@@ -103,7 +102,7 @@ export default function WhyChooseUsSection() {
         >
           <Button
             asChild
-            className="bg-white text-blue-800 hover:bg-blue-100 font-semibold py-3 px-8 rounded-full"
+            className="bg-white dark: text-blue-800 hover:bg-blue-100 font-semibold py-3 px-8 rounded-full"
           >
             <a href="/about">Discover More</a>
           </Button>

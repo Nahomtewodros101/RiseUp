@@ -8,7 +8,7 @@ import CookieConsent from "@/components/CookieConsent";
 import PwaInstallPrompt from "@/components/PwaInstallPrompt";
 
 export const metadata: Metadata = {
-  title: "Tech Agency",
+  title: " Qmem Cloud Solutions",
   description:
     "Transforming ideas into digital reality with cutting-edge technology solutions.",
   manifest: "/manifest.json",

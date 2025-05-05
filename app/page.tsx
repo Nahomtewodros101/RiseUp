@@ -213,7 +213,7 @@ export default function Home() {
             transition: "color 0.3s ease",
           }}
         >
-         ESHKINTIRPIRPIR SITUATION 👨🏾‍💻
+         ESHKINTIRPIRPIR SITUATION  SHIII 👨🏾‍💻
         </p>
       </div>
 

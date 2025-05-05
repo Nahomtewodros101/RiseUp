@@ -84,7 +84,7 @@ export default function WhyChooseUsSection() {
               <div className="flex items-center justify-start mb-4">
                 <item.icon className="h-8 w-8 text-blue-600 dark:text-white " />
               </div>
-              <h3 className="text-xl sm:text-2xl font-poppins font-semibold text-blue-600 dark:text-white relative z-10">
+              <h3 className="text-xl sm:text-3xl font-poppins font-semibold text-blue-600 dark:text-white relative z-10">
                 {item.title}
               </h3>
               <p className="text-base text-gray-600 dark:text-gray-600 mt-3 relative z-10 font-inter leading-relaxed">

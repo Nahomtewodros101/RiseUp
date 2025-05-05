@@ -58,6 +58,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Qemem Tech" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <meta property="og:image" content="favicon-192x192.png" />
       </head>
       <body>
         <ThemeProvider

@@ -199,7 +199,7 @@ const LifecycleSection: React.FC = () => {
         >
           Software Lifecycle Journey
         </motion.h2>
-        <p className="text-gray-600 text-center mb-12 text-xl  max-w- px-auto">
+        <p className="text-gray-600 dark:text-white text-center mb-12 text-xl  max-w- px-auto">
           Software lifecycle refers to the entire process of creating, testing,
           and deploying software over its entire life cycle.
         </p>
@@ -261,10 +261,10 @@ const LifecycleSection: React.FC = () => {
               >
                 {stage.icon}
               </motion.div>
-              <h3 className="text-xl font-semibold text-blue-900 mb-2 text-center">
+              <h3 className="text-xl font-semibold text-blue-900 dark:text-white mb-2 text-center">
                 {stage.title}
               </h3>
-              <p className="text-gray-600 text-center">{stage.description}</p>
+              <p className="text-gray-600 dark:text-white text-center">{stage.description}</p>
               <motion.button
                 className="mt-4 text-blue-500 hover:text-blue-700 font-medium"
                 whileHover={{

@@ -49,7 +49,7 @@ export default function WhyChooseUsSection() {
           <h2 className="text-4xl sm:text-5xl font-poppins font-bold text-blue-600 tracking-tight">
             Why Choose Qmem Tech?
           </h2>
-          <p className="max-w-xl mx-auto mt-6 text-gray-600 text-lg sm:text-xl leading-relaxed font-inter">
+          <p className="max-w-xl mx-auto mt-6 dark:text-gray-200 text-gray-600 text-lg sm:text-xl leading-relaxed font-inter">
             We are more than a service we are a movement, shaping the future
             with innovation and trust.
           </p>
@@ -87,7 +87,7 @@ export default function WhyChooseUsSection() {
               <h3 className="text-xl sm:text-2xl font-poppins font-semibold text-blue-600 dark:text-white relative z-10">
                 {item.title}
               </h3>
-              <p className="text-base text-gray-600 dark:text-gray-300 mt-3 relative z-10 font-inter leading-relaxed">
+              <p className="text-base text-gray-600 dark:text-gray-600 mt-3 relative z-10 font-inter leading-relaxed">
                 {item.description}
               </p>
             </motion.div>

@@ -99,12 +99,12 @@ export default function Home() {
                     transition={{ delay: 0.2, duration: 0.8 }}
                   >
                     Transforming Ideas into{" "}
-                    <span className="text-blue-500 dark:text-blue-300">
+                    <span className="text-blue-500 dark:text-blue-600">
                       Digital Reality
                     </span>
                   </motion.h1>
                   <motion.p
-                    className="max-w-[600px] text-gray-600 dark:text-gray-300 md:text-xl"
+                    className="max-w-[600px] text-gray-600 dark:text-gray-600 md:text-xl"
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4, duration: 0.8 }}
@@ -166,7 +166,7 @@ export default function Home() {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-blue-700 dark:text-blue-300">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-blue-700 dark:text-blue-600">
                 Featured Projects
               </h2>
               <p className="max-w-[600px] mx-auto mt-4 text-xl text-gray-600 dark:text-gray-300">
@@ -223,13 +223,13 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-blue-200 dark:bg-blue-800 px-3 py-1 text-sm text-blue-700 dark:text-blue-300">
+                <div className="inline-block rounded-lg bg-blue-200 dark:bg-blue-800 px-3 py-1 text-sm text-blue-700 dark:text-blue-600">
                   Our Services
                 </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-blue-800 dark:text-blue-300">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-blue-800 dark:text-blue-600">
                   What We Do Best
                 </h2>
-                <p className="max-w-[900px] text-gray-600 dark:text-gray-300 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                <p className="max-w-[900px] text-gray-600 dark:text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Cutting-edge solutions tailored to your business needs.
                 </p>
               </div>
@@ -316,10 +316,10 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-blue-600 dark:text-blue-300">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-blue-600 dark:text-blue-600">
                 Our Impact in Numbers
               </h2>
-              <p className="max-w-[600px] mx-auto mt-4 text-xl text-gray-600 dark:text-blue-200">
+              <p className="max-w-[600px] mx-auto mt-4 text-xl text-gray-600 d dark:text-blue-600">
                 We are proud of the milestones we have achieved with our
                 clients.
               </p>
@@ -343,11 +343,11 @@ export default function Home() {
                   }}
                   viewport={{ once: true }}
                 >
-                  <p className="text-4xl font-bold text-blue-600 dark:text-blue-300">
+                  <p className="text-4xl font-bold text-blue-600 dark:text-blue-600">
                     <CountUp start={0} end={stat.value} duration={2.5} />
                     {stat.suffix}
                   </p>
-                  <p className="mt-2 text-gray-600 dark:text-blue-200">
+                  <p className="mt-2 text-gray-600 dark:text-blue-600">
                     {stat.label}
                   </p>
                 </motion.div>
@@ -456,7 +456,7 @@ export default function Home() {
                 <h2 className="text-3xl text-blue-600 font-bold tracking-tighter md:text-4xl">
                   Trusted by Industry Leaders
                 </h2>
-                <p className="max-w-[900px] text-gray-600 md:text-xl">
+                <p className="max-w-[900px] text-gray-600 dark:text-gray-600 md:text-xl">
                   We collaborate with top organizations to deliver cutting-edge
                   solutions.
                 </p>
@@ -488,7 +488,7 @@ export default function Home() {
                         width={160}
                         height={80}
                       />
-                      <p className="mt-2 text-sm font-medium text-blue-600">
+                      <p className="mt-2 text-sm font-medium dark:text-white text-blue-600">
                         {partner.name}
                       </p>
                     </div>
@@ -516,7 +516,7 @@ export default function Home() {
                         width={160}
                         height={80}
                       />
-                      <p className="mt-2 text-sm font-medium text-blue-600">
+                      <p className="mt-2 text-sm font-medium dark:text-white text-blue-600">
                         {partner.name}
                       </p>
                     </div>
@@ -543,7 +543,7 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-blue-700 dark:text-blue-300">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl text-blue-700 dark:text-blue-600">
                 Latest Blog Insights
               </h2>
               <p className="max-w-[600px] mx-auto mt-4 text-gray-600 dark:text-gray-300">
@@ -562,7 +562,7 @@ export default function Home() {
               {
                 title :"Drug Awareness in Rural Ethiopia",
                 excerpt:" If you can not Handle your drugs, DO NOT do them please.",
-                link: "https://www.amsh.gov.et/",
+                link: "/https://www.amsh.gov.et/",
                 image: "/drugs.jpg",
               },
                 {
@@ -597,7 +597,7 @@ export default function Home() {
                       <p className="mt-3 text-lg text-gray-600 dark:text-gray-300">
                         {post.excerpt}
                       </p>
-                      <span className="mt-4 inline-block text-blue-500 dark:text-blue-300 hover:underline font-medium">
+                      <span className="mt-4 inline-block text-blue-500 dark:text-blue-600 hover:underline font-medium">
                         Read More
                       </span>
                     </div>
@@ -643,7 +643,7 @@ export default function Home() {
                   <input
                     type="email"
                     placeholder="Enter your email"
-                    className="px-4 py-2 rounded-lg text-gray-800 dark:text-gray-200 bg-white/80 dark:bg-blue-800/50 border border-blue-600 dark:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="px-4 py-2 rounded-lg text-gray-800 dark:text-gray-600 bg-white/80 dark:bg-blue-800/50 border border-blue-600 dark:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
                     required
                   />
                   <Button

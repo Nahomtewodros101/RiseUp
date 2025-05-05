@@ -201,20 +201,7 @@ export default function Home() {
         >
           QMEM
         </h1>
-        <p
-          style={{
-            fontSize: "1.2rem",
-            color: "#bfdbfe",
-            maxWidth: "500px",
-            margin: "1rem auto",
-            lineHeight: "1.6",
-            opacity: 0,
-            animation: "slideUp 1.8s ease-out 0.3s forwards",
-            transition: "color 0.3s ease",
-          }}
-        >
-         ESHQULBITBITT
-        </p>
+  
       </div>
 
       {/* CSS for Animations and Transitions */}

@@ -213,8 +213,7 @@ export default function Home() {
             transition: "color 0.3s ease",
           }}
         >
-          Qmem is undergoing maintenance to enhance your experience. We'll be
-          back online soon!
+         ESHQULBITBITT
         </p>
       </div>
 

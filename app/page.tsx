@@ -25,6 +25,7 @@ import { Card, CardContent } from "../components/ui/card";
 import Image from "next/image";
 import WhyChooseUsSection from "../components/WhyChooseUS";
 import LifecycleSection from "../components/LifecycleSection";
+import { title } from "process";
 
 export default function Home() {
   const [isContentReady, setIsContentReady] = useState(false);
@@ -32,239 +33,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const Maintenance = () => (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #0a1a3a 0%, #1e3a8a 100%)",
-        color: "#ffffff",
-        display: "grid",
-        placeItems: "center",
-        textAlign: "center",
-        fontFamily: "'Inter', sans-serif",
-        overflow: "hidden",
-        transition: "background 1s ease-in-out",
-      }}
-    >
-      <div
-        style={{
-          opacity: 0,
-          animation: "fadeIn 1.5s ease-out forwards",
-        }}
-      >
-        {/* SVG Illustration */}
-        <svg
-          width="400"
-          height="300"
-          viewBox="0 0 400 300"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{
-            margin: "0 auto",
-            display: "block",
-            transition: "transform 0.5s ease",
-          }}
-        >
-          {/* Background Glow */}
-          <defs>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="6" result="coloredBlur" />
-              <feMerge>
-                <feMergeNode in="coloredBlur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-
-          {/* Animated Orbiting Circles */}
-          <circle
-            cx="200"
-            cy="150"
-            r="80"
-            stroke="#3b82f6"
-            strokeWidth="4"
-            fill="none"
-            filter="url(#glow)"
-            style={{ transition: "stroke 0.3s ease" }}
-          >
-            <animateTransform
-              attributeName="transform"
-              type="rotate"
-              from="0 200 150"
-              to="360 200 150"
-              dur="12s"
-              repeatCount="indefinite"
-              calcMode="spline"
-              keySplines="0.42 0 0.58 1"
-            />
-          </circle>
-          <circle
-            cx="200"
-            cy="150"
-            r="60"
-            stroke="#60a5fa"
-            strokeWidth="3"
-            fill="none"
-            filter="url(#glow)"
-            style={{ transition: "stroke 0.3s ease" }}
-          >
-            <animateTransform
-              attributeName="transform"
-              type="rotate"
-              from="360 200 150"
-              to="0 200 150"
-              dur="10s"
-              repeatCount="indefinite"
-              calcMode="spline"
-              keySplines="0.42 0 0.58 1"
-            />
-          </circle>
-
-          {/* Central Node with Pulse */}
-          <circle
-            cx="200"
-            cy="150"
-            r="20"
-            fill="#93c5fd"
-            filter="url(#glow)"
-            style={{ transition: "fill 0.3s ease" }}
-          >
-            <animate
-              attributeName="r"
-              values="20;24;20"
-              dur="2s"
-              repeatCount="indefinite"
-              calcMode="spline"
-              keySplines="0.42 0 0.58 1"
-            />
-            <animate
-              attributeName="opacity"
-              values="0.7;1;0.7"
-              dur="2s"
-              repeatCount="indefinite"
-              calcMode="spline"
-              keySplines="0.42 0 0.58 1"
-            />
-          </circle>
-
-          {/* Floating Particles with Bounce */}
-          <circle cx="150" cy="100" r="5" fill="#3b82f6">
-            <animate
-              attributeName="cy"
-              values="100;85;100"
-              dur="3s"
-              repeatCount="indefinite"
-              calcMode="spline"
-              keySplines="0.42 0 0.58 1"
-            />
-            <animate
-              attributeName="opacity"
-              values="0.5;1;0.5"
-              dur="3s"
-              repeatCount="indefinite"
-              calcMode="spline"
-              keySplines="0.42 0 0.58 1"
-            />
-          </circle>
-          <circle cx="250" cy="200" r="5" fill="#60a5fa">
-            <animate
-              attributeName="cy"
-              values="200;185;200"
-              dur="4s"
-              repeatCount="indefinite"
-              calcMode="spline"
-              keySplines="0.42 0 0.58 1"
-            />
-            <animate
-              attributeName="opacity"
-              values="0.5;1;0.5"
-              dur="4s"
-              repeatCount="indefinite"
-              calcMode="spline"
-              keySplines="0.42 0 0.58 1"
-            />
-          </circle>
-        </svg>
-
-        {/* Text Content */}
-        <h1
-          style={{
-            fontSize: "3.5rem",
-            fontWeight: "800",
-            background: "linear-gradient(90deg, #3b82f6, #93c5fd)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            marginTop: "1.5rem",
-            letterSpacing: "0.15em",
-            transition: "all 0.5s ease",
-          }}
-        >
-          QMEM
-        </h1>
-        <p
-          style={{
-            fontSize: "1.2rem",
-            color: "#bfdbfe",
-            maxWidth: "500px",
-            margin: "1rem auto",
-            lineHeight: "1.6",
-            opacity: 0,
-            animation: "slideUp 1.8s ease-out 0.3s forwards",
-            transition: "color 0.3s ease",
-          }}
-        >
-         ESHKINTIRPIRPIR SITUATION  SHIII 👨🏾‍💻
-        </p>
-      </div>
-
-      {/* CSS for Animations and Transitions */}
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes pulse {
-          0% {
-            opacity: 0.7;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 1;
-            transform: scale(1.05);
-          }
-          100% {
-            opacity: 0.7;
-            transform: scale(1);
-          }
-        }
-        h1 {
-          animation: pulse 5s infinite ease-in-out;
-        }
-        svg:hover {
-          transform: scale(1.05);
-        }
-        p:hover {
-          color: #ffffff;
-        }
-      `}</style>
-    </div>
-  );
+ 
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -300,7 +69,6 @@ export default function Home() {
   }
   const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
 
-  if (isMaintenance) return <Maintenance />;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -784,20 +552,19 @@ export default function Home() {
             </motion.div>
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {[
-                {
-                  title: "Top Web Design Trends for 2025",
-                  excerpt:
-                    "Discover the styles shaping the future of digital experiences.",
-                  link: "/blog",
-                  image: "/website.jpg",
-                },
-                {
-                  title: "Owning A web based business",
-                  excerpt:
-                    "How to own a web based business and make the best of it.",
-                  link: "/blog",
-                  image: "/own.png",
-                },
+                // {
+                //   title: "Top Web Design Trends for 2025",
+                //   excerpt:
+                //     "Discover the styles shaping the future of digital experiences.",
+                //   link: "/blog",
+                //   image: "/website.jpg",
+                // },
+              {
+                title :"Drug Awareness in Rural Ethiopia",
+                excerpt:" If you can not Handle your drugs, DO NOT do them please.",
+                link: "https://www.amsh.gov.et/",
+                image: "/drugs.jpg",
+              },
                 {
                   title: "Why choosing the right tech provider is crucial",
                   excerpt:

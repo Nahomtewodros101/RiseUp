@@ -285,7 +285,7 @@ export default function Home() {
   if (!isContentReady) {
     return null;
   }
-  const isMaintenance = "true";
+  const isMaintenance = false
   if (isMaintenance) return <Maintenance />;
 
   return (
@@ -770,20 +770,14 @@ export default function Home() {
             </motion.div>
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {[
-                // {
-                //   title: "Top Web Design Trends for 2025",
-                //   excerpt:
-                //     "Discover the styles shaping the future of digital experiences.",
-                //   link: "/blog",
-                //   image: "/website.jpg",
-                // },
                 {
-                  title: "Drug Awareness in Rural Ethiopia",
+                  title: "Top Web Design Trends for 2025",
                   excerpt:
-                    " If you can not Handle your drugs, DO NOT do them please.",
-                  link: "/https://www.amsh.gov.et/",
-                  image: "/drugs.jpg",
+                    "Discover the styles shaping the future of digital experiences.",
+                  link: "/blog",
+                  image: "/website.jpg",
                 },
+              
                 {
                   title: "Why choosing the right tech provider is crucial",
                   excerpt:

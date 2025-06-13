@@ -3,7 +3,7 @@
 import type React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Mail, MapPin, Phone } from "lucide-react";
+import { Home, Mail, MapPin, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,6 +18,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
+import { IPhoneFrame } from "@/components/IphoneFrame";
+
 const MapComponent = dynamic(() => import("@/components/MapComponent"), {
   ssr: false,
 });
@@ -32,7 +34,7 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null); 
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -52,7 +54,7 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setError(null); // Reset any previous errors
+    setError(null);
 
     try {
       const response = await fetch("/api/contact", {
@@ -90,159 +92,174 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
       <Navbar />
       <main className="flex-1 py-12 md:py-24">
-        <div className="container px-4 md:px-6">
-          <div className="mb-12">
+        {/* Decorative Header Section */}
+        <div className="relative w-full h-48 bg-blue-600 overflow-hidden">
+          <div className="absolute inset-0 bg-[url('/path-to-decorative-image.jpg')] bg-cover bg-center opacity-30" />
+          <motion.div
+            className="container px-4 md:px-6 mt-10 text-center text-white space-y-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+              Let's Connect
+            </h1>
+            <p className="max-w-[700px] mx-auto text-lg">
+              Reach out to our team for inquiries, projects, or support. We're
+              here to help!
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="container px-4 md:px-6 mt-12">
+          <div className="mb-12 flex justify-center">
             <Link href="/">
-              <Button variant="ghost" className="mb-6">
-                <ArrowLeft className="mr-2 h-4 w-4" />
+              <Button
+                variant="ghost"
+                className="text-blue-600 hover:bg-blue-100"
+              >
+                <Home className="mr-2 h-4 w-4" />
                 Back to Home
               </Button>
             </Link>
-            <motion.div
-              className="space-y-2"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-3xl text-blue-600 font-bold tracking-tighter sm:text-5xl">
-                Contact Us
-              </h1>
-              <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
-                Have a question or want to discuss a project? Get in touch with
-                our team.
-              </p>
-            </motion.div>
           </div>
 
           <div className="grid gap-10 lg:grid-cols-2">
-            {/* Contact Form */}
+            {/* Contact Form inside iPhone Frame */}
             <motion.div
-              className="rounded-lg border bg-card p-6 shadow-sm"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              className="flex justify-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              {isSubmitted ? (
-                <div className="flex flex-col items-center justify-center space-y-4 py-10">
-                  <div className="rounded-full bg-green-100 p-3">
-                    <svg
-                      className="h-6 w-6 text-green-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      ></path>
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold">Message Sent!</h3>
-                  <p className="text-center text-gray-500 dark:text-gray-400">
-                    Thank you for contacting us. We&apos;ll get back to you as
-                    soon as possible.
-                  </p>
-                  <Button
-                    onClick={() => setIsSubmitted(false)}
-                    className="mt-4"
-                  >
-                    Send Another Message
-                  </Button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="name"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Name
-                    </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formState.name}
-                      onChange={handleChange}
-                      placeholder="Your name"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="email"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formState.email}
-                      onChange={handleChange}
-                      placeholder="Your email address"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="subject"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Subject
-                    </label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a subject" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="general">General Inquiry</SelectItem>
-                        <SelectItem value="project">
-                          Project Discussion
-                        </SelectItem>
-                        <SelectItem value="quote">Request a Quote</SelectItem>
-                        <SelectItem value="support">
-                          Technical Support
-                        </SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <label
-                      htmlFor="message"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Message
-                    </label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      value={formState.message}
-                      onChange={handleChange}
-                      placeholder="Your message"
-                      className="min-h-[150px]"
-                      required
-                    />
-                  </div>
-                  {error && (
-                    <p className="text-red-600 text-sm">{error}</p> // Show error message
+              <IPhoneFrame>
+                <div className="p-4 bg-white dark:bg-gray-800 rounded-lg">
+                  {isSubmitted ? (
+                    <div className="flex flex-col items-center justify-center space-y-4 py-10">
+                      <div className="rounded-full bg-green-100 p-3">
+                        <svg
+                          className="h-6 w-6 text-green-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-xl font-bold">Message Sent!</h3>
+                      <p className="text-center text-gray-500 dark:text-gray-400">
+                        Thank you for contacting us. We'll get back to you soon.
+                      </p>
+                      <Button
+                        onClick={() => setIsSubmitted(false)}
+                        className="mt-4 bg-blue-600 hover:bg-blue-700"
+                      >
+                        Send Another Message
+                      </Button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="name"
+                          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                        >
+                          Name
+                        </label>
+                        <Input
+                          id="name"
+                          name="name"
+                          value={formState.name}
+                          onChange={handleChange}
+                          placeholder="Your name"
+                          required
+                          className="border-gray-300 dark:border-gray-600"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="email"
+                          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                        >
+                          Email
+                        </label>
+                        <Input
+                          id="email"
+                          name="email"
+                          type="email"
+                          value={formState.email}
+                          onChange={handleChange}
+                          placeholder="Your email address"
+                          required
+                          className="border-gray-300 dark:border-gray-600"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="subject"
+                          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                        >
+                          Subject
+                        </label>
+                        <Select>
+                          <SelectTrigger className="border-gray-300 dark:border-gray-600">
+                            <SelectValue placeholder="Select a subject" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="general">
+                              General Inquiry
+                            </SelectItem>
+                            <SelectItem value="project">
+                              Project Discussion
+                            </SelectItem>
+                            <SelectItem value="quote">
+                              Request a Quote
+                            </SelectItem>
+                            <SelectItem value="support">
+                              Technical Support
+                            </SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <label
+                          htmlFor="message"
+                          className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                        >
+                          Message
+                        </label>
+                        <Textarea
+                          id="message"
+                          name="message"
+                          value={formState.message}
+                          onChange={handleChange}
+                          placeholder="Your message"
+                          className="min-h-[100px] border-gray-300 dark:border-gray-600"
+                          required
+                        />
+                      </div>
+                      {error && <p className="text-red-600 text-sm">{error}</p>}
+                      <Button
+                        type="submit"
+                        className="w-full bg-blue-600 hover:bg-blue-700"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? "Sending..." : "Send Message"}
+                      </Button>
+                    </form>
                   )}
-                  <Button
-                    type="submit"
-                    className="w-full bg-blue-600 hover:bg-blue-700"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </Button>
-                </form>
-              )}
+                </div>
+              </IPhoneFrame>
             </motion.div>
 
             {/* Contact Information */}
@@ -252,17 +269,19 @@ export default function ContactPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="rounded-lg border bg-card p-6 shadow-sm">
-                <h3 className="text-xl font-bold mb-4">Contact Information</h3>
+              <div className="rounded-lg border bg-card p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <h3 className="text-xl font-bold mb-4 text-blue-600 dark:text-blue-400">
+                  Contact Information
+                </h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
                     <MapPin className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
                     <div>
                       <h4 className="font-medium">Address</h4>
                       <p className="text-gray-500 dark:text-gray-400">
-                        Addis Ababa , Ethiopia
+                        Addis Ababa, Ethiopia
                         <br />
-                        Spokane , WD
+                        Spokane, WA
                       </p>
                     </div>
                   </div>
@@ -282,7 +301,7 @@ export default function ContactPage() {
                     <div>
                       <h4 className="font-medium">Phone</h4>
                       <p className="text-gray-500 dark:text-gray-400">
-                        +251 963 18 29 98 <br />
+                        +251 963 18 29 98
                       </p>
                     </div>
                   </div>
@@ -292,6 +311,29 @@ export default function ContactPage() {
               <MapComponent />
             </motion.div>
           </div>
+
+          {/* Call to Action Section */}
+          <motion.div
+            className="mt-12 text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="rounded-lg bg-blue-100 dark:bg-blue-900 p-6 shadow-md">
+              <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                Ready to Start a Project?
+              </h3>
+              <p className="mt-2 text-gray-600 dark:text-gray-300">
+                Let's collaborate to bring your ideas to life. Contact us today!
+              </p>
+              <Button
+                className="mt-4 bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => setIsSubmitted(false)}
+              >
+                Get in Touch
+              </Button>
+            </div>
+          </motion.div>
         </div>
       </main>
       <Footer />

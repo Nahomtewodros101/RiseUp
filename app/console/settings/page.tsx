@@ -238,7 +238,7 @@ export default function SettingsPage() {
   return (
     <div className="container mx-auto px-4 md:px-6 py-12 md:py-24">
       <div className="flex flex-col">
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+        <h2 className="text-3xl font-bold tracking-tight text-blue-600 dark:text-gray-100">
           Admin Settings
         </h2>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
@@ -247,7 +247,7 @@ export default function SettingsPage() {
       </div>
 
       <Tabs defaultValue="account" className="mt-6">
-        <TabsList className="bg-blue-50 dark:bg-gray-800">
+        <TabsList className="bg-blue-50 dark:bg-gray-800 text-blue-600">
           <TabsTrigger
             value="account"
             className="data-[state=active]:bg-blue-100 dark:data-[state=active]:bg-blue-900/30"

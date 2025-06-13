@@ -1,6 +1,5 @@
-// types.ts
+// Types for the entire codebase
 export type UserRole = "user" | "admin";
-
 export interface User {
   id: string;
   email: string;

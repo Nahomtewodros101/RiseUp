@@ -171,7 +171,7 @@ function Page() {
         <CardHeader className="bg-blue-50 dark:from-gray-800 dark:to-gray-700 border-b dark:border-gray-600">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-2xl font-bold flex items-center gap-2 text-gray-900 dark:text-gray-100">
+              <CardTitle className="text-2xl font-bold flex items-center gap-2 text-blue-600 dark:text-gray-100">
                 <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 User Management
               </CardTitle>
@@ -182,13 +182,13 @@ function Page() {
             <div className="flex items-center gap-2">
               <Badge
                 variant="outline"
-                className="px-3 py-1 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
+                className="px-3 py-1 text-blue-600 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600"
               >
                 Total: {users.length}
               </Badge>
               <Badge
                 variant="outline"
-                className="bg-sky-50 text-sky-700 px-3 py-1 dark:bg-sky-900 dark:text-sky-200 dark:border-sky-600"
+                className="bg-sky-50 text-blue-600 px-3 py-1 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-600"
               >
                 Admins: {users.filter((user) => user.role === "admin").length}
               </Badge>
@@ -261,7 +261,7 @@ function Page() {
                     {currentUsers.map((user) => (
                       <TableRow
                         key={user.id}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-600"
+                        className="hover:bg-blue-300 dark:hover:bg-gray-600"
                       >
                         <TableCell className="text-gray-900 dark:text-gray-200">
                           {user.name}
@@ -270,7 +270,7 @@ function Page() {
                           {user.email}
                         </TableCell>
                         <TableCell>
-                          <Badge className={`${getRoleBadgeColor(user.role)}`}>
+                          <Badge className={`${getRoleBadgeColor(user.role)} text-blue-600`}>
                             {user.role}
                           </Badge>
                         </TableCell>

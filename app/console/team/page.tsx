@@ -271,7 +271,7 @@ export default function ConsoleTeamPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl text-black dark:text-white font-bold tracking-tight">
+        <h2 className="text-3xl text-blue-600 dark:text-white font-bold tracking-tight">
           Team Members
         </h2>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>

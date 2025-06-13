@@ -166,7 +166,7 @@ export default function CareersPage() {
   return (
     <div className="flex-col space-y-10 mt-10 shadow-xl dark:bg-gray-800 rounded-lg p-10  items-center mx-auto max-w-7xl justify-between">
       <div className="flex items-center mx-auto max-w-7xl justify-between">
-        <h2 className="text-3xl text-black dark:text-white font-bold tracking-tight">
+        <h2 className="text-3xl text-blue-600 dark:text-white font-bold tracking-tight">
           Careers
         </h2>
         <Button asChild>
@@ -242,13 +242,15 @@ export default function CareersPage() {
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody >
+              <TableBody>
                 {filteredCareers.map((career) => (
                   <TableRow key={career.id}>
-                    <TableCell className="font-medium ">
+                    <TableCell className="font-medium text-blue-600 ">
                       {career.title}
                     </TableCell>
-                    <TableCell>{career.department}</TableCell>
+                    <TableCell className="text-blue-900">
+                      {career.department}
+                    </TableCell>
                     <TableCell>{career.location}</TableCell>
                     <TableCell>{career.type}</TableCell>
                     <TableCell>

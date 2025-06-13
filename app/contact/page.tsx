@@ -105,10 +105,10 @@ export default function ContactPage() {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-              Let's Connect
+              Let us Connect
             </h1>
             <p className="max-w-[700px] mx-auto text-lg">
-              Reach out to our team for inquiries, projects, or support. We're
+              Reach out to our team for inquiries, projects, or support. We are
               here to help!
             </p>
           </motion.div>
@@ -157,7 +157,7 @@ export default function ContactPage() {
                       </div>
                       <h3 className="text-xl font-bold">Message Sent!</h3>
                       <p className="text-center text-gray-500 dark:text-gray-400">
-                        Thank you for contacting us. We'll get back to you soon.
+                        Thank you for contacting us. We will get back to you soon.
                       </p>
                       <Button
                         onClick={() => setIsSubmitted(false)}
@@ -324,7 +324,7 @@ export default function ContactPage() {
                 Ready to Start a Project?
               </h3>
               <p className="mt-2 text-gray-600 dark:text-gray-300">
-                Let's collaborate to bring your ideas to life. Contact us today!
+                Let us collaborate to bring your ideas to life. Contact us today!
               </p>
               <Button
                 className="mt-4 bg-blue-600 hover:bg-blue-700 text-white"

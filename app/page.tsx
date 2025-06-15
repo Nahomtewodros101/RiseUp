@@ -201,7 +201,6 @@ export default function Home() {
         >
           QMEM
         </h1>
-  
       </div>
 
       {/* CSS for Animations and Transitions */}
@@ -285,7 +284,7 @@ export default function Home() {
   if (!isContentReady) {
     return null;
   }
-  const isMaintenance = false
+  const isMaintenance = false;
   if (isMaintenance) return <Maintenance />;
 
   return (
@@ -768,7 +767,7 @@ export default function Home() {
                 Stay updated with our tips, trends, and tech insights.
               </p>
             </motion.div>
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
               {[
                 {
                   title: "Top Web Design Trends for 2025",
@@ -777,7 +776,7 @@ export default function Home() {
                   link: "/blog",
                   image: "/website.jpg",
                 },
-              
+
                 {
                   title: "Why choosing the right tech provider is crucial",
                   excerpt:
@@ -832,8 +831,11 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <div className="space-y-2">
-                <h2 className="text-3xl  font-bold text-black dark:text-white tracking-tighter sm:text-4xl md:text-5xl">
-                  Let us Build Something Amazing
+                <h2 className="text-3xl  font-bold text-blue-600 dark:text-white tracking-tighter sm:text-4xl md:text-5xl">
+                  Let us{" "}
+                  <span className="text-black dark:text-blue-900">Build</span>{" "}
+                  Something{" "}
+                  <span className="text-black dark:text-blue-900">Amazing</span>
                 </h2>
                 <Link href="/contact" className="inline-block">
                   <Button className="bg-blue-600 text-white hover:bg-blue-500 font-semibold py-3 px-8 rounded-full">
@@ -841,32 +843,6 @@ export default function Home() {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-                <p className="max-w-[600px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Ready to transform your ideas? join our newsletter.
-                </p>
-              </div>
-              <div className="flex flex-col gap-4 min-[400px]:flex-row items-center">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    window.location.reload();
-                  }}
-                  className="flex gap-2"
-                >
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="px-4 py-2 rounded-lg text-gray-800 dark:text-gray-600 bg-white/80 dark:bg-blue-800/50 border border-blue-600 dark:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    required
-                  />
-                  <Button
-                    type="submit"
-                    className="bg-blue-600 text-white hover:bg-blue-500 font-semibold py-3 px-8 rounded-full"
-                  >
-                    Subscribe
-                    <SubscriptIcon className="ml-2 h-4 w-4" />
-                  </Button>
-                </form>
               </div>
             </motion.div>
           </div>

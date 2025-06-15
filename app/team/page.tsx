@@ -98,11 +98,14 @@ export default function TeamPage() {
 
           {/* Loading State */}
           {isLoading && (
-            <div className="flex justify-center items-center py-20">
+            <div className="flex justify-center flex-col items-center py-20">
               <Loader2 className="h-10 w-10 animate-spin text-blue-600 dark:text-blue-400" />
-              <p className="ml-4 text-gray-500 dark:text-gray-400">
+              <Badge
+                variant="secondary"
+                className="bg-gradient-to-r from-blue-500 to-blue-500 text-white font-bold animate-pulse uppercase text-xs py-1 px-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 hover:rotate-2"
+              >
                 Get ready to meet our Qmems
-              </p>
+              </Badge>
             </div>
           )}
 
@@ -134,8 +137,11 @@ export default function TeamPage() {
                   </div>
                   <CardContent className="p-4">
                     <h3 className="font-bold text-lg">
-                      
-                      <VerifiedIcon color="blue" className=" h-4 w-4 inline-flex" /> {member.name}
+                      <VerifiedIcon
+                        color="blue"
+                        className=" h-4 w-4 inline-flex"
+                      />{" "}
+                      {member.name}
                     </h3>
                     <p className="text-blue-600 dark:text-blue-400">
                       {member.role}
@@ -239,13 +245,6 @@ export default function TeamPage() {
               <Link href="/careers">View Open Positions</Link>
             </Button>
           </motion.div>
-          <blockquote className="text-xl font-semibold italic text-blue-600 dark:text-blue-400">
-            We are not just a team ... we are a family. Together, we create
-            magic.
-          </blockquote>
-          <p className="mt-4 text-sm font-medium text-end text-blue-300">
-            — Qemem Devs
-          </p>
         </div>
       </main>
       <Footer />

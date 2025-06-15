@@ -180,7 +180,7 @@ export default function BlogPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+              <h1 className="text-3xl font-bold text-blue-600 tracking-tighter sm:text-5xl">
                 Our Blog
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">

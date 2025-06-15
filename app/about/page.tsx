@@ -147,12 +147,6 @@ export default function AboutPage() {
             transition={{ duration: 0.5, delay: 0.8 }}
           >
             <div className="flex flex-col items-center max-w-2xl container justify-center">
-              <h1 className="text-blue-600 animate-pulse  font-bold text-xl   my-3">
-                Crafted with careful planing and extraordinary sorcery
-                <br />
-                Our products speak for themselves when it comes to quality
-              </h1>
-
               <div className="flex flex-row sm:flex-col gap-4 justify-center">
                 <Button
                   asChild
@@ -160,9 +154,6 @@ export default function AboutPage() {
                   className="bg-blue-600 hover:bg-blue-700 "
                 >
                   <Link href="/contact">Reach out </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg">
-                  <Link href="/projects">See for yourself</Link>
                 </Button>
               </div>
             </div>

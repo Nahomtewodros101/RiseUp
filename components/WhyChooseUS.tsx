@@ -87,7 +87,7 @@ export default function WhyChooseUsSection() {
               <h3 className="text-xl sm:text-3xl font-poppins font-semibold text-blue-600 dark:text-white relative z-10">
                 {item.title}
               </h3>
-              <p className="text-base text-gray-600 dark:text-gray-600 mt-3 relative z-10 font-inter leading-relaxed">
+              <p className="text-base text-blue-600 dark:text-black mt-3 relative z-10 font-inter leading-relaxed">
                 {item.description}
               </p>
             </motion.div>

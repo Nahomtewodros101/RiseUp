@@ -221,18 +221,9 @@ export default function JobsPage() {
               </Link>
             </div>
             <h1 className="text-3xl text-blue-600 font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-              Let us Build Something Amazing Together
+              Let us Talk Business Now
             </h1>
-            <p className="max-w-[700px] text-black/40 font-semibold md:text-xl text-center animate-pulse leading-relaxed">
-              <br />
-              Whether you are looking to <span>join our team</span> or
-              <span>hire our experts</span> <br />
-              <span className="text-blue-600">
-                <Link href="/">Qmem Tech</Link>
-              </span>
-              <br />
-              Will gladly help you achieve your goals.
-            </p>
+
             <Button onClick={() => window.history.back()}>
               Not feeling like it?
             </Button>
@@ -383,14 +374,6 @@ export default function JobsPage() {
                   </CardContent>
                 </Card>
               )}
-              <blockquote className="mt-6 border-l-2 pl-6 italic text-blue-600 animate-pulse">
-                Your time is limited, so do not waste it working for someone who
-                do not want you to evolve into the best version of yourself.{" "}
-                <br />
-                <footer className="mt-2 text-sm not-italic text-right">
-                  — qmem
-                </footer>
-              </blockquote>
             </div>
           </TabsContent>
         </Tabs>
@@ -683,19 +666,15 @@ function ClientServices() {
             },
           ].map((item, i) => (
             <div key={i} className="relative">
-              <div className="text-4xl font-bold text-sky-100">{item.step}</div>
+              <div className="text-4xl font-bold text-blue-600">{item.step}</div>
               <h3 className="text-xl font-bold mt-2">{item.title}</h3>
               <p className="text-gray-500 mt-2">{item.description}</p>
               {i < 3 && (
-                <div className="hidden lg:block absolute top-10 right-0 w-1/2 h-0.5 bg-sky-100"></div>
+                <div className="hidden lg:block absolute top-10 right-0 w-1/2 h-0.5 bg-blue-100"></div>
               )}
             </div>
           ))}
         </div>
-        <blockquote className="mt-6 border-l-2 text-lg pl-6 italic text-blue-600 animate-pulse">
-          Your software is only as brilliant as the genius behind it.
-          <footer className="mt-2 text-lg not-italic text-right">— qmem</footer>
-        </blockquote>
       </section>
     </div>
   );

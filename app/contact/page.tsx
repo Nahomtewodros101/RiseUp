@@ -104,10 +104,10 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-              Let us Connect
+            <h1 className="text-4xl font-bold  tracking-tighter sm:text-5xl md:text-6xl">
+              Let us <span className="text-black"> Connect </span>
             </h1>
-            <p className="max-w-[700px] mx-auto text-lg">
+            <p className="max-w-[700px] mx-auto font-bold text-lg">
               Reach out to our team for inquiries, projects, or support. We are
               here to help!
             </p>
@@ -157,7 +157,8 @@ export default function ContactPage() {
                       </div>
                       <h3 className="text-xl font-bold">Message Sent!</h3>
                       <p className="text-center text-gray-500 dark:text-gray-400">
-                        Thank you for contacting us. We will get back to you soon.
+                        Thank you for contacting us. We will get back to you
+                        soon.
                       </p>
                       <Button
                         onClick={() => setIsSubmitted(false)}
@@ -311,29 +312,6 @@ export default function ContactPage() {
               <MapComponent />
             </motion.div>
           </div>
-
-          {/* Call to Action Section */}
-          <motion.div
-            className="mt-12 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="rounded-lg bg-blue-100 dark:bg-blue-900 p-6 shadow-md">
-              <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                Ready to Start a Project?
-              </h3>
-              <p className="mt-2 text-gray-600 dark:text-gray-300">
-                Let us collaborate to bring your ideas to life. Contact us today!
-              </p>
-              <Button
-                className="mt-4 bg-blue-600 hover:bg-blue-700 text-white"
-                onClick={() => setIsSubmitted(false)}
-              >
-                Get in Touch
-              </Button>
-            </div>
-          </motion.div>
         </div>
       </main>
       <Footer />

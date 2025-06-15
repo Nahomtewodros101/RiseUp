@@ -135,27 +135,7 @@ export default function CareerDetailsPage() {
           }}
           className="text-blue-800 text-lg font-semibold"
         >
-          <svg
-            className="animate-spin h-8 w-8 text-blue-800 mb-4"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v8H4z"
-            ></path>
-          </svg>
-          Loading job details...
+          Loading job details for you please be patient...
         </motion.div>
       </div>
     );
@@ -163,7 +143,7 @@ export default function CareerDetailsPage() {
 
   if (!job) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-blue-500">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-blue-600">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -209,14 +189,14 @@ export default function CareerDetailsPage() {
             className="mb-12"
           >
             <Link href="/careers">
-              <Button variant="ghost" className="mb-6 text-blue-700">
+              <Button variant="ghost" className="mb-6 text-blue-600">
                 <ArrowLeft className="mr-2 h-4 w-4" /> Back to Careers
               </Button>
             </Link>
-            <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">
+            <h1 className="text-4xl md:text-5xl font-bold text-blue-600 mb-2">
               {job.title}
             </h1>
-            <div className="flex flex-wrap gap-3 text-sm text-blue-700 mb-4">
+            <div className="flex flex-wrap gap-3 text-sm text-blue-600 mb-4">
               <div className="flex items-center gap-1">
                 <Briefcase className="w-4 h-4" /> {job.department}
               </div>
@@ -239,7 +219,7 @@ export default function CareerDetailsPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mb-20"
           >
-            <h2 className="text-2xl font-bold text-blue-800 mb-4">Apply Now</h2>
+            <h2 className="text-2xl font-bold text-blue-600 mb-4">Apply Now</h2>
 
             {successMessage && (
               <div className="p-4 mb-4 text-green-800 bg-green-100 rounded">
@@ -255,7 +235,7 @@ export default function CareerDetailsPage() {
               onSubmit={handleSubmitApplication}
               className="space-y-6 bg-gradient-to-b from-blue-50 to-blue-100 p-8 rounded-lg shadow-lg"
             >
-              <h3 className="text-2xl font-semibold text-blue-800 text-center">
+              <h3 className="text-2xl font-semibold text-blue-600 text-center">
                 Applying for {job.title}
               </h3>
               <div className="space-y-4">
@@ -271,7 +251,7 @@ export default function CareerDetailsPage() {
                     id="fullName"
                     name="fullName"
                     placeholder="Enter your full name"
-                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full border border-blue-600 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
                     value={applicationData.fullName}
                     onChange={handleInputChange}
                     required
@@ -289,7 +269,7 @@ export default function CareerDetailsPage() {
                     id="email"
                     name="email"
                     placeholder="Enter your email"
-                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
                     value={applicationData.email}
                     onChange={handleInputChange}
                     required
@@ -307,7 +287,7 @@ export default function CareerDetailsPage() {
                     id="phone"
                     name="phone"
                     placeholder="Enter your phone number"
-                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
                     value={applicationData.phone}
                     onChange={handleInputChange}
                     required
@@ -325,7 +305,7 @@ export default function CareerDetailsPage() {
                     id="resumeUrl"
                     name="resumeUrl"
                     placeholder="Link to your resume"
-                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full border border-blue-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
                     value={applicationData.resumeUrl}
                     onChange={handleInputChange}
                   />
@@ -341,7 +321,7 @@ export default function CareerDetailsPage() {
                     id="coverLetter"
                     name="coverLetter"
                     placeholder="Write your cover letter here"
-                    className="w-full border border-blue-300 rounded-lg px-4 py-2 h-32 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    className="w-full border border-blue-300 rounded-lg px-4 py-2 h-32 focus:ring-2 focus:ring-blue-600 focus:outline-none"
                     value={applicationData.coverLetter}
                     onChange={handleInputChange}
                   />
@@ -350,7 +330,7 @@ export default function CareerDetailsPage() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               >
                 {isSubmitting ? "Submitting..." : "Submit Application"}
               </Button>

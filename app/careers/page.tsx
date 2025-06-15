@@ -73,7 +73,7 @@ export default function CareersPage() {
   }, []);
 
   if (!isContentReady) {
-    return null; // Return nothing while loading screen is showing
+    return null;
   }
 
   return (
@@ -94,7 +94,7 @@ export default function CareersPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+              <h1 className="text-3xl text-blue-600 font-bold tracking-tighter sm:text-5xl">
                 Join Our Team
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
@@ -111,7 +111,9 @@ export default function CareersPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <h2 className="text-2xl font-bold mb-6">Open Positions</h2>
+            <h2 className="text-2xl text-blue-600 font-bold mb-6">
+              Open Positions
+            </h2>
             <Tabs defaultValue="all">
               <TabsList className="mb-6">
                 <TabsTrigger value="all">All Departments</TabsTrigger>
@@ -198,7 +200,7 @@ function JobCard({ job }: { job: Job }) {
       <CardContent className="p-6">
         <h3 className="text-xl font-bold mb-2">{job.title}</h3>
         <div className="flex flex-wrap gap-y-2 mb-4">
-          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mr-4">
+          <div className="flex items-center text-sm text-blue-500 dark:text-gray-400 mr-4">
             <Briefcase className="h-4 w-4 mr-1" />
             {job.department}
           </div>

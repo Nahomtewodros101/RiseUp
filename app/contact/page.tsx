@@ -35,6 +35,9 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [submissionResponse, setSubmissionResponse] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -55,6 +58,7 @@ export default function ContactPage() {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
+    setSubmissionResponse(null);
 
     try {
       const response = await fetch("/api/contact", {
@@ -65,12 +69,19 @@ export default function ContactPage() {
         body: JSON.stringify(formState),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Failed to send message. Please try again later.");
+        throw new Error(
+          data.error || "Failed to send message. Please try again later."
+        );
       }
 
       setIsSubmitting(false);
       setIsSubmitted(true);
+      setSubmissionResponse(
+        data.message || "Contact saved and emails sent successfully!"
+      );
       setFormState({
         name: "",
         email: "",
@@ -104,7 +115,7 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl font-bold  tracking-tighter sm:text-5xl md:text-6xl">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
               Let us <span className="text-black"> Connect </span>
             </h1>
             <p className="max-w-[700px] mx-auto font-bold text-lg">
@@ -156,10 +167,11 @@ export default function ContactPage() {
                         </svg>
                       </div>
                       <h3 className="text-xl font-bold">Message Sent!</h3>
-                      <p className="text-center text-gray-500 dark:text-gray-400">
-                        Thank you for contacting us. We will get back to you
-                        soon.
-                      </p>
+                      {submissionResponse && (
+                        <p className="text-center text-gray-500 dark:text-gray-400">
+                          {submissionResponse}
+                        </p>
+                      )}
                       <Button
                         onClick={() => setIsSubmitted(false)}
                         className="mt-4 bg-blue-600 hover:bg-blue-700"
@@ -211,7 +223,15 @@ export default function ContactPage() {
                         >
                           Subject
                         </label>
-                        <Select>
+                        <Select
+                          onValueChange={(value) =>
+                            setFormState((prev) => ({
+                              ...prev,
+                              subject: value,
+                            }))
+                          }
+                          value={formState.subject}
+                        >
                           <SelectTrigger className="border-gray-300 dark:border-gray-600">
                             <SelectValue placeholder="Select a subject" />
                           </SelectTrigger>

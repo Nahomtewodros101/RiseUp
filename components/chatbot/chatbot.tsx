@@ -25,10 +25,12 @@ export default function Chatbot() {
   useEffect(() => {
     const savedMessages = localStorage.getItem("chatbot-messages");
     if (savedMessages) {
-      const parsedMessages = JSON.parse(savedMessages).map((msg: any) => ({
-        ...msg,
-        timestamp: new Date(msg.timestamp),
-      }));
+      const parsedMessages = JSON.parse(savedMessages).map(
+        (msg: ChatMessage) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp),
+        })
+      );
       setMessages(parsedMessages);
     } else {
       const welcomeMessage: ChatMessage = {
@@ -62,7 +64,7 @@ export default function Chatbot() {
       text,
       isBot,
       timestamp: new Date(),
-      type: type as any,
+      type: (type as ChatMessage["type"]) || "text",
     };
     setMessages((prev) => [...prev, newMessage]);
   };
@@ -118,7 +120,7 @@ export default function Chatbot() {
   const renderMessage = (message: ChatMessage) => {
     const isGreeting = message.text.includes("Hi there! 👋");
     const hasOptions = isGreeting || message.type === "options";
-    console.log(hasOptions)
+    console.log(hasOptions);
     const timestamp =
       message.timestamp instanceof Date
         ? message.timestamp

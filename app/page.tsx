@@ -651,13 +651,7 @@ export default function Home() {
                     <p className="text-gray-500 italic">{testimonial.quote}</p>
                     <div className="flex items-center gap-4">
                       <div className="rounded-full bg-sky-100 w-12 h-12 flex items-center justify-center">
-                        <Image
-                          src={testimonial.image}
-                          alt={`${testimonial.name}'s picture`}
-                          className="rounded-full w-12 h-12 object-cover"
-                          width={48}
-                          height={48}
-                        />
+                        <testimonial.image className="w-8 h-8 text-blue-600" />
                       </div>
                       <div>
                         <p className="font-bold">{testimonial.name}</p>

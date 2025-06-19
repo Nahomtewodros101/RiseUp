@@ -10,7 +10,7 @@ import {
   Globe,
   Layers,
   Phone,
-  
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -596,25 +596,39 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mt-12">
               {[
                 {
-                  name: "Sarah Johnson",
+                  name: "Sarah Woldegebirhan",
                   role: "CEO, Lead Gen Ethiopia",
                   quote:
                     "Working with Qmem Tech transformed our business. Their team delivered a solution that exceeded our expectations and helped us scale rapidly.",
-                  image: "/person-1.jpg",
+                  image: User,
                 },
                 {
-                  name: "Michael Chen",
-                  role: "CTO, Moon Studios",
+                  name: "Samuel Tesfaye",
+                  role: "CTO, Mereb Tech",
                   quote:
                     "The team at Qmem Tech is exceptional. They understood our complex requirements and delivered a robust platform that our users love.",
-                  image: "/person-2.jpg",
+                  image: User,
                 },
                 {
                   name: "Emily Rodriguez",
-                  role: "Founder, One Planet",
+                  role: "Founder, One Angles Touch",
                   quote:
                     "Qmem Tech data analytics solution gave us insights we never had before. It's been a game-changer for our decision-making process.",
-                  image: "/person-3.jpg",
+                  image: User,
+                },
+                {
+                  name: "Mickias Taye",
+                  role: "Owner ,Hey-mobile",
+                  quote:
+                    "Working with Qmem Tech was a game-changer for our business. Their team delivered a solution that exceeded our expectations and helped us scale rapidly.",
+                  image: User,
+                },
+                {
+                  name: "Amanuel Tesfaye",
+                  role: "Founder, Fundo Ethiopia",
+                  quote:
+                    "Qmem Tech's expertise in cloud solutions helped us migrate seamlessly. Their support has been invaluable.",
+                  image: User,
                 },
               ].map((testimonial, index) => (
                 <Card key={index} className="border-sky-100">

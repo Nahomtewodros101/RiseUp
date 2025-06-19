@@ -225,7 +225,7 @@ export default function Chatbot() {
                     <Bot className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <CardTitle className="text-sm">Qemem Assistant</CardTitle>
+                    <CardTitle className="text-sm">Qemem </CardTitle>
                     <p className="text-xs text-muted-foreground">Online now</p>
                   </div>
                 </div>

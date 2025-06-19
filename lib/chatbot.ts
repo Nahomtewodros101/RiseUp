@@ -1,4 +1,3 @@
-// lib/chatbot.ts
 export interface ChatMessage {
   id: string;
   text: string;
@@ -115,7 +114,7 @@ export class ChatbotService {
 
     // Contact
     this.responses.set("contact", {
-      text: "📞 Get in touch with us:\n\n📧 Email: hello@qemem.dev\n📱 Phone: +1 (555) 123-4567\n🌐 Website: qemem.dev\n📍 Location: Remote & On-site\n\n⏰ We typically respond within 2 hours during business hours!",
+      text: "📞 Get in touch with us:\n\n📧 Email: Estifanos.neway.d@gmail.com\n📱 Phone: +251 963 18 29 98\n🌐 Website: qemem.cloud\n📍 Location: Spokane Washington\n\n⏰ We typically respond within 2 hours during business hours!",
       type: "options",
       options: [
         { text: "Send Message", action: "contact-form" },

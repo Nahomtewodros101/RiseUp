@@ -120,6 +120,7 @@ export default function Chatbot() {
   const renderMessage = (message: ChatMessage) => {
     const isGreeting = message.text.includes("Hi there! 👋");
     const hasOptions = isGreeting || message.type === "options";
+    console.log(hasOptions, message.type);
     const timestamp =
       message.timestamp instanceof Date
         ? message.timestamp

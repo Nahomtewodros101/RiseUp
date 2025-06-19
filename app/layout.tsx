@@ -6,6 +6,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import BackgroundGrid from "@/components/BacgroundGrid";
 import CookieConsent from "@/components/CookieConsent";
 import PwaInstallPrompt from "@/components/PwaInstallPrompt";
+import Chatbot from "../components/chatbot/chatbot";
 
 export const metadata: Metadata = {
   title: " Qmem Cloud Solutions",
@@ -71,6 +72,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
           <BackgroundGrid />
           <LoadingScreen />
           <CookieConsent />
+          <Chatbot />
           <PwaInstallPrompt />
           {children}
         </ThemeProvider>

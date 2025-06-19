@@ -53,7 +53,7 @@ export default function CloudSolutionsPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+              <h1 className="text-3xl text-blue-600 font-bold tracking-tighter sm:text-5xl">
                 Cloud Solutions
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
@@ -71,7 +71,7 @@ export default function CloudSolutionsPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div>
-              <h2 className="text-3xl font-bold mb-6">
+              <h2 className="text-3xl text-blue-600 font-bold mb-6">
                 Transform Your Business with Cloud Technology
               </h2>
               <div className="space-y-4 text-gray-500 dark:text-gray-400">

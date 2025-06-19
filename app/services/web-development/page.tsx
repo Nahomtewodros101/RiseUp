@@ -51,7 +51,7 @@ export default function WebDevelopmentPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+              <h1 className="text-3xl text-blue-600 font-bold tracking-tighter sm:text-5xl">
                 Web Development
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
@@ -68,7 +68,7 @@ export default function WebDevelopmentPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div>
-              <h2 className="text-3xl font-bold mb-6">
+              <h2 className="text-3xl text-blue-600 font-bold mb-6">
                 Modern Web Solutions for the Digital Age
               </h2>
               <div className="space-y-4 text-gray-500 dark:text-gray-400">

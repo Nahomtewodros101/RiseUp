@@ -55,9 +55,8 @@ export async function POST(req: Request) {
       from: `"Qmem Cloud" <${process.env.SMTP_USER}>`,
       to: email,
       subject: "Thank You for Your Message",
-      text: `Hi ${name},\n\nThank you for reaching out! we have received your message and will get back to you soon.\n\nBest,\nNahom Tewodros`,
+      text: `Hi ${name},\n\ we have received your message and will get back to you soon.\n\nBest,\nNahom Tewodros`,
       html: `
-        <h2>Thank You for Your Message</h2>
         <p>Hi ${name},</p>
         <p>Thank you for reaching out! we have  received your message and will get back to you soon.</p>
         <p>Best,<br>Qmem Cloud</p>

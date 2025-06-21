@@ -586,7 +586,7 @@ function ClientServices() {
           </div>
           <div className="flex justify-center">
             <Image
-              src="/Logo.webp"
+              src="/cloudd.png"
               width={500}
               height={400}
               alt="Team collaboration"
@@ -699,7 +699,7 @@ function JoinTeam() {
         <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
           <div className="flex justify-center order-last lg:order-first">
             <Image
-              src="/Logo.webp"
+              src="/cloudd.png"
               width={500}
               height={400}
               alt="Team collaboration"

@@ -14,8 +14,8 @@ export const metadata: Metadata = {
     "Transforming ideas into digital reality with cutting-edge technology solutions.",
   manifest: "/manifest.json",
   icons: [
-    { rel: "apple-touch-icon", url: "/icon-192x192.png" },
-    { rel: "icon", url: "/icon-192x192.png" },
+    { rel: "apple-touch-icon", url: "/cloudd.png" },
+    { rel: "icon", url: "/cloudd.png" },
   ],
 };
 
@@ -51,7 +51,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/cloudd.png" type="image/x-icon" />
         <link rel="manifest" href="/manifest.json" />
         {/* PWA Meta Tags */}
         <meta name="application-name" content="Qemem Tech" />
@@ -59,7 +59,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Qemem Tech" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta property="og:image" content="favicon-192x192.png" />
+        <meta property="og:image" content="cloudd.png" />
       </head>
       <body>
         <ThemeProvider

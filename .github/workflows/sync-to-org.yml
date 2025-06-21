@@ -3,28 +3,30 @@ name: Sync to Org Repo
 on:
   push:
     branches:
-      - main
+      - main  # Trigger only on main branch pushes
 
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source repo
+      - name: Checkout source repo (RiseUp)
         uses: actions/checkout@v3
 
-      - name: Set up Git
+      - name: Set up Git identity
         run: |
           git config --global user.name "nahom-bot"
           git config --global user.email "nahom@users.noreply.github.com"
 
-      - name: Clone the org repo
+      - name: Clone the Org Repo (Qmem-Tech/Qmem-Website)
         run: |
-          git clone https://x-access-token:${{ secrets.ORG_PUSH_TOKEN }}@github.com/Qmem-Tech/Qmem-Website.git
+          git clone https://x-access-token:${{ secrets.ORG_PUSH_TOKEN }}@github.com/Qmem-Tech/Qmem-Website.git org-repo
           rsync -av --delete --exclude='.git' ./ ./org-repo/
 
-      - name: Commit & Push
+      - name: Commit & Push to Org Repo
         run: |
+          git remote remove origin
+          git remote add origin https://x-access-token:${{ secrets.ORG_PUSH_TOKEN }}@github.com/Qmem-Tech/Qmem-Website.git
           git add .
           git commit -m "🔄 Auto-sync from RiseUp on $(date)" || echo "No changes to commit"
           git push origin main

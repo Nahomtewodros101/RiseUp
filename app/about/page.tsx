@@ -44,7 +44,7 @@ export default function AboutPage() {
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-3xl font-bold text-blue-600 tracking-tighter sm:text-5xl">
-                About Qemem Tech
+                About Qemem Cloud
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
                 Learn about our mission, values, and the team behind our success
@@ -63,7 +63,7 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold mb-6">Our Story</h2>
               <div className="space-y-4 text-gray-500 dark:text-gray-400">
                 <p>
-                  Founded in 2022, Qemem Tech began as a small team of
+                  Founded in 2022, Qemem Cloud began as a small team of
                   passionate developers with a shared vision: to create digital
                   solutions that make a real difference for businesses and users
                   alike.
@@ -88,7 +88,7 @@ export default function AboutPage() {
             <div className="relative h-[400px] rounded-lg overflow-hidden">
               <Image
                 src="/team.png"
-                alt="Qemem Tech team"
+                alt="Qemem Cloud team"
                 fill
                 className="object-cover"
               />
@@ -112,8 +112,9 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-bold mb-2">Innovation</h3>
                 <p className="text-gray-500 dark:text-gray-400">
-                  We embrace new technologies and approaches, constantly pushing
-                  the boundaries of what is possible in digital development.
+                  We embrace new Cloudnologies and approaches, constantly
+                  pushing the boundaries of what is possible in digital
+                  development.
                 </p>
               </div>
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border">

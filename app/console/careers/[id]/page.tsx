@@ -21,7 +21,6 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-// Career form schema
 const careerFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
   department: z.string().min(1, "Department is required"),

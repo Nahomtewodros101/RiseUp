@@ -178,7 +178,7 @@ export default function CareerDetailsPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
       <main className="flex-1 py-12 md:py-20">
         <div className="container px-4 md:px-8">
@@ -193,7 +193,7 @@ export default function CareerDetailsPage() {
                 <ArrowLeft className="mr-2 h-4 w-4" /> Back to Careers
               </Button>
             </Link>
-            <h1 className="text-4xl md:text-5xl font-bold text-blue-600 mb-2">
+            <h1 className="text-4xl md:text-5xl font-bold  text-blue-600 mb-2">
               {job.title}
             </h1>
             <div className="flex flex-wrap gap-3 text-sm text-blue-600 mb-4">
@@ -210,7 +210,7 @@ export default function CareerDetailsPage() {
                 <DollarSign className="w-4 h-4" /> {job.salary}
               </div>
             </div>
-            <p className="text-gray-600">{job.description}</p>
+            <p className="text-blue-600 max-w-3xl ">{job.description}</p>
           </motion.div>
 
           <motion.div
@@ -233,7 +233,7 @@ export default function CareerDetailsPage() {
             )}
             <form
               onSubmit={handleSubmitApplication}
-              className="space-y-6 bg-gradient-to-b from-blue-50 to-blue-100 p-8 rounded-lg shadow-lg"
+              className="space-y-6 bg-transparent p-8 rounded-lg shadow-lg"
             >
               <h3 className="text-2xl font-semibold text-blue-600 text-center">
                 Applying for {job.title}

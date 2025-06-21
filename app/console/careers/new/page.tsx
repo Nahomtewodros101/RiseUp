@@ -133,20 +133,20 @@ export default function NewCareerPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 text-blue-600">
+      <div className="flex items-center  justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Add New Career</h2>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
           {error && (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2 text-blue-600">
             <Card>
               <CardHeader>
                 <CardTitle>Basic Information</CardTitle>

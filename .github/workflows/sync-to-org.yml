@@ -18,10 +18,9 @@ jobs:
           git config --global user.name "nahom-bot"
           git config --global user.email "nahom@users.noreply.github.com"
 
-      - name: Clone the Org Repo (Qmem-Tech/Qmem-Website)
+      - name: Clone the Org Repo (Qmem-Tech/Qmem-Website)  
         run: |
           git clone https://x-access-token:${{ secrets.ORG_PUSH_TOKEN }}@github.com/Qmem-Tech/Qmem-Website.git
-          rsync -av --delete --exclude='.git' ./ ./org-repo/
 
       - name: Commit & Push to Org Repo
         run: |

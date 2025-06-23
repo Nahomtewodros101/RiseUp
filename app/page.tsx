@@ -738,14 +738,14 @@ export default function Home() {
                   title: "Top Web Design Trends for 2025",
                   description:
                     "Discover the styles shaping the future of digital experiences.",
-                  link: "/best",
+                  link: "/blog",
                   image: "/website.jpg",
                 },
                 {
                   title: "Why Choosing the Right Tech Provider is Crucial",
                   description:
                     "Choosing the right tech provider can make all the difference.",
-                  link: "/best",
+                  link: "/blog",
                   image: "/jemaw.png",
                 },
               ].map((post, index) => (

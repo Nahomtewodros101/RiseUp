@@ -102,7 +102,6 @@ export default function WebDevelopmentPage() {
               <Image
                 src="/webdev.png"
                 alt="Web Development"
-                fill
                 className="object-cover"
                 priority
                 width={800}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft,  Mail } from "lucide-react";
+import { ArrowLeft, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 export default function PrivacyPolicyPage() {
   const [isContentReady, setIsContentReady] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -22,15 +21,7 @@ export default function PrivacyPolicyPage() {
   }, []);
 
   if (!isContentReady) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-blue-600">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-          className="h-16 w-16 border-4 border-t-blue-500 border-white rounded-full"
-        ></motion.div>
-      </div>
-    );
+    return null;
   }
 
   const sections = [
@@ -49,12 +40,12 @@ export default function PrivacyPolicyPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-600 to-white text-gray-900 font-inter">
+    <div className="min-h-screen flex flex-col  text-gray-900 font-inter">
       {/* Floating Navbar */}
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-md"
+        className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md "
       >
         <Navbar />
       </motion.header>
@@ -64,12 +55,12 @@ export default function PrivacyPolicyPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="pt-32 pb-16 text-center bg-gradient-to-r from-blue-800 to-blue-600 text-white"
+        className="pt-32 pb-16 text-center  text-blue-600"
       >
         <h1 className="text-4xl md:text-5xl font-poppins font-bold tracking-tight leading-tight">
           Your Privacy, Our Priority
         </h1>
-        <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-blue-100 leading-relaxed">
+        <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-blue-600 leading-relaxed">
           Learn how Qemem Tech protects your data with transparency and care.
         </p>
         <motion.div whileHover={{ scale: 1.05 }} className="mt-8">
@@ -82,10 +73,7 @@ export default function PrivacyPolicyPage() {
         </motion.div>
       </motion.section>
 
-      <main
-        id="content"
-        className="flex-1 py-12 bg-blue-600 backdrop-blur-lg  md:py-24"
-      >
+      <main id="content" className="flex-1 py-12  backdrop-blur-lg  md:py-24">
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
           <div className="mb-12 flex items-center justify-between">
             <Link href="/" className="bg-white rounded-lg">
@@ -144,10 +132,10 @@ export default function PrivacyPolicyPage() {
                   Introduction
                 </h2>
                 <p className="text-base leading-relaxed text-gray-700">
-                  Qemem Tech we are committed to protecting
-                  your privacy. This Privacy Policy explains how we collect,
-                  use, disclose, and safeguard your information when you visit
-                  our website or use our services.
+                  Qemem Tech we are committed to protecting your privacy. This
+                  Privacy Policy explains how we collect, use, disclose, and
+                  safeguard your information when you visit our website or use
+                  our services.
                 </p>
                 <p className="text-base leading-relaxed text-gray-700 mt-4">
                   Please read this Privacy Policy carefully. If you do not agree
@@ -287,19 +275,16 @@ export default function PrivacyPolicyPage() {
                   <a
                     href="mailto:chefche@qememTech.com"
                     className="text-blue-600 hover:underline"
-                  >
-                    
-                  </a>
+                  ></a>
                   <br />
                   +251930902116
                 </p>
                 <motion.div whileHover={{ scale: 1.05 }} className="mt-6">
-                  <Button
-                    onClick={() => setIsModalOpen(true)}
-                    className="bg-blue-600 text-white hover:bg-blue-700 py-3 px-6 rounded-full flex items-center font-medium"
-                  >
-                    <Mail className="mr-2 h-5 w-5" />
-                    Send Us a Message
+                  <Button className=" text-white hover:bg-blue-700 py-3 px-6 rounded-full flex items-center font-medium">
+                    <Link href="/contact" className="flex">
+                      <Mail className="mr-2 h-5 w-5" />
+                      Send Us a Message
+                    </Link>
                   </Button>
                 </motion.div>
               </section>
@@ -307,76 +292,6 @@ export default function PrivacyPolicyPage() {
           </div>
         </div>
       </main>
-
-      {/* Contact Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full"
-            >
-              <h3 className="text-2xl font-poppins font-bold text-blue-800 mb-4">
-                Contact Us
-              </h3>
-              <form className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-base"
-                    placeholder="Your Name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-base"
-                    placeholder="Your Email"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Message
-                  </label>
-                  <textarea
-                    className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-base"
-                    rows={4}
-                    placeholder="Your Message"
-                  ></textarea>
-                </div>
-                <div className="flex justify-end space-x-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsModalOpen(false)}
-                    className="text-blue-600 border-blue-600 hover:bg-blue-50 font-medium"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="bg-blue-600 text-white hover:bg-blue-700 font-medium"
-                  >
-                    Send
-                  </Button>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

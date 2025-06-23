@@ -106,14 +106,14 @@ export default function TermsOfServicePage() {
             transition={{ duration: 0.5 }}
             className="flex flex-col items-center"
           >
-            <Shield className="h-16 w-16 text-blue-500 mb-4" />
+            <Shield className="h-16 w-16 text-blue-600 mb-4" />
             <h2 className="text-2xl font-bold">Loading Terms of Service</h2>
             <p className="text-muted-foreground mt-2">
               Preparing legal information...
             </p>
             <div className="mt-6 w-48 h-1.5 bg-gray-200 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-blue-500 rounded-full"
+                className="h-full bg-blue-600 rounded-full"
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}
                 transition={{ duration: 1.2, ease: "easeInOut" }}
@@ -130,7 +130,7 @@ export default function TermsOfServicePage() {
       <Navbar />
 
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-background -z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 to-background -z-10" />
         <div className="container px-4 pt-16 pb-8 md:pt-24 md:pb-12">
           <Link href="/">
             <Button variant="ghost" className="mb-6 group">
@@ -146,15 +146,15 @@ export default function TermsOfServicePage() {
             transition={{ duration: 0.6 }}
           >
             <div className="flex items-center space-x-3">
-              <FileText className="h-8 w-8 text-blue-500" />
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+              <FileText className="h-8 w-8 text-blue-600" />
+              <h1 className="text-4xl text-blue-600 font-bold tracking-tight sm:text-5xl">
                 Terms of Service
               </h1>
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <Badge
                 variant="outline"
-                className="px-3 py-1 text-sm bg-blue-500/10"
+                className="px-3 py-1 text-blue-600 text-sm bg-blue-600/10"
               >
                 Last updated: April 25, 2025
               </Badge>
@@ -163,7 +163,7 @@ export default function TermsOfServicePage() {
                 Official Document
               </Badge>
             </div>
-            <p className="text-lg text-muted-foreground max-w-2xl">
+            <p className="text-lg text-black font-semibold  max-w-2xl">
               Please read these terms carefully before using our services. By
               accessing our platform, you agree to be bound by these terms and
               conditions.
@@ -184,7 +184,7 @@ export default function TermsOfServicePage() {
                     exit={{ x: -20 }}
                     className="bg-card rounded-xl border shadow-sm p-4"
                   >
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center text-blue-600 justify-between mb-4">
                       <h3 className="font-semibold flex items-center">
                         <BookOpen className="h-4 w-4 mr-2" />
                         Table of Contents
@@ -205,12 +205,12 @@ export default function TermsOfServicePage() {
                           onClick={() => scrollToSection(section.id)}
                           className={`w-full text-left px-3 py-2 text-sm rounded-lg transition-colors flex items-center ${
                             activeSection === section.id
-                              ? "bg-blue-500/10 text-blue-500 font-medium"
+                              ? "bg-blue-600/10 text-blue-600 font-medium"
                               : "hover:bg-muted"
                           }`}
                         >
                           {activeSection === section.id && (
-                            <div className="w-1 h-4 bg-blue-500 rounded-full mr-2" />
+                            <div className="w-1 h-4 bg-blue-600 rounded-full mr-2" />
                           )}
                           {section.title}
                         </button>
@@ -250,14 +250,14 @@ export default function TermsOfServicePage() {
             >
               <Tabs defaultValue="full" className="mb-8">
                 <TabsList className="w-full sm:w-auto">
-                  <TabsTrigger value="full">Full Document</TabsTrigger>
-                  <TabsTrigger value="summary">Summary</TabsTrigger>
+                  <TabsTrigger value="full" className="text-blue-600">Full Document</TabsTrigger>
+                  <TabsTrigger value="summary" className="text-blue-600"  >Summary</TabsTrigger>
                 </TabsList>
                 <TabsContent value="full" className="mt-6">
-                  <Card className="mb-8 border-blue-500/20">
+                  <Card className="mb-8 border-blue-600/20">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 text-sm text-muted-foreground mb-2">
-                        <Shield className="h-5 w-5 text-blue-500" />
+                        <Shield className="h-5 w-5 text-blue-600" />
                         <span>This document is legally binding</span>
                       </div>
                       <p className="text-sm">
@@ -270,8 +270,8 @@ export default function TermsOfServicePage() {
                   </Card>
 
                   <section id="agreement" className="scroll-mt-24">
-                    <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-                      <span className="inline-block p-1 rounded-md bg-blue-500/10 text-blue-500">
+                    <h2 className="flex items-center gap-2 text-blue-600 text-2xl font-bold tracking-tight">
+                      <span className="inline-block p-1 rounded-md bg-blue-600/10 text-blue-600">
                         <Check className="h-5 w-5" />
                       </span>
                       Agreement to Terms
@@ -296,8 +296,8 @@ export default function TermsOfServicePage() {
                   </section>
 
                   <section id="intellectual" className="scroll-mt-24 mt-12">
-                    <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-                      <span className="inline-block p-1 rounded-md bg-blue-500/10 text-blue-500">
+                    <h2 className="flex items-center gap-2 text-2xl text-blue-600 font-bold tracking-tight">
+                      <span className="inline-block p-1 rounded-md bg-blue-600/10 text-blue-600">
                         <Check className="h-5 w-5" />
                       </span>
                       Intellectual Property Rights
@@ -329,8 +329,8 @@ export default function TermsOfServicePage() {
                   </section>
 
                   <section id="user" className="scroll-mt-24 mt-12">
-                    <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-                      <span className="inline-block p-1 rounded-md bg-blue-500/10 text-blue-500">
+                    <h2 className="flex items-center gap-2 text-2xl text-blue-600 font-bold tracking-tight">
+                      <span className="inline-block p-1 rounded-md bg-blue-600/10 text-blue-600">
                         <Check className="h-5 w-5" />
                       </span>
                       User Representations
@@ -349,8 +349,8 @@ export default function TermsOfServicePage() {
                   </section>
 
                   <section id="prohibited" className="scroll-mt-24 mt-12">
-                    <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-                      <span className="inline-block p-1 rounded-md bg-blue-500/10 text-blue-500">
+                    <h2 className="flex items-center gap-2 text-2xl text-blue-600 font-bold tracking-tight">
+                      <span className="inline-block p-1 rounded-md  bg-blue-600/10 text-blue-600">
                         <Check className="h-5 w-5" />
                       </span>
                       Prohibited Activities
@@ -375,7 +375,7 @@ export default function TermsOfServicePage() {
                         "Upload or transmit (or attempt to upload or to transmit) viruses, Trojan horses, or other material, including excessive use of capital letters and spamming (continuous posting of repetitive text), that interferes with any party's uninterrupted use and enjoyment of the Site or modifies, impairs, disrupts, alters, or interferes with the use, features, functions, operation, or maintenance of the Site.",
                       ].map((item, index) => (
                         <li key={index} className="flex items-start gap-2">
-                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/10 text-blue-500 mt-0.5 flex-shrink-0">
+                          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600/10 text-blue-600 mt-0.5 flex-shrink-0">
                             <Check className="h-3 w-3" />
                           </span>
                           <span>{item}</span>
@@ -385,8 +385,8 @@ export default function TermsOfServicePage() {
                   </section>
 
                   <section id="submissions" className="scroll-mt-24 mt-12">
-                    <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-                      <span className="inline-block p-1 rounded-md bg-blue-500/10 text-blue-500">
+                    <h2 className="flex items-center gap-2 text-blue-600 text-2xl font-bold tracking-tight">
+                      <span className="inline-block p-1 rounded-md bg-blue-600/10 text-blue-600">
                         <Check className="h-5 w-5" />
                       </span>
                       Submissions
@@ -405,8 +405,8 @@ export default function TermsOfServicePage() {
                   </section>
 
                   <section id="management" className="scroll-mt-24 mt-12">
-                    <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-                      <span className="inline-block p-1 rounded-md bg-blue-500/10 text-blue-500">
+                    <h2 className="flex items-center text-blue-600 gap-2 text-2xl font-bold tracking-tight">
+                      <span className="inline-block p-1 rounded-md bg-blue-600/10 text-blue-600">
                         <Check className="h-5 w-5" />
                       </span>
                       Site Management
@@ -432,8 +432,8 @@ export default function TermsOfServicePage() {
                   </section>
 
                   <section id="termination" className="scroll-mt-24 mt-12">
-                    <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-                      <span className="inline-block p-1 rounded-md bg-blue-500/10 text-blue-500">
+                    <h2 className="flex items-center gap-2 text-2xl font-bold text-blue-600 tracking-tight">
+                      <span className="inline-block p-1 rounded-md bg-blue-600/10 text-blue-600">
                         <Check className="h-5 w-5" />
                       </span>
                       Term and Termination
@@ -456,8 +456,8 @@ export default function TermsOfServicePage() {
                   </section>
 
                   <section id="contact" className="scroll-mt-24 mt-12">
-                    <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-                      <span className="inline-block p-1 rounded-md bg-blue-500/10 text-blue-500">
+                    <h2 className="flex items-center gap-2 text-2xl text-blue-600 font-bold tracking-tight">
+                      <span className="inline-block p-1 rounded-md bg-blue-600/10 text-blue-600">
                         <Check className="h-5 w-5" />
                       </span>
                       Contact Us
@@ -470,32 +470,32 @@ export default function TermsOfServicePage() {
 
                     <Card className="mt-4 overflow-hidden border-0 shadow-md">
                       <div className="grid sm:grid-cols-2">
-                        <CardContent className="p-6 bg-blue-500/5">
-                          <h3 className="font-semibold text-lg mb-2">
+                        <CardContent className="p-6 bg-blue-600/5">
+                          <h3 className="font-semibold text-blue-600 text-lg mb-2">
                             Qemem Devs
                           </h3>
-                          <address className="not-italic space-y-1 text-muted-foreground">
+                          <address className="not-italic space-y-1 text-blue-600">
                             <p>Gerji Imperial</p>
                             <p>Spokane, WD 94107</p>
                             <p className="flex items-center gap-1.5">
                               <span className="inline-block w-4 h-4 rounded-full bg-green-500/20 border border-green-500/30">
                                 <span className="block w-2 h-2 rounded-full bg-green-500 m-0.5"></span>
                               </span>
-                              +251 (300) 123-4567
+                              +251930902116
                             </p>
                             <a
-                              href="mailto:chefche@qememdevs.com"
-                              className="text-blue-500 hover:underline flex items-center gap-1"
+                              href="mailto:nahomtewodrosm@gmail.com"
+                              className="text-blue-600 hover:underline flex items-center gap-1"
                             >
-                              chefche@qememdevs.com
+                              nahomtewodrosm@gmail.com
                               <ExternalLink className="h-3 w-3" />
                             </a>
                           </address>
                         </CardContent>
                         <div className="relative h-48 sm:h-auto bg-gray-100">
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-blue-500/5 flex items-center justify-center">
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-blue-600/5 flex items-center justify-center">
                             <div className="text-center p-6">
-                              <Shield className="h-12 w-12 mx-auto mb-2 text-blue-500/70" />
+                              <Shield className="h-12 w-12 mx-auto mb-2 text-blue-600/70" />
                               <h4 className="font-medium">Customer Support</h4>
                               <p className="text-sm text-muted-foreground mt-1">
                                 Available 24/7
@@ -512,7 +512,7 @@ export default function TermsOfServicePage() {
                   <Card>
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 rounded-full bg-amber-100 text-amber-600">
+                        <div className="p-2 rounded-full  text-blue-600">
                           <Shield className="h-5 w-5" />
                         </div>
                         <h3 className="font-semibold text-lg">
@@ -599,7 +599,7 @@ export default function TermsOfServicePage() {
         <Button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           size="icon"
-          className="rounded-full shadow-lg h-12 w-12 bg-blue-500 hover:bg-blue-500/90"
+          className="rounded-full shadow-lg h-12 w-12 bg-blue-600 hover:bg-blue-600/90"
         >
           <ArrowLeft className="h-5 w-5 rotate-90" />
         </Button>

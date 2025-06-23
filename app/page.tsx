@@ -776,7 +776,7 @@ export default function Home() {
                         {post.description}
                       </p>
                       <span className="mt-3 inline-block text-blue-500 dark:text-blue-400 hover:underline font-medium">
-                        Read more →
+                        Read more 
                       </span>
                     </div>
                   </Link>

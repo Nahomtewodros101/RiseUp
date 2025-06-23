@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,16 +19,100 @@ import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import type { TeamMember } from "@/types";
 
+
+const TeamMemberImage = ({
+  src,
+  alt,
+  name,
+}: {
+  src: string | null | undefined;
+  alt: string;
+  name: string;
+}) => {
+  const [showFallback, setShowFallback] = useState(false);
+  const [showCheckLater, setShowCheckLater] = useState(false);
+
+  useEffect(() => {
+    if (!src) {
+      setShowFallback(true);
+      const timer = setTimeout(() => {
+        setShowCheckLater(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [src]);
+
+  if (showCheckLater) {
+    return (
+      <div className="relative aspect-square flex items-center flex-col justify-center bg-gray-100 dark:bg-gray-800">
+        <p className="text-blue-600 dark:text-blue-400 text-3xl font-bold">
+          ??
+        </p>
+        <p className="text-gray-500 dark:text-gray-400 text-sm text-center">
+          Check back later
+        </p>
+      </div>
+    );
+  }
+
+  if (showFallback) {
+    return (
+      <div className="relative aspect-square flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+        <div className="text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
+            {name}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative aspect-square">
+      <Image
+        src={src ?? ""}
+        alt={alt}
+        fill
+        className="object-cover"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        onError={() => {
+          setShowFallback(true);
+          setTimeout(() => setShowCheckLater(true), 2000);
+        }}
+      />
+    </div>
+  );
+};
+
 export default function TeamPage() {
   const [isContentReady, setIsContentReady] = useState(false);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const useIsMobile = () => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+      const checkMobile = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+
+      checkMobile();
+      window.addEventListener("resize", checkMobile);
+
+      return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
+    return isMobile;
+  };
+
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsContentReady(true);
-    }, 2100);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -46,7 +131,7 @@ export default function TeamPage() {
         const activeMembers = data.filter(
           (member: TeamMember) => member.isActive
         );
-        console.log("Fetched team members:", activeMembers); // Debug: Log fetched data
+        console.log("Fetched team members:", activeMembers);
         setTeamMembers(activeMembers);
       } catch (err) {
         console.error("Error fetching team members:", err);
@@ -64,6 +149,14 @@ export default function TeamPage() {
       fetchTeamMembers();
     }
   }, [isContentReady]);
+
+  const animationProps = (props: {
+    initial?: any;
+    animate?: any;
+    transition?: any;
+    whileInView?: any;
+    viewport?: any;
+  }) => (isMobile ? {} : { ...props });
 
   if (!isContentReady) {
     return null;
@@ -83,22 +176,24 @@ export default function TeamPage() {
             </Link>
             <motion.div
               className="space-y-2"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              {...animationProps({
+                initial: { opacity: 0, y: 20 },
+                animate: { opacity: 1, y: 0 },
+                transition: { duration: 0.5 },
+              })}
             >
               <h1 className="text-3xl text-blue-600 font-bold tracking-tighter sm:text-5xl">
                 The Qmem Community
               </h1>
               <p className="max-w-[700px] text-gray-500 dark:text-gray-400">
-                Meet the talented individuals behind Qemem Cloud Community
+                Meet the talented individuals behind Qmem Cloud Community
               </p>
             </motion.div>
           </div>
 
           {/* Loading State */}
           {isLoading && (
-            <div className="flex justify-center flex-col items-center py-20">
+            <div className="flex justify-center flex-col space-y-10 items-center py-20">
               <Loader2 className="h-10 w-10 animate-spin text-blue-600 dark:text-blue-400" />
               <Badge
                 variant="secondary"
@@ -127,19 +222,16 @@ export default function TeamPage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {teamMembers.map((member) => (
                 <Card key={member.id} className="overflow-hidden">
-                  <div className="relative aspect-square">
-                    <Image
-                      src={member.image || "/placeholder.svg"}
-                      alt={member.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                  <TeamMemberImage
+                    src={member.image}
+                    alt={member.name}
+                    name={member.name}
+                  />
                   <CardContent className="p-4">
                     <h3 className="font-bold text-lg">
                       <VerifiedIcon
                         color="blue"
-                        className=" h-4 w-4 inline-flex"
+                        className="h-4 w-4 inline-flex mr-1"
                       />{" "}
                       {member.name}
                     </h3>
@@ -155,13 +247,15 @@ export default function TeamPage() {
                           {member.skills!.map((skill, skillIndex) => (
                             <motion.div
                               key={skill}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
+                              {...animationProps({
+                                initial: { opacity: 0, scale: 0.8 },
+                                animate: { opacity: 1, scale: 1 },
+                                transition: {
+                                  duration: 0.2,
+                                  delay: skillIndex * 0.05,
+                                },
+                              })}
                               exit={{ opacity: 0, scale: 0.8 }}
-                              transition={{
-                                duration: 0.2,
-                                delay: skillIndex * 0.05,
-                              }}
                             >
                               <Badge
                                 variant="secondary"
@@ -179,7 +273,7 @@ export default function TeamPage() {
                       </p>
                     )}
                     <div className="mt-4 flex space-x-3">
-                      {member.socialLinks.twitter && (
+                      {member.socialLinks?.twitter && (
                         <Link
                           href={member.socialLinks.twitter}
                           className="text-gray-500 hover:text-blue-500 dark:hover:text-blue-400"
@@ -190,7 +284,7 @@ export default function TeamPage() {
                           <span className="sr-only">Twitter</span>
                         </Link>
                       )}
-                      {member.socialLinks.linkedin && (
+                      {member.socialLinks?.linkedin && (
                         <Link
                           href={member.socialLinks.linkedin}
                           className="text-gray-500 hover:text-blue-500 dark:hover:text-blue-400"
@@ -201,7 +295,7 @@ export default function TeamPage() {
                           <span className="sr-only">LinkedIn</span>
                         </Link>
                       )}
-                      {member.socialLinks.github && (
+                      {member.socialLinks?.github && (
                         <Link
                           href={member.socialLinks.github}
                           className="text-gray-500 hover:text-blue-500 dark:hover:text-blue-400"
@@ -231,10 +325,12 @@ export default function TeamPage() {
           {/* Join Our Team Section */}
           <motion.div
             className="mt-20 rounded-lg bg-blue-50 dark:bg-blue-900/20 p-8 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
+            {...animationProps({
+              initial: { opacity: 0, y: 20 },
+              whileInView: { opacity: 1, y: 0 },
+              transition: { duration: 0.5 },
+              viewport: { once: true },
+            })}
           >
             <h2 className="text-2xl font-bold mb-4">Join Our Team</h2>
             <p className="max-w-[600px] mx-auto mb-6 text-gray-500 dark:text-gray-400">

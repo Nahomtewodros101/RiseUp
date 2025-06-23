@@ -15,10 +15,9 @@ import {
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import HeroIllustration from "@/components/HeroIlutrator";
 import ProjectCard from "@/components/ProjectCard";
 import WelcomeBanner from "@/components/WelcomeBanner";
-import { motion } from "framer-motion";
+import { motion, TargetAndTransition, Transition } from "framer-motion";
 import { Project } from "@/types";
 import CountUp from "react-countup";
 import { Card, CardContent } from "@/components/ui/card";
@@ -27,10 +26,14 @@ import WhyChooseUsSection from "@/components/WhyChooseUS";
 import LifecycleSection from "@/components/LifecycleSection";
 
 interface AnimationProps {
-  initial?: any;
-  whileInView?: any;
-  transition?: any;
-  viewport?: any;
+  initial?: TargetAndTransition;
+  whileInView?: TargetAndTransition;
+  transition?: Transition;
+  viewport?: {
+    once?: boolean;
+    margin?: string;
+    amount?: number | "some" | "all";
+  };
 }
 
 const useIsMobile = () => {

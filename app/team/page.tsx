@@ -16,7 +16,12 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  Transition,
+  TargetAndTransition,
+} from "framer-motion";
 import type { TeamMember } from "@/types";
 
 
@@ -151,11 +156,15 @@ export default function TeamPage() {
   }, [isContentReady]);
 
   const animationProps = (props: {
-    initial?: any;
-    animate?: any;
-    transition?: any;
-    whileInView?: any;
-    viewport?: any;
+    initial?: TargetAndTransition;
+    animate?: TargetAndTransition;
+    transition?: Transition;
+    whileInView?: TargetAndTransition;
+    viewport?: {
+      once?: boolean;
+      margin?: string;
+      amount?: number | "some" | "all";
+    };
   }) => (isMobile ? {} : { ...props });
 
   if (!isContentReady) {

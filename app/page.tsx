@@ -276,7 +276,7 @@ export default function Home() {
               >
                 <Image
                   src="/desk.svg"
-                  alt="Qmem Cloud Hero Image"
+                  alt="Qmem Cloud Hero "
                   width={600}
                   height={400}
                   className="w-full max-w-[400px] rounded-md lg:max-w-[600px] object-contain"

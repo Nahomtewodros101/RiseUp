@@ -21,10 +21,12 @@ jobs:
       - name: Set git safe directory
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
-      - name: Clone the Org Repo (Qmem-Tech/Qmem-Website)
+      - name: Clone Qmem-Website
         run: |
           git clone https://x-access-token:${{ secrets.ORG_PUSH_TOKEN }}@github.com/Qmem-Tech/Qmem-Website.git
+    
 
+          
       - name: Copy files from RiseUp to Qmem-Website
         run: |
           cd Qmem-Website

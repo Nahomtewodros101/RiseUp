@@ -17,21 +17,21 @@ jobs:
         run: |
           git config --global user.name "nahom-bot"
           git config --global user.email "nahom@users.noreply.github.com"
-
       - name: Set git safe directory
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
       - name: Clone Qmem-Website
         run: |
           git clone https://x-access-token:${{ secrets.ORG_PUSH_TOKEN }}@github.com/Qmem-Tech/Qmem-Website.git
+    
 
+          
       - name: Copy files from RiseUp to Qmem-Website
         run: |
           cd Qmem-Website
           find . -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
           cd ..
           rsync -av --exclude='Qmem-Website' --exclude='.git' ./ Qmem-Website/
-
       - name: Commit & Push to Org Repo
         run: |
           cd Qmem-Website

@@ -38,7 +38,7 @@ export default function LoadingScreen() {
               }}
             >
               <span className="font-bold text-xl">
-                <Image src="/cloudd.png" alt="Logo" width={100} height={100} />
+                <Image src="/cloudd.png" alt="Logo" className="rounded-full" width={100} height={100} />
               </span>
             </motion.div>
 

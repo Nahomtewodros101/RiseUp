@@ -21,18 +21,15 @@ jobs:
       - name: Set git safe directory
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
-      - name: Clone Qmem-Website target repo
+      - name: Clone Qmem-Website
         run: |
-          git clone https://x-access-token:${{ secrets.ORG_PUSH_TOKEN }}@github.com/riseup/Qmem-Website.git
+          git clone https://x-access-token:${{ secrets.ORG_PUSH_TOKEN }}@github.com/Qmem-Tech/Qmem-Website.git
 
-      - name: Remove old files from Qmem-Website
+      - name: Copy files from RiseUp to Qmem-Website
         run: |
           cd Qmem-Website
           find . -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
           cd ..
-
-      - name: Sync latest source to Qmem-Website
-        run: |
           rsync -av --exclude='Qmem-Website' --exclude='.git' ./ Qmem-Website/
 
       - name: Commit & Push to Org Repo

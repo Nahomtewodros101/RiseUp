@@ -17,16 +17,15 @@ jobs:
         run: |
           git config --global user.name "nahom-bot"
           git config --global user.email "nahom@users.noreply.github.com"
+          
 
       - name: Clone the Org Repo (Qmem-Tech/Qmem-Website)
         run: |
           git clone https://x-access-token:${{ secrets.ORG_PUSH_TOKEN }}@github.com/Qmem-Tech/Qmem-Website.git
-          cd Qmem-Website
 
       - name: Copy files from RiseUp to Qmem-Website
         run: |
           # Remove all files in Qmem-Website except .git to preserve its Git history
-          cd Qmem-Website
           find . -maxdepth 1 -not -path './.git' -not -path . -exec rm -rf {} +
           # Copy all files from RiseUp (parent directory) except Qmem-Website and .git
           shopt -s extglob
@@ -36,7 +35,6 @@ jobs:
 
       - name: Commit & Push to Org Repo
         run: |
-          cd Qmem-Website
           git add .
           git commit -m "🔄 Auto-sync from RiseUp on $(date)" || echo "No changes to commit"
           git push origin main

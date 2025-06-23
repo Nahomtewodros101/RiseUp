@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout source repo (RiseUp)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Git identity
         run: |
@@ -28,10 +28,11 @@ jobs:
           # Remove all files in Qmem-Website except .git to preserve its Git history
           cd Qmem-Website
           find . -maxdepth 1 -not -path './.git' -not -path . -exec rm -rf {} +
-          # Copy all files from RiseUp (parent directory) except .git
-          cp -r ../* .
-          # Remove the .git from RiseUp to avoid copying it
-          rm -rf .git
+          # Copy all files from RiseUp (parent directory) except Qmem-Website and .git
+          shopt -s extglob
+          cp -r ../!(Qmem-Website|.git) .
+          # Ensure no .git from RiseUp is copied
+          rm -rf .git || true
 
       - name: Commit & Push to Org Repo
         run: |

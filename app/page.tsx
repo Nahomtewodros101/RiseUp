@@ -744,7 +744,7 @@ export default function Home() {
                 {
                   title: "Why Choosing the Right Tech Provider is Crucial",
                   description:
-                    "Choosing the right tech provider can make all the difference.",
+                    "Choosing the right  provider can make all the difference.",
                   link: "/blog",
                   image: "/jemaw.png",
                 },

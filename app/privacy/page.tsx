@@ -61,7 +61,7 @@ export default function PrivacyPolicyPage() {
           Your Privacy, Our Priority
         </h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-blue-600 leading-relaxed">
-          Learn how Qemem Tech protects your data with transparency and care.
+          Learn how Qemem cloud protects your data with transparency and care.
         </p>
         <motion.div whileHover={{ scale: 1.05 }} className="mt-8">
           <Button
@@ -132,7 +132,7 @@ export default function PrivacyPolicyPage() {
                   Introduction
                 </h2>
                 <p className="text-base leading-relaxed text-gray-700">
-                  Qemem Tech we are committed to protecting your privacy. This
+                  Qemem cloud we are committed to protecting your privacy. This
                   Privacy Policy explains how we collect, use, disclose, and
                   safeguard your information when you visit our website or use
                   our services.
@@ -250,7 +250,7 @@ export default function PrivacyPolicyPage() {
                   Security of Your Information
                 </h2>
                 <p className="text-base leading-relaxed text-gray-700">
-                  We use administrative, technical, and physical security
+                  We use administrative, cloudnical, and physical security
                   measures to protect your personal information. However, no
                   security measures are perfect, and no data transmission method
                   is guaranteed against interception or misuse.
@@ -266,14 +266,14 @@ export default function PrivacyPolicyPage() {
                   please contact us at:
                 </p>
                 <p className="mt-4 text-base leading-relaxed text-gray-700">
-                  Qemem Tech
+                  Qemem cloud
                   <br />
                   Gerji Imperial
                   <br />
                   Spokane, WD 94107
                   <br />
                   <a
-                    href="mailto:chefche@qememTech.com"
+                    href="mailto:chefche@qememcloud.com"
                     className="text-blue-600 hover:underline"
                   ></a>
                   <br />

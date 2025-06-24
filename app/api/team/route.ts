@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/db";
 import { authMiddleware } from "@/lib/auth";
+import cloudinary from "@/lib/cloudinary"; // You'll create this file (see below)
 
 const teamMemberSchema = z.object({
   id: z.string().optional(),
@@ -14,7 +15,7 @@ const teamMemberSchema = z.object({
     linkedin: z.string().optional(),
     github: z.string().optional(),
   }),
-  skills: z.array(z.string()).optional(), 
+  skills: z.array(z.string()).optional(),
   isActive: z.boolean().default(true),
   order: z.number().int().default(0),
 });
@@ -30,14 +31,13 @@ export async function GET() {
         bio: true,
         image: true,
         isActive: true,
-        skills: true, 
+        skills: true,
         socialLinks: true,
         order: true,
         createdAt: true,
         updatedAt: true,
       },
     });
-    console.log("API /team response:", teamMembers); 
     return NextResponse.json(teamMembers, {
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate",
@@ -46,7 +46,6 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("Error fetching team members:", error);
     return NextResponse.json(
       { error: "Failed to fetch team members" },
       { status: 500 }
@@ -59,13 +58,70 @@ export async function POST(req: NextRequest) {
   if (authError) return authError;
 
   try {
-    const body = await req.json();
-    console.log("Received body:", body);
+    // Parse multipart/form-data
+    const formData = await req.formData();
+    const name = formData.get("name") as string;
+    const role = formData.get("role") as string;
+    const bio = formData.get("bio") as string;
+    const skills = formData.getAll("skills") as string[]; // if sent as array
+    const isActive = formData.get("isActive") === "true";
+    const order = Number(formData.get("order") || 0);
 
-    const validatedData = teamMemberSchema.safeParse(body);
+    // Social links as JSON string or individual fields
+    let socialLinks: any = {};
+    try {
+      const socialLinksRaw = formData.get("socialLinks");
+      if (typeof socialLinksRaw === "string") {
+        socialLinks = JSON.parse(socialLinksRaw);
+      } else {
+        socialLinks = {
+          twitter: formData.get("twitter") as string | undefined,
+          linkedin: formData.get("linkedin") as string | undefined,
+          github: formData.get("github") as string | undefined,
+        };
+      }
+    } catch {
+      socialLinks = {};
+    }
+
+    // Handle image upload
+    const imageFile = formData.get("image") as File | null;
+    if (!imageFile) {
+      return NextResponse.json({ error: "Image is required" }, { status: 400 });
+    }
+
+    // Convert File to Buffer
+    const arrayBuffer = await imageFile.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Upload buffer to Cloudinary
+    const cloudinaryUpload = () =>
+      new Promise<{ secure_url: string }>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "team_members" },
+          (error, result) => {
+            if (error || !result) reject(error);
+            else resolve(result as { secure_url: string });
+          }
+        );
+        stream.end(buffer);
+      });
+
+    const uploadResult = await cloudinaryUpload();
+
+    // Validate all data
+    const validatedData = teamMemberSchema.safeParse({
+      name,
+      role,
+      bio,
+      image: uploadResult.secure_url,
+      socialLinks,
+      skills,
+      isActive,
+      order,
+    });
 
     if (!validatedData.success) {
-      console.error("Validation failed:", validatedData.error.format());
       return NextResponse.json(
         { error: "Invalid input data", details: validatedData.error.format() },
         { status: 400 }
@@ -78,7 +134,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(teamMember, { status: 201 });
   } catch (error) {
-    console.error("Failed to create team member:", error);
     return NextResponse.json(
       {
         error: "Failed to create team member",

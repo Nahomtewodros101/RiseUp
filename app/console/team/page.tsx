@@ -2,7 +2,7 @@
 
 import { DialogTrigger } from "@/components/ui/dialog";
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -71,7 +71,6 @@ export default function ConsoleTeamPage() {
     name: "",
     role: "",
     bio: "",
-    image: "/placeholder.svg?height=400&width=400",
     order: 0,
     isActive: true,
     socialLinks: {
@@ -81,6 +80,9 @@ export default function ConsoleTeamPage() {
     },
     skills: [] as string[],
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchTeamMembers = async () => {
     setIsLoading(true);
@@ -98,11 +100,9 @@ export default function ConsoleTeamPage() {
       }
 
       const data = await response.json();
-      console.log("Fetched team members:", data); 
       setTeamMembers(data);
     } catch (error) {
       console.error("Failed to fetch team members:", error);
-      console.error("Failed to fetch team members. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -148,10 +148,7 @@ export default function ConsoleTeamPage() {
           member.id === id ? { ...member, isActive: !currentStatus } : member
         )
       );
-
-      console.log(`Team member ${currentStatus ? "deactivated" : "activated"}`);
     } catch (error) {
-      console.error("Failed to update team member status:", error);
       console.error("Failed to update team member status:", error);
     }
   };
@@ -188,6 +185,13 @@ export default function ConsoleTeamPage() {
     setNewMember((prev) => ({ ...prev, [name]: checked }));
   };
 
+  // Handle file input/image preview
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setImageFile(file);
+    setImagePreview(file ? URL.createObjectURL(file) : null);
+  };
+
   const handleAddTeamMember = async () => {
     try {
       // Validate form
@@ -195,14 +199,27 @@ export default function ConsoleTeamPage() {
         console.error("Please fill in all required fields.");
         return;
       }
+      if (!imageFile) {
+        console.error("Please select a profile image to upload.");
+        return;
+      }
+
+      // Use FormData for file upload
+      const formData = new FormData();
+      formData.append("name", newMember.name);
+      formData.append("role", newMember.role);
+      formData.append("bio", newMember.bio);
+      formData.append("isActive", String(newMember.isActive));
+      formData.append("order", String(newMember.order));
+      formData.append("socialLinks", JSON.stringify(newMember.socialLinks));
+      (newMember.skills || []).forEach((skill) =>
+        formData.append("skills", skill)
+      );
+      formData.append("image", imageFile);
 
       const response = await fetch("/api/team", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache, no-store, must-revalidate",
-        },
-        body: JSON.stringify(newMember),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -216,7 +233,6 @@ export default function ConsoleTeamPage() {
         name: "",
         role: "",
         bio: "",
-        image: "/placeholder.svg?height=400&width=400",
         order: 0,
         isActive: true,
         socialLinks: {
@@ -226,9 +242,12 @@ export default function ConsoleTeamPage() {
         },
         skills: [],
       });
+      setImageFile(null);
+      setImagePreview(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
       setIsAddDialogOpen(false);
-
-      console.log("Team member added successfully.");
     } catch (error) {
       console.error("Error in adding team member:", error);
     }
@@ -255,10 +274,7 @@ export default function ConsoleTeamPage() {
 
       setIsDeleteDialogOpen(false);
       setMemberToDelete(null);
-
-      console.log("Team member deleted successfully.");
     } catch (error) {
-      console.error("Failed to delete team member:", error);
       console.error("Failed to delete team member:", error);
     }
   };
@@ -281,17 +297,26 @@ export default function ConsoleTeamPage() {
               Add Team Member
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+          <DialogContent
+            className="
+              sm:max-w-3xl max-w-[98vw] max-h-[95vh]
+              bg-white
+              shadow-2xl border-none rounded-2xl
+              border-[3px] border-blue-600
+              "
+          >
             <DialogHeader>
-              <DialogTitle>Add New Team Member</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-3xl text-blue-600 font-bold drop-shadow-lg">
+                Add New Team Member
+              </DialogTitle>
+              <DialogDescription className="text-blue-600">
                 Add a new member to your team. They will be displayed on the
                 team page.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
+                <Label htmlFor="name" className="text-blue-600 font-medium">
                   Name*
                 </Label>
                 <Input
@@ -300,11 +325,11 @@ export default function ConsoleTeamPage() {
                   value={newMember.name}
                   onChange={handleInputChange}
                   placeholder="Full name"
-                  className="col-span-3"
+                  className="col-span-3 placeholder:text-blue-600 text-blue-600 bg-blue-50/60 border-blue-100"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="role" className="text-right">
+                <Label htmlFor="role" className="text-blue-600 font-medium">
                   Role*
                 </Label>
                 <Input
@@ -313,11 +338,11 @@ export default function ConsoleTeamPage() {
                   value={newMember.role}
                   onChange={handleInputChange}
                   placeholder="Job title"
-                  className="col-span-3"
+                  className="col-span-3 placeholder:text-blue-300 text-blue-900 bg-blue-50/60 border-blue-100"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="bio" className="text-right">
+                <Label htmlFor="bio" className="text-blue-600 font-medium">
                   Bio*
                 </Label>
                 <Textarea
@@ -326,12 +351,12 @@ export default function ConsoleTeamPage() {
                   value={newMember.bio}
                   onChange={handleInputChange}
                   placeholder="Professional biography"
-                  className="col-span-3"
+                  className="col-span-3 placeholder:text-blue-300 text-blue-900 bg-blue-50/60 border-blue-100"
                   rows={4}
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="skills" className="text-right">
+                <Label htmlFor="skills" className="text-blue-600 font-medium">
                   Expertise
                 </Label>
                 <Input
@@ -340,24 +365,33 @@ export default function ConsoleTeamPage() {
                   value={newMember.skills.join(", ")}
                   onChange={handleInputChange}
                   placeholder="e.g., JavaScript, React, Node.js"
-                  className="col-span-3"
+                  className="col-span-3 placeholder:text-blue-300 text-blue-900 bg-blue-50/60 border-blue-100"
                 />
               </div>
+              {/* Image file upload */}
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="image" className="text-right">
-                  Image URL
+                <Label htmlFor="image" className="text-blue-600 font-medium">
+                  Profile Image*
                 </Label>
                 <Input
                   id="image"
                   name="image"
-                  value={newMember.image}
-                  onChange={handleInputChange}
-                  placeholder="https://example.com/image.jpg"
-                  className="col-span-3"
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="col-span-3 text-blue-900 file:bg-blue-200 file:text-blue-900 file:border-0"
                 />
+                {imagePreview && (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="col-span-4 mt-2 w-24 h-24 object-cover rounded-full border border-blue-300 shadow"
+                  />
+                )}
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="order" className="text-right">
+                <Label htmlFor="order" className="text-blue-600 font-medium">
                   Display Order
                 </Label>
                 <Input
@@ -367,11 +401,11 @@ export default function ConsoleTeamPage() {
                   value={newMember.order.toString()}
                   onChange={handleInputChange}
                   placeholder="0"
-                  className="col-span-3"
+                  className="col-span-3 placeholder:text-blue-300 text-blue-900 bg-blue-50/60 border-blue-100"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="isActive" className="text-right">
+                <Label htmlFor="isActive" className="text-blue-600 font-medium">
                   Active Status
                 </Label>
                 <div className="flex items-center space-x-2 col-span-3">
@@ -382,7 +416,7 @@ export default function ConsoleTeamPage() {
                       handleSwitchChange(checked, "isActive")
                     }
                   />
-                  <Label htmlFor="isActive">
+                  <Label htmlFor="isActive" className="text-blue-600">
                     {newMember.isActive
                       ? "Visible on website"
                       : "Hidden from website"}
@@ -390,7 +424,7 @@ export default function ConsoleTeamPage() {
                 </div>
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="twitter" className="text-right">
+                <Label htmlFor="twitter" className="text-blue-600 font-medium">
                   Twitter URL
                 </Label>
                 <Input
@@ -399,11 +433,11 @@ export default function ConsoleTeamPage() {
                   value={newMember.socialLinks.twitter}
                   onChange={handleInputChange}
                   placeholder="https://twitter.com/username"
-                  className="col-span-3"
+                  className="col-span-3 placeholder:text-blue-300 text-blue-900 bg-blue-50/60 border-blue-100"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="linkedin" className="text-right">
+                <Label htmlFor="linkedin" className="text-blue-600 font-medium">
                   LinkedIn URL
                 </Label>
                 <Input
@@ -412,11 +446,11 @@ export default function ConsoleTeamPage() {
                   value={newMember.socialLinks.linkedin}
                   onChange={handleInputChange}
                   placeholder="https://linkedin.com/in/username"
-                  className="col-span-3"
+                  className="col-span-3 placeholder:text-blue-300 text-blue-900 bg-blue-50/60 border-blue-100"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="github" className="text-right">
+                <Label htmlFor="github" className="text-blue-600 font-medium">
                   GitHub URL
                 </Label>
                 <Input
@@ -425,7 +459,7 @@ export default function ConsoleTeamPage() {
                   value={newMember.socialLinks.github}
                   onChange={handleInputChange}
                   placeholder="https://github.com/username"
-                  className="col-span-3"
+                  className="col-span-3 placeholder:text-blue-300 text-blue-900 bg-blue-50/60 border-blue-100"
                 />
               </div>
             </div>
@@ -433,10 +467,16 @@ export default function ConsoleTeamPage() {
               <Button
                 variant="outline"
                 onClick={() => setIsAddDialogOpen(false)}
+                className="text-blue-600 border-blue-600 hover:bg-blue-50"
               >
                 Cancel
               </Button>
-              <Button onClick={handleAddTeamMember}>Add Team Member</Button>
+              <Button
+                onClick={handleAddTeamMember}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+              >
+                Add Team Member
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -512,7 +552,7 @@ export default function ConsoleTeamPage() {
                     {member.isActive ? (
                       <ToggleRight className="h-4 w-4 text-green-600" />
                     ) : (
-                      <ToggleLeft className="h-4 w-4 text-gray-400" />
+                      <ToggleLeft className="h-4 w-4 text-gray-600" />
                     )}
                     <span className="sr-only">
                       {member.isActive ? "Deactivate" : "Activate"}
@@ -574,10 +614,10 @@ export default function ConsoleTeamPage() {
               </div>
               <CardContent className="p-4">
                 <h3 className="font-bold text-lg">{member.name}</h3>
-                <p className="text-blue-600 dark:text-blue-400">
+                <p className="text-blue-600 dark:text-blue-600">
                   {member.role}
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">
+                <p className="text-sm text-gray-500 dark:text-gray-600 mt-2 line-clamp-2">
                   {member.bio}
                 </p>
                 {(member.skills?.length ?? 0) > 0 ? (
@@ -605,7 +645,7 @@ export default function ConsoleTeamPage() {
                     </AnimatePresence>
                   </div>
                 ) : (
-                  <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                  <p className="mt-4 text-sm text-gray-500 dark:text-gray-600">
                     No skills listed
                   </p>
                 )}
@@ -624,7 +664,7 @@ export default function ConsoleTeamPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the team member 
+              This will permanently delete the team member
               {memberToDelete?.name}. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>

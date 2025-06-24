@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -26,7 +26,7 @@ const teamMemberFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   role: z.string().min(1, "Role is required"),
   bio: z.string().min(1, "Bio is required"),
-  image: z.string().nullable().optional(),
+  // image is NOT validated here, handled separately as file
   socialLinks: z
     .object({
       twitter: z.string().nullable().optional(),
@@ -43,6 +43,7 @@ type TeamMemberFormValues = z.infer<typeof teamMemberFormSchema> & {
   id?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  image?: string; // for editing, show current image
 };
 
 interface TeamMemberFormProps {
@@ -58,6 +59,11 @@ export default function TeamMemberForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentSkill, setCurrentSkill] = useState<string>("");
+  const [imagePreview, setImagePreview] = useState<string>(
+    initialData?.image || ""
+  );
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<TeamMemberFormValues>({
     resolver: zodResolver(teamMemberFormSchema),
@@ -65,7 +71,6 @@ export default function TeamMemberForm({
       name: "",
       role: "",
       bio: "",
-      image: "",
       socialLinks: {
         twitter: "",
         linkedin: "",
@@ -88,12 +93,31 @@ export default function TeamMemberForm({
       const url = isEditing ? `/api/team/${initialData?.id}` : "/api/team";
       const method = isEditing ? "PATCH" : "POST";
 
+      // Use FormData for multipart/form-data request
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("role", data.role);
+      formData.append("bio", data.bio);
+      formData.append("isActive", String(data.isActive));
+      formData.append("order", String(data.order));
+
+      // Social Links as JSON string
+      formData.append("socialLinks", JSON.stringify(data.socialLinks || {}));
+      // Skills (array)
+      (data.skills || []).forEach((skill) => formData.append("skills", skill));
+
+      // Only send a new image file if selected
+      if (imageFile) {
+        formData.append("image", imageFile);
+      } else if (isEditing && initialData?.image) {
+        // If editing and no new file, send the old image url (backend should handle this)
+        formData.append("image", initialData.image);
+      }
+
       const response = await fetch(url, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        // Don't set Content-Type, browser sets boundary for FormData
+        body: formData,
       });
 
       if (!response.ok) {
@@ -134,6 +158,14 @@ export default function TeamMemberForm({
     if (e.key === "Enter") {
       e.preventDefault();
       handleAddSkill();
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setImageFile(file || null);
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -208,27 +240,24 @@ export default function TeamMemberForm({
                   )}
                 />
 
-                {/* Image Field */}
-                <FormField
-                  control={form.control}
-                  name="image"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Image URL</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="url"
-                          className="w-full"
-                          placeholder="Image URL"
-                          value={field.value ?? ""}
-                          disabled={isSubmitting}
-                          onChange={(e) => field.onChange(e.target.value)}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+                {/* Image Upload Field */}
+                <div>
+                  <FormLabel>Profile Image</FormLabel>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    disabled={isSubmitting}
+                    ref={fileInputRef}
+                  />
+                  {imagePreview && (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="mt-2 w-24 h-24 object-cover rounded-full border"
+                    />
                   )}
-                />
+                </div>
 
                 {/* Social Links */}
                 <FormField

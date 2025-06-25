@@ -24,7 +24,6 @@ import {
 } from "framer-motion";
 import type { TeamMember } from "@/types";
 
-
 const TeamMemberImage = ({
   src,
   alt,

@@ -103,11 +103,11 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen flex flex-col bg-transparent dark:from-gray-900 dark:to-gray-800">
       <Navbar />
       <main className="flex-1 py-12 md:py-24">
         {/* Decorative Header Section */}
-        <div className="relative w-full h-48 bg-blue-600 overflow-hidden">
+        <div className="relative w-full h-48 bg-transparent overflow-hidden">
           <div className="absolute inset-0 bg-[url('/path-to-decorative-image.jpg')] bg-cover bg-center opacity-30" />
           <motion.div
             className="container px-4 md:px-6 mt-10 text-center text-white space-y-4"
@@ -115,10 +115,11 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-              Let us <span className="text-black"> Connect </span>
+            <h1 className="text-4xl font-bold   tracking-tighter sm:text-5xl md:text-6xl">
+              <span className="text-black dark:text-blue-600">Let us</span>
+              <span className="text-blue-600 dark:text-white"> Connect </span>
             </h1>
-            <p className="max-w-[700px] mx-auto font-bold text-lg">
+            <p className="max-w-[700px] mx-auto text-black dark:text-white font-bold text-lg">
               Reach out to our team for inquiries, projects, or support. We are
               here to help!
             </p>
@@ -147,7 +148,7 @@ export default function ContactPage() {
               transition={{ duration: 0.5 }}
             >
               <IPhoneFrame>
-                <div className="p-4 bg-white dark:bg-gray-800 rounded-lg">
+                <div className="p-4 bg-white dark:bg-transparent rounded-lg">
                   {isSubmitted ? (
                     <div className="flex flex-col items-center justify-center space-y-4 py-10">
                       <div className="rounded-full bg-green-100 p-3">
